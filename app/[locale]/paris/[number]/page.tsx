@@ -1,11 +1,13 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { loadArrondissements } from "@/lib/data";
+import { loadBoundaries } from "@/lib/geo";
 import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
 import { EQUAL_WEIGHTS } from "@/lib/personas";
 import { computeComposite, rankByComposite } from "@/lib/scoring";
 import { Badge } from "@/components/ui/badge";
 import { DimensionSection } from "@/components/detail/dimension-section";
+import { MiniMap } from "@/components/detail/mini-map";
 import { Link } from "@/i18n/navigation";
 import { ShareButton } from "@/components/share-button";
 import { ArrowLeft } from "lucide-react";
@@ -49,7 +51,10 @@ export default async function DetailPage({ params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale });
-  const data = await loadArrondissements();
+  const [data, boundaries] = await Promise.all([
+    loadArrondissements(),
+    loadBoundaries(),
+  ]);
   const arrondissement = data.find((a) => a.number === Number(number));
 
   if (!arrondissement) {
@@ -74,6 +79,16 @@ export default async function DetailPage({ params }: Props) {
   const rank = ranked.find((a) => a.number === Number(number))?.rank ?? 0;
   const composite = computeComposite(arrondissement.scores, EQUAL_WEIGHTS);
 
+  const feature = boundaries.features.find(
+    (f) => f.properties?.number === arrondissement.number,
+  );
+  const geomXY = feature?.properties?.geom_x_y as
+    | { lon: number; lat: number }
+    | undefined;
+  const center = geomXY
+    ? { longitude: geomXY.lon, latitude: geomXY.lat }
+    : { longitude: 2.3488, latitude: 48.8566 };
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <Link
@@ -94,6 +109,13 @@ export default async function DetailPage({ params }: Props) {
           #{rank}/20
         </span>
         <ShareButton number={arrondissement.number} />
+      </div>
+      <div className="mt-6">
+        <MiniMap
+          boundaries={boundaries}
+          highlightNumber={arrondissement.number}
+          center={center}
+        />
       </div>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {DIMENSION_KEYS.map((key) => (
