@@ -22,8 +22,7 @@
 
 ## Commit & Pull Request Guidelines
 
-Follow the existing commit style: short, imperative subjects (examples: `Add format script`, `Format components with prettier`).
-
+- Follow the existing commit style: short, imperative subjects (examples: `add format script`, `format components with prettier`).
 - Keep commits small & scoped to one logical change (lowercased, no conventional commits)
 - PRs should include: what changed, why, validation commands run, and screenshots/GIFs for UI changes
 - Link related issue/spec context when applicable
