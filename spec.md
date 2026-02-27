@@ -43,16 +43,16 @@ All data is pre-computed at build time by a TypeScript script and shipped as sta
 
 All data is pre-computed per arrondissement and shipped as static JSON.
 
-| #   | Dimension             | Source                    | Format                            | Metric                                                   | Processing notes                                                                                                                                                                                                    |
-| --- | --------------------- | ------------------------- | --------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Housing affordability | DVF (data.gouv.fr)        | CSV.gz by departement             | Median price/m2 (apartments), YoY trend                  | Parse departement 75 yearly snapshots and filter `code_commune` 75101..75120. Filter `type_local = "Appartement"`. Multi-row mutations: group by `id_mutation`, use `valeur_fonciere / surface_reelle_bati`. Drop rows with missing surface. Trim outliers (below 1st and above 99th percentile). |
-| 2   | Income                | Filosofi / INSEE          | **XLSX**                          | Median household income, poverty rate                    | Needs XLSX parser (`xlsx` or `exceljs`). Wide format with coded column names. Map codes to fields.                                                                                                                  |
-| 3   | Safety                | SSMSI crime stats         | CSV                               | Total crime rate per 1k residents, breakdown by category | Population data needed from separate INSEE source to compute per-capita rates.                                                                                                                                      |
-| 4   | Transport density     | IDFM station data         | GeoJSON/CSV with lat/lon          | Metro/RER stations per km2                               | **Spatial: point-in-polygon** test each station against arrondissement boundaries using turf.js.                                                                                                                    |
-| 5   | Nightlife & dining    | SIRENE (API)              | JSON via API                      | Restaurants per km2, bars+cafes per km2                  | **Cannot download full SIRENE (5GB+).** Use INSEE API SIRENE: query by commune code (75101-75120) + validated NAF Rev.2 codes. Free token required, 30 req/min rate limit. ~20 paginated queries.                   |
-| 6   | Green space           | opendata.paris.fr         | GeoJSON polygons                  | m2 of green space per resident                           | **Spatial: polygon intersection.** Parks can span arrondissements. Clip with turf.js `intersect()`, compute area with `turf.area()`.                                                                                |
-| 7   | Noise                 | Bruitparif / data.gouv.fr | CSV                               | % residents exposed above Lden thresholds                | Straightforward. Already per arrondissement.                                                                                                                                                                        |
-| 8   | Amenities             | BPE (INSEE)               | CSV                               | Pharmacies, doctors, schools, gyms, cinemas per km2      | Filter by commune codes 75101-75120. Count equipment by type code.                                                                                                                                                  |
+| #   | Dimension             | Source                                  | Format                   | Metric                                                   | Processing notes                                                                                                                                                                                                                                                                                  |
+| --- | --------------------- | --------------------------------------- | ------------------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Housing affordability | DVF (data.gouv.fr)                      | CSV.gz by departement    | Median price/m2 (apartments), YoY trend                  | Parse departement 75 yearly snapshots and filter `code_commune` 75101..75120. Filter `type_local = "Appartement"`. Multi-row mutations: group by `id_mutation`, use `valeur_fonciere / surface_reelle_bati`. Drop rows with missing surface. Trim outliers (below 1st and above 99th percentile). |
+| 2   | Income                | INSEE dossier complet (Filosofi fields) | CSV inside ZIP           | Median household income, poverty rate                    | Parse `dossier_complet.csv` from the yearly INSEE archive and map `CODGEO` to communes `75101..75120`. Use `MED21` (median income) and `TP6021` (poverty rate). Same table provides shared population (`NBPERSMENFISC21`).                                                                        |
+| 3   | Safety                | SSMSI crime stats                       | CSV                      | Total crime rate per 1k residents, breakdown by category | Population data needed from separate INSEE source to compute per-capita rates.                                                                                                                                                                                                                    |
+| 4   | Transport density     | IDFM station data                       | GeoJSON/CSV with lat/lon | Metro/RER stations per km2                               | **Spatial: point-in-polygon** test each station against arrondissement boundaries using turf.js.                                                                                                                                                                                                  |
+| 5   | Nightlife & dining    | SIRENE (API)                            | JSON via API             | Restaurants per km2, bars+cafes per km2                  | **Cannot download full SIRENE (5GB+).** Use INSEE API SIRENE: query by commune code (75101-75120) + validated NAF Rev.2 codes. Free token required, 30 req/min rate limit. ~20 paginated queries.                                                                                                 |
+| 6   | Green space           | opendata.paris.fr                       | GeoJSON polygons         | m2 of green space per resident                           | **Spatial: polygon intersection.** Parks can span arrondissements. Clip with turf.js `intersect()`, compute area with `turf.area()`.                                                                                                                                                              |
+| 7   | Noise                 | Bruitparif / data.gouv.fr               | CSV                      | % residents exposed above Lden thresholds                | Straightforward. Already per arrondissement.                                                                                                                                                                                                                                                      |
+| 8   | Amenities             | BPE (INSEE)                             | CSV                      | Pharmacies, doctors, schools, gyms, cinemas per km2      | Filter by commune codes 75101-75120. Count equipment by type code.                                                                                                                                                                                                                                |
 
 **Score direction:** All dimensions are scored so that higher = better for the resident. Housing uses affordability (cheap = high score). Safety uses inverse crime rate (low crime = high score). Noise uses inverse exposure (low noise = high score). Persona weights control importance, not direction.
 
@@ -104,15 +104,15 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    - Validate exactly 20 arrondissements: commune codes 75101..75120
    - Compute `area_km2` from boundary `surface` (m2) in the pinned GeoJSON snapshot
 3. Build shared base tables
-   - Population per arrondissement from cached legal-population snapshot (`geo.api.gouv.fr`)
-   - (Phase 1B follow-up) replace population source with Filosofi shared table
+   - Population per arrondissement from INSEE dossier complet (`NBPERSMENFISC21`)
 4. For each enabled dimension, fetch from cache-or-network and compute metrics
    a. DVF:
       - Parse departement 75 CSV snapshots for target year + prior year, then filter arrondissement communes 75101..75120
       - Filter apartments, group by `id_mutation`, compute price/m2
       - Trim outliers using fixed percentile rule
    b. Filosofi:
-      - Parse XLSX, map coded columns, extract median income + poverty
+      - Parse INSEE dossier complet CSV-in-ZIP, filter `CODGEO` = `75101..75120`
+      - Extract `MED21` (median income) + `TP6021` (poverty rate)
    c. SSMSI:
       - Parse crime CSV, filter 75101..75120, compute per-1k with population
    d. IDFM:
@@ -141,19 +141,18 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 ### Manual refresh commands
 
 - `bun run data:build` -- build `arrondissements.json`, enrich `arrondissements.geojson`, write `metadata.json`
-- `bun run data:build --offline` -- same build, but fail if cached raw population snapshot or enabled-dimension raw snapshots are missing
+- `bun run data:build --offline` -- same build, but fail if cached INSEE dossier-complet archive or enabled-dimension raw snapshots are missing
 - `bun run data:refresh --dimensions=nightlife --all` -- refresh SIRENE nightlife raw snapshots for all arrondissements
 - `bun run data:refresh --dimensions=nightlife --offline --all` -- rebuild nightlife raw snapshots from cache only
 
 ### Dependencies for build script
 
-- Current implementation (through Phase 1B step 1) uses built-in `fetch` + Node fs/path/crypto/zlib only
-- `exceljs`, `@turf/turf`, and bounded-concurrency helpers are added in later Phase 1B/1C steps as parsers land
+- Current implementation (through Phase 1B step 2) uses built-in `fetch` + Node fs/path/crypto/zlib + child-process streaming (`unzip`) for large CSV-in-ZIP extraction
+- `@turf/turf` and bounded-concurrency helpers are added in later Phase 1C/1D steps as parsers land
 
 ### Population and area sources
 
-- **Population (current Phase 1A):** cached legal-population snapshot from `geo.api.gouv.fr` (`data/raw/population/legal-population.geo-api.json`), pinned by refresh date in `data-config.ts`.
-- **Population (planned Phase 1B):** switch to Filosofi shared table for income + population together.
+- **Population (current):** INSEE dossier complet shared table (`NBPERSMENFISC21`) from the pinned archive in `scripts/data-config.ts`.
 - **Area:** `surface` field from the pinned arrondissement GeoJSON snapshot (m2), converted to `area_km2`.
 
 ### Data quality gates
@@ -396,10 +395,15 @@ Weight sliders for user customization are a future addition. v1 ships with prese
 
 ## Social Sharing / OG Images
 
-- Each `/paris/{number}` page generates a dynamic OG image
-- Image shows: arrondissement number (large), composite score (equal weights), top 3 dimension scores
-- Uses `@vercel/og` (ImageResponse API) in a route handler at `app/api/og/[number]/route.tsx` (**outside** the `[locale]` prefix -- images are language-independent)
-- Twitter Card + Open Graph meta tags set per page
+- Each `/paris/{number}` page generates a dynamic OG image at `app/api/og/[number]/route.tsx`
+- Default OG image for home/leaderboard at `app/api/og/route.tsx`
+- Uses `next/og` (ImageResponse API) with Geist font loaded from `assets/fonts/`
+- Per-arrondissement image shows: arrondissement number (large), composite score (equal weights), rank, top 3 dimension scores
+- Default image shows: "Quartier" brand, tagline, all 8 dimension names as tags
+- Design: light background (#fafafa), clean minimalist typography, Geist sans-serif
+- All OG routes are **outside** the `[locale]` prefix (images are language-independent)
+- Twitter Card (`summary_large_image`) + Open Graph meta tags set per page via `generateMetadata`
+- Layout-level metadata provides default OG/Twitter tags; detail pages override with arrondissement-specific images
 
 ## Scoring Algorithm
 
@@ -464,7 +468,7 @@ scripts/
   build-data.ts             # orchestrator: download, parse, aggregate, output JSON
   sources/
     dvf.ts                  # DVF CSV parsing + median computation
-    filosofi.ts             # XLSX parsing for income data
+    filosofi.ts             # INSEE dossier-complet CSV-in-ZIP parsing for income + shared population
     crime.ts                # SSMSI CSV parsing + per-capita rates
     transport.ts            # IDFM station point-in-polygon
     sirene.ts               # INSEE API SIRENE queries for nightlife/dining
@@ -501,7 +505,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 ### Phase 1B: Core Dimensions (ship first snapshot)
 
 1. [x] DVF housing parser
-2. [ ] Filosofi income parser (+ shared population table)
+2. [x] Filosofi income parser (+ shared population table)
 3. [ ] SSMSI safety parser
 4. [ ] IDFM transport parser
 5. [x] Normalization + score output for enabled dimensions only
@@ -543,9 +547,9 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 ### Phase 5: Social + Deploy
 
-1. Dynamic OG image generation per arrondissement (@vercel/og)
-2. Meta tags per page
-3. Deploy to Vercel at quartier.sh
+1. [x] Dynamic OG image generation per arrondissement (next/og + Geist font)
+2. [x] Meta tags per page (OG + Twitter Card via generateMetadata)
+3. [ ] Deploy to Vercel at quartier.sh
 
 ### Phase 6: UI Polish
 
@@ -567,7 +571,8 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 - DVF: https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres/
 - DVF geo-split CSVs: https://files.data.gouv.fr/geo-dvf/latest/csv/
-- Filosofi income: https://www.data.gouv.fr/fr/datasets/revenus-et-pauvrete-des-menages-aux-niveaux-national-et-local-revenus-localises-sociaux-et-fiscaux/
+- Filosofi income (catalog): https://www.data.gouv.fr/fr/datasets/revenus-et-pauvrete-des-menages-aux-niveaux-national-et-local-revenus-localises-sociaux-et-fiscaux/
+- INSEE dossier complet archive (current parser source): https://www.insee.fr/fr/statistiques/5359146
 - Crime (SSMSI): https://www.data.gouv.fr/fr/datasets/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/
 - IDFM stations: https://data.iledefrance-mobilites.fr/explore/dataset/emplacement-des-gares-idf/
 - SIRENE: https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/

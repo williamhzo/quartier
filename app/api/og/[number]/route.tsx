@@ -1,4 +1,6 @@
-import { ImageResponse } from "@vercel/og";
+import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { loadArrondissements } from "@/lib/data";
 import { EQUAL_WEIGHTS } from "@/lib/personas";
 import { computeComposite, rankByComposite } from "@/lib/scoring";
@@ -11,10 +13,16 @@ const DIMENSION_LABELS: Record<DimensionKey, string> = {
   safety: "Safety",
   transport: "Transport",
   nightlife: "Nightlife",
-  greenSpace: "Green space",
+  greenSpace: "Green Space",
   noise: "Noise",
   amenities: "Amenities",
 };
+
+const size = { width: 1200, height: 630 };
+
+const fontsDir = join(process.cwd(), "assets/fonts");
+const fontRegularData = readFile(join(fontsDir, "Geist-Regular.ttf"));
+const fontSemiBoldData = readFile(join(fontsDir, "Geist-SemiBold.ttf"));
 
 export async function GET(
   _req: Request,
@@ -27,13 +35,18 @@ export async function GET(
     return new Response("Not found", { status: 404 });
   }
 
-  const data = await loadArrondissements();
-  const arr = data.find((a) => a.number === num);
+  const [fontRegular, fontSemiBold, data] = await Promise.all([
+    fontRegularData,
+    fontSemiBoldData,
+    loadArrondissements(),
+  ]);
 
+  const arr = data.find((a) => a.number === num);
   const label = formatArrondissement(num);
+
   let composite = 0;
   let rank = 0;
-  let topDimensions: { key: DimensionKey; score: number }[] = [];
+  let topDimensions: { key: DimensionKey; label: string; score: number }[] = [];
 
   if (arr) {
     composite = Math.round(computeComposite(arr.scores, EQUAL_WEIGHTS));
@@ -42,9 +55,10 @@ export async function GET(
 
     topDimensions = DIMENSION_KEYS.map((k) => ({
       key: k as DimensionKey,
-      score: arr.scores[k as DimensionKey] ?? 0,
+      label: DIMENSION_LABELS[k as DimensionKey],
+      score: arr.scores[k as DimensionKey] ?? -1,
     }))
-      .filter((d) => d.score > 0)
+      .filter((d) => d.score >= 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, 3);
   }
@@ -56,92 +70,158 @@ export async function GET(
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
-        padding: "60px",
         backgroundColor: "#fafafa",
-        fontFamily: "sans-serif",
+        fontFamily: "Geist",
+        padding: "48px 64px",
+        justifyContent: "space-between",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          gap: "16px",
-        }}
-      >
-        <span style={{ fontSize: 72, fontWeight: 700, color: "#0f172a" }}>
-          {label}
-        </span>
-        {arr && (
-          <span style={{ fontSize: 32, color: "#64748b" }}>#{rank}/20</span>
-        )}
-      </div>
-
-      {arr ? (
-        <div
-          style={{ display: "flex", flexDirection: "column", marginTop: 32 }}
+      {/* Top: brand */}
+      <div style={{ display: "flex" }}>
+        <span
+          style={{
+            fontSize: 17,
+            fontWeight: 400,
+            color: "#a3a3a3",
+            letterSpacing: "0.03em",
+          }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              gap: "12px",
-            }}
-          >
-            <span style={{ fontSize: 48, fontWeight: 600, color: "#0f172a" }}>
-              {composite}
-            </span>
-            <span style={{ fontSize: 24, color: "#94a3b8" }}>/100</span>
-          </div>
-
-          <div style={{ display: "flex", gap: "24px", marginTop: 32 }}>
-            {topDimensions.map((d) => (
-              <div
-                key={d.key}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  backgroundColor: "#f1f5f9",
-                  borderRadius: 12,
-                  padding: "16px 24px",
-                }}
-              >
-                <span style={{ fontSize: 16, color: "#64748b" }}>
-                  {DIMENSION_LABELS[d.key]}
-                </span>
-                <span
-                  style={{ fontSize: 28, fontWeight: 600, color: "#0f172a" }}
-                >
-                  {Math.round(d.score)}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div style={{ display: "flex", marginTop: 32 }}>
-          <span style={{ fontSize: 24, color: "#94a3b8" }}>
-            Data coming soon
-          </span>
-        </div>
-      )}
-
-      <div
-        style={{
-          display: "flex",
-          position: "absolute",
-          bottom: 40,
-          right: 60,
-        }}
-      >
-        <span style={{ fontSize: 20, color: "#94a3b8", fontWeight: 500 }}>
           quartier.sh
         </span>
       </div>
+
+      {/* Center: arrondissement + score */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* Left: arrondissement name */}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <span
+            style={{
+              fontSize: 140,
+              fontWeight: 600,
+              color: "#0a0a0a",
+              lineHeight: 0.9,
+              letterSpacing: "-0.04em",
+            }}
+          >
+            {label}
+          </span>
+          <span
+            style={{
+              fontSize: 30,
+              fontWeight: 400,
+              color: "#a3a3a3",
+              marginTop: 8,
+              letterSpacing: "0.01em",
+            }}
+          >
+            arrondissement
+          </span>
+        </div>
+
+        {/* Right: composite score */}
+        {arr && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              paddingBottom: 6,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "baseline" }}>
+              <span
+                style={{
+                  fontSize: 88,
+                  fontWeight: 600,
+                  color: "#0a0a0a",
+                  lineHeight: 1,
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                {composite}
+              </span>
+              <span
+                style={{
+                  fontSize: 26,
+                  fontWeight: 400,
+                  color: "#d4d4d4",
+                  marginLeft: 4,
+                }}
+              >
+                /100
+              </span>
+            </div>
+            <span
+              style={{
+                fontSize: 20,
+                fontWeight: 400,
+                color: "#a3a3a3",
+                marginTop: 4,
+              }}
+            >
+              #{rank} of 20
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom: dimension pills */}
+      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        {topDimensions.length > 0 &&
+          topDimensions.map((d) => (
+            <div
+              key={d.key}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                backgroundColor: "#ebebeb",
+                borderRadius: 8,
+                padding: "10px 18px",
+              }}
+            >
+              <span
+                style={{ fontSize: 15, fontWeight: 400, color: "#737373" }}
+              >
+                {d.label}
+              </span>
+              <span
+                style={{ fontSize: 18, fontWeight: 600, color: "#262626" }}
+              >
+                {Math.round(d.score)}
+              </span>
+            </div>
+          ))}
+
+        {topDimensions.length === 0 && (
+          <span style={{ fontSize: 16, fontWeight: 400, color: "#a3a3a3" }}>
+            Data coming soon
+          </span>
+        )}
+      </div>
     </div>,
     {
-      width: 1200,
-      height: 630,
+      ...size,
+      fonts: [
+        {
+          name: "Geist",
+          data: fontRegular,
+          style: "normal" as const,
+          weight: 400 as const,
+        },
+        {
+          name: "Geist",
+          data: fontSemiBold,
+          style: "normal" as const,
+          weight: 600 as const,
+        },
+      ],
     },
   );
 }
