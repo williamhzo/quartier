@@ -28,7 +28,6 @@
   },
   "map": {
     "title": "Paris Map",
-    "clickToExplore": "Click an arrondissement to explore",
     "compositeScore": "Composite score"
   },
   "leaderboard": {

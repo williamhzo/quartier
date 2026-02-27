@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { loadArrondissements } from "@/lib/data";
-import { loadBoundaries } from "@/lib/geo";
+import { loadBoundaries, loadContextBoundaries } from "@/lib/geo";
 import { ParisMap } from "@/components/map/paris-map";
 
 type Props = {
@@ -11,10 +11,17 @@ export default async function MapPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [arrondissements, boundaries] = await Promise.all([
+  const [arrondissements, boundaries, contextBoundaries] = await Promise.all([
     loadArrondissements(),
     loadBoundaries(),
+    loadContextBoundaries(),
   ]);
 
-  return <ParisMap arrondissements={arrondissements} boundaries={boundaries} />;
+  return (
+    <ParisMap
+      arrondissements={arrondissements}
+      boundaries={boundaries}
+      contextBoundaries={contextBoundaries}
+    />
+  );
 }

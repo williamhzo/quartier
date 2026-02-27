@@ -25,11 +25,17 @@ const INITIAL_ZOOM = 11.5;
 type Props = {
   arrondissements: Arrondissement[];
   boundaries: FeatureCollection<Geometry>;
+  contextBoundaries: FeatureCollection<Geometry>;
 };
 
-export function ParisMap({ arrondissements, boundaries }: Props) {
+export function ParisMap({
+  arrondissements,
+  boundaries,
+  contextBoundaries,
+}: Props) {
   const t = useTranslations();
   const mapRef = useRef<MapRef>(null);
+  const hoveredIdRef = useRef<number | null>(null);
   const [persona, setPersona] = useState<PersonaKey>("youngPro");
   const [dimension, setDimension] = useState<DimensionKey | "composite">(
     "composite",
@@ -104,16 +110,50 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
   }, [ranked, hoveredNumber, dimension]);
 
   const onMouseMove = useCallback((e: MapLayerMouseEvent) => {
+    const map = mapRef.current?.getMap();
+    if (!map) return;
+
     if (e.features && e.features.length > 0) {
-      const num = e.features[0].properties?.number;
+      const num = e.features[0].properties?.number as number | undefined;
+
+      if (hoveredIdRef.current != null && hoveredIdRef.current !== num) {
+        map.setFeatureState(
+          { source: "arrondissements", id: hoveredIdRef.current },
+          { hover: false },
+        );
+      }
+
+      if (num != null) {
+        map.setFeatureState(
+          { source: "arrondissements", id: num },
+          { hover: true },
+        );
+        hoveredIdRef.current = num;
+      }
+
       setHoveredNumber(num ?? null);
       setTooltipPos({ x: e.point.x, y: e.point.y });
     } else {
+      if (hoveredIdRef.current != null) {
+        map.setFeatureState(
+          { source: "arrondissements", id: hoveredIdRef.current },
+          { hover: false },
+        );
+        hoveredIdRef.current = null;
+      }
       setHoveredNumber(null);
     }
   }, []);
 
   const onMouseLeave = useCallback(() => {
+    const map = mapRef.current?.getMap();
+    if (map && hoveredIdRef.current != null) {
+      map.setFeatureState(
+        { source: "arrondissements", id: hoveredIdRef.current },
+        { hover: false },
+      );
+      hoveredIdRef.current = null;
+    }
     setHoveredNumber(null);
   }, []);
 
@@ -126,27 +166,67 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
     }
   }, []);
 
-  const hasData = arrondissements.length > 0;
+  const fillColor: maplibregl.ExpressionSpecification = [
+    "interpolate",
+    ["linear"],
+    ["coalesce", ["get", "score"], 0],
+    0,
+    "#f7fbff",
+    20,
+    "#c6dbef",
+    40,
+    "#6baed6",
+    60,
+    "#2171b5",
+    80,
+    "#08519c",
+    100,
+    "#08306b",
+  ];
 
-  const fillColor = hasData
-    ? ([
-        "interpolate",
-        ["linear"],
-        ["coalesce", ["get", "score"], 0],
-        0,
-        "#f7fbff",
-        20,
-        "#c6dbef",
-        40,
-        "#6baed6",
-        60,
-        "#2171b5",
-        80,
-        "#08519c",
-        100,
-        "#08306b",
-      ] as maplibregl.ExpressionSpecification)
-    : ("#c6dbef" as string);
+  // Memoize paint expressions so they only change when selectedNumber changes,
+  // not on every hover. Hover styling is handled via MapLibre feature-state.
+  const fillOpacity = useMemo(
+    () =>
+      [
+        "case",
+        ["boolean", ["feature-state", "hover"], false],
+        0.9,
+        selectedNumber != null
+          ? [
+              "case",
+              ["==", ["get", "number"], selectedNumber],
+              0.85,
+              0.6,
+            ]
+          : 0.7,
+      ] as maplibregl.ExpressionSpecification,
+    [selectedNumber],
+  );
+
+  const lineColor = useMemo(
+    () =>
+      [
+        "case",
+        ["==", ["get", "number"], selectedNumber ?? -1],
+        "#1e293b",
+        "#64748b",
+      ] as maplibregl.ExpressionSpecification,
+    [selectedNumber],
+  );
+
+  const lineWidth = useMemo(
+    () =>
+      [
+        "case",
+        ["==", ["get", "number"], selectedNumber ?? -1],
+        2.5,
+        ["boolean", ["feature-state", "hover"], false],
+        1.5,
+        0.8,
+      ] as maplibregl.ExpressionSpecification,
+    [selectedNumber],
+  );
 
   return (
     <div className="relative h-[calc(100vh-3.5rem)]">
@@ -173,7 +253,7 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
             {
               id: "background",
               type: "background",
-              paint: { "background-color": "#f8f9fa" },
+              paint: { "background-color": "#f0f0f0" },
             },
           ],
         }}
@@ -183,45 +263,45 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
         onClick={onClick}
         cursor={hoveredNumber ? "pointer" : "grab"}
       >
-        <Source id="arrondissements" type="geojson" data={enrichedGeojson}>
+        <Source id="idf-context" type="geojson" data={contextBoundaries}>
+          <Layer
+            id="idf-context-fill"
+            type="fill"
+            paint={{
+              "fill-color": "#e8e8e8",
+              "fill-opacity": 0.6,
+            }}
+          />
+          <Layer
+            id="idf-context-outline"
+            type="line"
+            paint={{
+              "line-color": "#c0c0c0",
+              "line-width": 0.5,
+            }}
+          />
+        </Source>
+
+        <Source
+          id="arrondissements"
+          type="geojson"
+          data={enrichedGeojson}
+          promoteId="number"
+        >
           <Layer
             id="arrondissements-fill"
             type="fill"
             paint={{
               "fill-color": fillColor as unknown as string,
-              "fill-opacity": [
-                "case",
-                ["==", ["get", "number"], hoveredNumber ?? -1],
-                0.9,
-                selectedNumber
-                  ? [
-                      "case",
-                      ["==", ["get", "number"], selectedNumber],
-                      0.85,
-                      0.6,
-                    ]
-                  : 0.7,
-              ],
+              "fill-opacity": fillOpacity as unknown as number,
             }}
           />
           <Layer
             id="arrondissements-outline"
             type="line"
             paint={{
-              "line-color": [
-                "case",
-                ["==", ["get", "number"], selectedNumber ?? -1],
-                "#1e293b",
-                "#64748b",
-              ],
-              "line-width": [
-                "case",
-                ["==", ["get", "number"], selectedNumber ?? -1],
-                2.5,
-                ["==", ["get", "number"], hoveredNumber ?? -1],
-                1.5,
-                0.8,
-              ],
+              "line-color": lineColor as unknown as string,
+              "line-width": lineWidth as unknown as number,
             }}
           />
           <Layer
@@ -266,15 +346,6 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
         />
       )}
 
-      {!hasData && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="bg-background/80 rounded-lg px-6 py-4 text-center backdrop-blur-sm">
-            <p className="text-muted-foreground text-sm">
-              {t("map.clickToExplore")}
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
