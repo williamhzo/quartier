@@ -2,57 +2,47 @@
 
 import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
-import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { ShareButton } from "@/components/share-button";
 import { ScoreBar } from "@/components/detail/score-bar";
+import { DimensionSection } from "@/components/detail/dimension-section";
 import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
-import type { Arrondissement, DimensionKey, PersonaWeights } from "@/lib/types";
+import type { Arrondissement, DimensionKey } from "@/lib/types";
 
 type Props = {
   arrondissement: Arrondissement & { composite: number; rank: number };
   composite: number;
   rank: number;
-  weights: PersonaWeights;
   onClose: () => void;
 };
 
-export function MapPanel({
-  arrondissement,
-  composite,
-  rank,
-  weights,
-  onClose,
-}: Props) {
+export function MapPanel({ arrondissement, composite, rank, onClose }: Props) {
   const num = arrondissement.number;
   const label = formatArrondissement(num);
-
-  const activeDimensions = DIMENSION_KEYS.filter(
-    (k) => weights[k as DimensionKey] > 0,
-  );
 
   return (
     <>
       {/* Desktop: side panel */}
-      <div className="bg-background animate-in slide-in-from-right-full absolute top-0 right-0 z-20 hidden h-full w-80 overflow-y-auto border-l shadow-lg md:block">
+      <div className="bg-background animate-in slide-in-from-right-full absolute top-0 right-0 z-20 hidden h-full overflow-y-auto border-l shadow-lg md:block md:w-96 lg:w-[28rem]">
         <PanelContent
           label={label}
           num={num}
           composite={composite}
           rank={rank}
-          activeDimensions={activeDimensions}
           arrondissement={arrondissement}
           onClose={onClose}
         />
       </div>
 
       {/* Mobile: bottom sheet */}
-      <div className="bg-background animate-in slide-in-from-bottom-full absolute right-0 bottom-0 left-0 z-20 max-h-[60vh] overflow-y-auto rounded-t-xl border-t shadow-lg md:hidden">
+      <div className="bg-background animate-in slide-in-from-bottom-full absolute right-0 bottom-0 left-0 z-20 max-h-[85vh] overflow-y-auto rounded-t-xl border-t shadow-lg md:hidden">
+        <div className="sticky top-0 z-10 flex justify-center pt-3 pb-1">
+          <div className="bg-muted-foreground/30 h-1 w-10 rounded-full" />
+        </div>
         <PanelContent
           label={label}
           num={num}
           composite={composite}
           rank={rank}
-          activeDimensions={activeDimensions}
           arrondissement={arrondissement}
           onClose={onClose}
         />
@@ -66,7 +56,6 @@ function PanelContent({
   num,
   composite,
   rank,
-  activeDimensions,
   arrondissement,
   onClose,
 }: {
@@ -74,7 +63,6 @@ function PanelContent({
   num: number;
   composite: number;
   rank: number;
-  activeDimensions: readonly string[];
   arrondissement: Arrondissement;
   onClose: () => void;
 }) {
@@ -89,12 +77,15 @@ function PanelContent({
             {t("detail.rank")}: {rank} {t("detail.outOf")}
           </p>
         </div>
-        <button
-          onClick={onClose}
-          className="text-muted-foreground hover:text-foreground rounded-md p-1"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-1">
+          <ShareButton number={num} size="icon-xs" />
+          <button
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground rounded-md p-1"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       <div className="mb-4">
@@ -104,23 +95,14 @@ function PanelContent({
         />
       </div>
 
-      <div className="space-y-2">
-        {activeDimensions.map((key) => {
-          const score = arrondissement.scores[key as DimensionKey];
-          return (
-            <ScoreBar
-              key={key}
-              label={t(`dimensions.${key}`)}
-              score={score != null ? Math.round(score) : null}
-            />
-          );
-        })}
-      </div>
-
-      <div className="mt-4">
-        <Button variant="outline" size="sm" className="w-full" asChild>
-          <Link href={`/paris/${num}`}>{t("detail.viewDetails")}</Link>
-        </Button>
+      <div className="space-y-3">
+        {DIMENSION_KEYS.map((key) => (
+          <DimensionSection
+            key={key}
+            dimensionKey={key as DimensionKey}
+            arrondissement={arrondissement}
+          />
+        ))}
       </div>
     </div>
   );

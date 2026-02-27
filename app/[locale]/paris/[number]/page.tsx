@@ -7,6 +7,7 @@ import { computeComposite, rankByComposite } from "@/lib/scoring";
 import { Badge } from "@/components/ui/badge";
 import { DimensionSection } from "@/components/detail/dimension-section";
 import { Link } from "@/i18n/navigation";
+import { ShareButton } from "@/components/share-button";
 import { ArrowLeft } from "lucide-react";
 
 const VALID_NUMBERS = Array.from({ length: 20 }, (_, i) => String(i + 1));
@@ -82,7 +83,7 @@ export default async function DetailPage({ params }: Props) {
         <ArrowLeft className="size-4" />
         {t("detail.backToMap")}
       </Link>
-      <div className="mt-4 flex items-baseline gap-4">
+      <div className="mt-4 flex items-center gap-4">
         <h1 className="text-2xl font-semibold">
           {formatArrondissement(arrondissement.number)}
         </h1>
@@ -92,6 +93,7 @@ export default async function DetailPage({ params }: Props) {
         <span className="text-muted-foreground text-sm tabular-nums">
           #{rank}/20
         </span>
+        <ShareButton number={arrondissement.number} />
       </div>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {DIMENSION_KEYS.map((key) => (
