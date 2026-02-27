@@ -12,6 +12,11 @@ import {
   loadIncomePopulationFromFilosofi,
   type IncomeMetric,
 } from "./sources/filosofi";
+import { buildSafetyFromSsmsi, type SafetyMetric } from "./sources/crime";
+import {
+  buildTransportFromIdfm,
+  type TransportMetric,
+} from "./sources/transport";
 
 type BuildOptions = {
   offline: boolean;
@@ -40,8 +45,8 @@ type BoundaryCollection = {
 type ArrondissementDimensions = {
   housing: HousingMetric | null;
   income: IncomeMetric | null;
-  safety: null;
-  transport: null;
+  safety: SafetyMetric | null;
+  transport: TransportMetric | null;
   nightlife: null;
   greenSpace: null;
   noise: null;
@@ -405,6 +410,100 @@ async function applyHousingDimension(
   };
 }
 
+async function applySafetyDimension(
+  rows: ArrondissementRow[],
+  mode: "network-first" | "cache-only",
+): Promise<BuildSourceContributions> {
+  if (!DATA_CONFIG.enabledDimensions.includes("safety")) {
+    return {
+      sourceRowCounts: {},
+      sourceChecksums: {},
+      sourceUrls: {},
+      warnings: [],
+    };
+  }
+
+  const populationByCommune = new Map(
+    rows.map((row) => [row.code, row.population] as const),
+  );
+  const safety = await buildSafetyFromSsmsi({
+    communes: PARIS_ARRONDISSEMENT_COMMUNES,
+    populationByCommune,
+    mode,
+    config: DATA_CONFIG.sources.safety,
+  });
+
+  const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
+  for (const [code, metric] of safety.byCommune) {
+    const row = rowByCode.get(code);
+    if (!row) continue;
+    row.dimensions.safety = metric;
+  }
+
+  return {
+    sourceRowCounts: safety.sourceRowCounts,
+    sourceChecksums: safety.sourceChecksums,
+    sourceUrls: safety.sourceUrls,
+    warnings: safety.warnings,
+  };
+}
+
+async function applyTransportDimension(
+  rows: ArrondissementRow[],
+  boundaries: BoundaryCollection,
+  mode: "network-first" | "cache-only",
+): Promise<BuildSourceContributions> {
+  if (!DATA_CONFIG.enabledDimensions.includes("transport")) {
+    return {
+      sourceRowCounts: {},
+      sourceChecksums: {},
+      sourceUrls: {},
+      warnings: [],
+    };
+  }
+
+  const geometryByCode = new Map<string, unknown>();
+  for (const feature of boundaries.features) {
+    const props = feature.properties ?? {};
+    const rawCode = props.c_arinsee;
+    if (rawCode == null) continue;
+    geometryByCode.set(assertParisCode(rawCode), feature.geometry);
+  }
+
+  const boundariesForParser = rows.map((row) => {
+    const geometry = geometryByCode.get(row.code);
+    if (!geometry) {
+      throw new Error(`missing boundary geometry for transport: ${row.code}`);
+    }
+
+    return {
+      code: row.code,
+      area_km2: row.area_km2,
+      geometry,
+    };
+  });
+
+  const transport = await buildTransportFromIdfm({
+    boundaries: boundariesForParser,
+    mode,
+    config: DATA_CONFIG.sources.transport,
+  });
+
+  const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
+  for (const [code, metric] of transport.byCommune) {
+    const row = rowByCode.get(code);
+    if (!row) continue;
+    row.dimensions.transport = metric;
+  }
+
+  return {
+    sourceRowCounts: transport.sourceRowCounts,
+    sourceChecksums: transport.sourceChecksums,
+    sourceUrls: transport.sourceUrls,
+    warnings: transport.warnings,
+  };
+}
+
 function applyIncomeDimension(
   rows: ArrondissementRow[],
   incomeByCommune: Map<string, IncomeMetric>,
@@ -430,6 +529,12 @@ function getRawMetricForDimension(
   }
   if (dimension === "income") {
     return row.dimensions.income?.median_household ?? null;
+  }
+  if (dimension === "safety") {
+    return row.dimensions.safety?.crime_rate_per_1k ?? null;
+  }
+  if (dimension === "transport") {
+    return row.dimensions.transport?.stations_per_km2 ?? null;
   }
 
   return null;
@@ -685,6 +790,23 @@ async function main(): Promise<void> {
   Object.assign(sourceChecksums, housingContribution.sourceChecksums);
   Object.assign(sourceUrls, housingContribution.sourceUrls);
   warnings.push(...housingContribution.warnings);
+
+  const safetyContribution = await applySafetyDimension(rows, mode);
+  Object.assign(sourceRowCounts, safetyContribution.sourceRowCounts);
+  Object.assign(sourceChecksums, safetyContribution.sourceChecksums);
+  Object.assign(sourceUrls, safetyContribution.sourceUrls);
+  warnings.push(...safetyContribution.warnings);
+
+  const transportContribution = await applyTransportDimension(
+    rows,
+    boundaries,
+    mode,
+  );
+  Object.assign(sourceRowCounts, transportContribution.sourceRowCounts);
+  Object.assign(sourceChecksums, transportContribution.sourceChecksums);
+  Object.assign(sourceUrls, transportContribution.sourceUrls);
+  warnings.push(...transportContribution.warnings);
+
   warnings.push(
     ...collectRowCountDriftWarnings(sourceRowCounts, driftBaseline.metadata),
   );
