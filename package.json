@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "data:validate:sirene-naf": "bun scripts/validate-sirene-naf.ts"
+    "data:validate:sirene-naf": "bun scripts/validate-sirene-naf.ts",
+    "data:dry-run:sirene:one": "bun scripts/dry-run-sirene-queries.ts --commune=75111",
+    "data:dry-run:sirene:all": "bun scripts/dry-run-sirene-queries.ts --all"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
