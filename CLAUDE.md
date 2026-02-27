@@ -1,0 +1,24 @@
+# CLAUDE.md
+
+## Project
+
+Baguette is a web app for exploring French open data from data.gouv.fr. See `ideas.md` for product direction.
+
+## Commands
+
+```bash
+bun dev          # dev server on :3000
+bun run build    # production build
+bun run lint     # eslint (flat config)
+bun run format   # prettier (with tailwind class sorting)
+```
+
+## Conventions
+
+- shadcn components use `data-slot` attributes for styling hooks
+- Add new shadcn components via `bunx shadcn@latest add <component>`
+
+## Data Sources
+
+- [datagouv MCP server](https://github.com/datagouv/datagouv-mcp) -- structured API access to data.gouv.fr datasets
+- [datagouv MCP blog post](https://www.data.gouv.fr/posts/experimentation-autour-dun-serveur-mcp-pour-datagouv) -- context on the MCP server experimentation
