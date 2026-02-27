@@ -7,6 +7,7 @@ import Map, {
   type MapLayerMouseEvent,
   type MapRef,
 } from "react-map-gl/maplibre";
+import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useTranslations } from "next-intl";
 import type { Arrondissement, DimensionKey, PersonaKey } from "@/lib/types";
@@ -109,53 +110,55 @@ export function ParisMap({
     };
   }, [ranked, hoveredNumber, dimension]);
 
-  const onMouseMove = useCallback((e: MapLayerMouseEvent) => {
-    const map = mapRef.current?.getMap();
-    if (!map) return;
+  const setHoverState = useCallback(
+    (map: maplibregl.Map, id: number, hover: boolean) => {
+      if (!map.getSource("arrondissements")) return;
+      map.setFeatureState(
+        { source: "arrondissements", id },
+        { hover },
+      );
+    },
+    [],
+  );
 
-    if (e.features && e.features.length > 0) {
-      const num = e.features[0].properties?.number as number | undefined;
+  const onMouseMove = useCallback(
+    (e: MapLayerMouseEvent) => {
+      const map = mapRef.current?.getMap();
+      if (!map) return;
 
-      if (hoveredIdRef.current != null && hoveredIdRef.current !== num) {
-        map.setFeatureState(
-          { source: "arrondissements", id: hoveredIdRef.current },
-          { hover: false },
-        );
+      if (e.features && e.features.length > 0) {
+        const num = e.features[0].properties?.number as number | undefined;
+
+        if (hoveredIdRef.current != null && hoveredIdRef.current !== num) {
+          setHoverState(map, hoveredIdRef.current, false);
+        }
+
+        if (num != null) {
+          setHoverState(map, num, true);
+          hoveredIdRef.current = num;
+        }
+
+        setHoveredNumber(num ?? null);
+        setTooltipPos({ x: e.point.x, y: e.point.y });
+      } else {
+        if (hoveredIdRef.current != null) {
+          setHoverState(map, hoveredIdRef.current, false);
+          hoveredIdRef.current = null;
+        }
+        setHoveredNumber(null);
       }
-
-      if (num != null) {
-        map.setFeatureState(
-          { source: "arrondissements", id: num },
-          { hover: true },
-        );
-        hoveredIdRef.current = num;
-      }
-
-      setHoveredNumber(num ?? null);
-      setTooltipPos({ x: e.point.x, y: e.point.y });
-    } else {
-      if (hoveredIdRef.current != null) {
-        map.setFeatureState(
-          { source: "arrondissements", id: hoveredIdRef.current },
-          { hover: false },
-        );
-        hoveredIdRef.current = null;
-      }
-      setHoveredNumber(null);
-    }
-  }, []);
+    },
+    [setHoverState],
+  );
 
   const onMouseLeave = useCallback(() => {
     const map = mapRef.current?.getMap();
     if (map && hoveredIdRef.current != null) {
-      map.setFeatureState(
-        { source: "arrondissements", id: hoveredIdRef.current },
-        { hover: false },
-      );
+      setHoverState(map, hoveredIdRef.current, false);
       hoveredIdRef.current = null;
     }
     setHoveredNumber(null);
-  }, []);
+  }, [setHoverState]);
 
   const onClick = useCallback((e: MapLayerMouseEvent) => {
     if (e.features && e.features.length > 0) {

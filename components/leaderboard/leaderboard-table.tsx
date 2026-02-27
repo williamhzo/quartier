@@ -45,8 +45,8 @@ export function LeaderboardTable({ data }: Props) {
         av = a.number;
         bv = b.number;
       } else {
-        av = a.scores[sortKey];
-        bv = b.scores[sortKey];
+        av = a.scores[sortKey] ?? 0;
+        bv = b.scores[sortKey] ?? 0;
       }
       return sortAsc ? av - bv : bv - av;
     });
