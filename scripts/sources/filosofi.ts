@@ -6,6 +6,7 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { createInterface } from "node:readline";
 import path from "node:path";
+import type { ReadableStream as NodeReadableStream } from "stream/web";
 
 type FetchMode = "network-first" | "cache-only";
 
@@ -139,8 +140,9 @@ async function fetchArchiveToCache(
 
       const tempPath = `${cachePath}.tmp-${Date.now()}`;
       await mkdir(path.dirname(cachePath), { recursive: true });
+      const nodeBody = response.body as unknown as NodeReadableStream<Uint8Array>;
       await pipeline(
-        Readable.fromWeb(response.body as ReadableStream),
+        Readable.fromWeb(nodeBody),
         createWriteStream(tempPath),
       );
       await rename(tempPath, cachePath);
@@ -221,10 +223,6 @@ async function parseRequiredRowsFromArchive(
   }
 
   let stderrBuffer = "";
-  let spawnError: Error | null = null;
-  unzip.on("error", (error) => {
-    spawnError = error;
-  });
   stderr.on("data", (chunk: Buffer) => {
     stderrBuffer += chunk.toString("utf8");
   });
@@ -310,15 +308,10 @@ async function parseRequiredRowsFromArchive(
   const closeResult = await new Promise<{
     code: number | null;
     signal: NodeJS.Signals | null;
-  }>((resolve) => {
-    unzip.on("close", (code, signal) => resolve({ code, signal }));
+  }>((resolve, reject) => {
+    unzip.once("error", reject);
+    unzip.once("close", (code, signal) => resolve({ code, signal }));
   });
-
-  if (spawnError) {
-    throw new Error(
-      `failed to execute unzip for filosofi parsing: ${spawnError.message}`,
-    );
-  }
 
   if (!shouldStopEarly && closeResult.code !== 0) {
     throw new Error(
