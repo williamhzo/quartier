@@ -36,7 +36,9 @@
     "rank": "#",
     "arrondissement": "Arrondissement",
     "score": "Score",
-    "viewDetails": "Voir le détail"
+    "viewDetails": "Voir le détail",
+    "emptyTitle": "Aucune donnée disponible",
+    "emptyDescription": "Les données des arrondissements n'ont pas encore été chargées."
   },
   "detail": {
     "backToMap": "Retour à la carte",
@@ -90,6 +92,7 @@
   "common": {
     "perKm2": "par km²",
     "na": "N/A",
+    "noData": "Données pas encore disponibles",
     "loading": "Chargement..."
   }
 }

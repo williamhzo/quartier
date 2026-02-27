@@ -107,12 +107,11 @@ function PanelContent({
       <div className="space-y-2">
         {activeDimensions.map((key) => {
           const score = arrondissement.scores[key as DimensionKey];
-          if (score == null) return null;
           return (
             <ScoreBar
               key={key}
               label={t(`dimensions.${key}`)}
-              score={Math.round(score)}
+              score={score != null ? Math.round(score) : null}
             />
           );
         })}

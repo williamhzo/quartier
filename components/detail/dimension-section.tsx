@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { ScoreBar } from "./score-bar";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
 
@@ -16,18 +17,19 @@ export function DimensionSection({ dimensionKey, arrondissement }: Props) {
   const dim = arrondissement.dimensions[dimensionKey];
 
   return (
-    <Card>
+    <Card className={cn(!dim && "opacity-60")}>
       <CardHeader className="pb-3">
         <CardTitle className="text-base">
           {t(`dimensions.${dimensionKey}`)}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <ScoreBar
-          score={score ?? 0}
-          label={t("detail.scores")}
-        />
-        <RawValues dimensionKey={dimensionKey} data={dim} />
+        <ScoreBar score={score} label={t("detail.scores")} />
+        {dim ? (
+          <RawValues dimensionKey={dimensionKey} data={dim} />
+        ) : (
+          <p className="text-muted-foreground text-sm">{t("common.noData")}</p>
+        )}
       </CardContent>
     </Card>
   );
@@ -51,7 +53,7 @@ function RawValues({
       {rows.map(([label, value]) => (
         <div key={label} className="flex justify-between py-1">
           <dt className="text-muted-foreground">{label}</dt>
-          <dd className="tabular-nums font-medium">{value}</dd>
+          <dd className="font-medium tabular-nums">{value}</dd>
         </div>
       ))}
     </dl>
@@ -69,7 +71,10 @@ function getRawValueRows(
     case "housing":
       return [
         [t("housing.medianPrice"), `${fmt(data.median_price_m2)} EUR/m²`],
-        [t("housing.yoyChange"), `${data.yoy_change > 0 ? "+" : ""}${data.yoy_change?.toFixed(1)}%`],
+        [
+          t("housing.yoyChange"),
+          `${data.yoy_change > 0 ? "+" : ""}${data.yoy_change?.toFixed(1)}%`,
+        ],
         [t("housing.transactions"), fmt(data.transaction_count)],
       ];
     case "income":
@@ -78,9 +83,7 @@ function getRawValueRows(
         [t("income.povertyRate"), `${data.poverty_rate?.toFixed(1)}%`],
       ];
     case "safety":
-      return [
-        [t("safety.crimeRate"), data.crime_rate_per_1k?.toFixed(1)],
-      ];
+      return [[t("safety.crimeRate"), data.crime_rate_per_1k?.toFixed(1)]];
     case "transport":
       return [
         [t("transport.stationsPerKm2"), data.stations_per_km2?.toFixed(1)],
@@ -88,7 +91,10 @@ function getRawValueRows(
       ];
     case "nightlife":
       return [
-        [t("nightlife.restaurantsPerKm2"), data.restaurants_per_km2?.toFixed(1)],
+        [
+          t("nightlife.restaurantsPerKm2"),
+          data.restaurants_per_km2?.toFixed(1),
+        ],
         [t("nightlife.barsPerKm2"), data.bars_per_km2?.toFixed(1)],
         [t("nightlife.cafesPerKm2"), data.cafes_per_km2?.toFixed(1)],
       ];
@@ -99,8 +105,14 @@ function getRawValueRows(
       ];
     case "noise":
       return [
-        [t("noise.dayExposure"), `${data.pct_above_lden_threshold?.toFixed(1)}%`],
-        [t("noise.nightExposure"), `${data.pct_above_night_threshold?.toFixed(1)}%`],
+        [
+          t("noise.dayExposure"),
+          `${data.pct_above_lden_threshold?.toFixed(1)}%`,
+        ],
+        [
+          t("noise.nightExposure"),
+          `${data.pct_above_night_threshold?.toFixed(1)}%`,
+        ],
       ];
     case "amenities":
       return [

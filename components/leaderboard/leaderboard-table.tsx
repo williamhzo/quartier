@@ -107,9 +107,16 @@ export function LeaderboardTable({ data }: Props) {
               <TableRow>
                 <TableCell
                   colSpan={3 + DIMENSION_KEYS.length}
-                  className="text-muted-foreground h-24 text-center"
+                  className="h-48 text-center"
                 >
-                  {t("common.na")}
+                  <div className="text-muted-foreground space-y-1">
+                    <p className="text-sm font-medium">
+                      {t("leaderboard.emptyTitle")}
+                    </p>
+                    <p className="text-xs">
+                      {t("leaderboard.emptyDescription")}
+                    </p>
+                  </div>
                 </TableCell>
               </TableRow>
             ) : (
