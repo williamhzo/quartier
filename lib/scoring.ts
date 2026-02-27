@@ -1,15 +1,18 @@
 import type { Arrondissement, DimensionKey, PersonaWeights } from "./types";
 
 export function computeComposite(
-  scores: Record<DimensionKey, number>,
+  scores: Record<DimensionKey, number | null>,
   weights: PersonaWeights,
 ): number {
   let weightedSum = 0;
   let totalWeight = 0;
 
   for (const key of Object.keys(weights) as DimensionKey[]) {
+    const score = scores[key];
+    if (score == null) continue;
+
     const w = weights[key];
-    weightedSum += w * scores[key];
+    weightedSum += w * score;
     totalWeight += w;
   }
 

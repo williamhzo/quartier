@@ -55,14 +55,14 @@ export type AmenitiesData = {
 };
 
 export type Dimensions = {
-  housing: HousingData;
-  income: IncomeData;
-  safety: SafetyData;
-  transport: TransportData;
-  nightlife: NightlifeData;
-  greenSpace: GreenSpaceData;
-  noise: NoiseData;
-  amenities: AmenitiesData;
+  housing: HousingData | null;
+  income: IncomeData | null;
+  safety: SafetyData | null;
+  transport: TransportData | null;
+  nightlife: NightlifeData | null;
+  greenSpace: GreenSpaceData | null;
+  noise: NoiseData | null;
+  amenities: AmenitiesData | null;
 };
 
 export type Arrondissement = {
@@ -72,7 +72,7 @@ export type Arrondissement = {
   population: number;
   area_km2: number;
   dimensions: Dimensions;
-  scores: Record<DimensionKey, number>;
+  scores: Record<DimensionKey, number | null>;
 };
 
 export type PersonaKey = "youngPro" | "family" | "tourist" | "business";
