@@ -97,6 +97,12 @@
     "retry": "Try again",
     "backToMap": "Back to map"
   },
+  "notFound": {
+    "title": "Page not found",
+    "description": "This arrondissement or page doesn't exist.",
+    "backToMap": "Back to map",
+    "backToLeaderboard": "View leaderboard"
+  },
   "common": {
     "perKm2": "per km²",
     "na": "N/A",

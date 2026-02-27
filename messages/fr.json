@@ -97,6 +97,12 @@
     "retry": "Réessayer",
     "backToMap": "Retour à la carte"
   },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "Cet arrondissement ou cette page n'existe pas.",
+    "backToMap": "Retour à la carte",
+    "backToLeaderboard": "Voir le classement"
+  },
   "common": {
     "perKm2": "par km²",
     "na": "N/A",
