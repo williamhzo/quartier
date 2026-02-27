@@ -91,6 +91,12 @@
     "fr": "FR",
     "en": "EN"
   },
+  "error": {
+    "title": "Une erreur est survenue",
+    "description": "Une erreur inattendue s'est produite lors du chargement de cette page.",
+    "retry": "Réessayer",
+    "backToMap": "Retour à la carte"
+  },
   "common": {
     "perKm2": "par km²",
     "na": "N/A",

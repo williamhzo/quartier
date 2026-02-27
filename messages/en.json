@@ -91,6 +91,12 @@
     "fr": "FR",
     "en": "EN"
   },
+  "error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred while loading this page.",
+    "retry": "Try again",
+    "backToMap": "Back to map"
+  },
   "common": {
     "perKm2": "per km²",
     "na": "N/A",
