@@ -22,6 +22,7 @@
 
 ## Commit & Pull Request Guidelines
 
+- Specifically for this project it's fine to commit and push on main (no need for a dedicated branch and PR)
 - Follow the existing commit style: short, imperative subjects (examples: `add format script`, `format components with prettier`).
 - Keep commits small & scoped to one logical change (lowercased, no conventional commits)
 - PRs should include: what changed, why, validation commands run, and screenshots/GIFs for UI changes
