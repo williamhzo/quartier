@@ -26,6 +26,13 @@ bun run format   # prettier (with tailwind class sorting)
 - If a phase is completed, mark it as done in the Phasing section
 - If implementation diverges from the spec (e.g., different library, changed data source, altered schema), update the spec to match reality
 
+## Commit & Pull Request Guidelines
+
+- Follow the existing commit style: short, imperative subjects (examples: `add format script`, `format components with prettier`).
+- Keep commits small & scoped to one logical change (lowercased, no conventional commits) after each baby step, each small task is done
+- PRs should include: what changed, why, validation commands run, and screenshots/GIFs for UI changes
+- Link related issue/spec context when applicable
+
 ## Data Sources
 
 - [datagouv MCP server](https://github.com/datagouv/datagouv-mcp) -- structured API access to data.gouv.fr datasets
