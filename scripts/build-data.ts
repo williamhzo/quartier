@@ -214,6 +214,20 @@ function readErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value != null && typeof value === "object" && !Array.isArray(value);
+}
+
+function isDataMetadataLike(value: unknown): value is DataMetadata {
+  if (!isRecord(value)) return false;
+  return isRecord(value.source_row_counts);
+}
+
+function isArrondissementRowLike(value: unknown): value is ArrondissementRow {
+  if (!isRecord(value)) return false;
+  return typeof value.code === "string" && isRecord(value.dimensions);
+}
+
 async function readOptionalJson(
   filePath: string,
   label: string,
@@ -247,13 +261,12 @@ async function loadDriftBaseline(): Promise<DriftBaseline> {
   if (metadataResult.warning) {
     warnings.push(metadataResult.warning);
   } else if (metadataResult.value != null) {
-    if (
-      typeof metadataResult.value === "object" &&
-      !Array.isArray(metadataResult.value)
-    ) {
+    if (isDataMetadataLike(metadataResult.value)) {
       metadata = metadataResult.value as DataMetadata;
     } else {
-      warnings.push("unable to use previous metadata for drift checks: invalid JSON shape");
+      warnings.push(
+        "unable to use previous metadata for drift checks: invalid JSON shape",
+      );
     }
   }
 
@@ -261,9 +274,17 @@ async function loadDriftBaseline(): Promise<DriftBaseline> {
     warnings.push(rowsResult.warning);
   } else if (rowsResult.value != null) {
     if (Array.isArray(rowsResult.value)) {
-      rows = rowsResult.value as ArrondissementRow[];
+      const validRows = rowsResult.value.filter(isArrondissementRowLike);
+      if (validRows.length < rowsResult.value.length) {
+        warnings.push(
+          "previous arrondissements for drift checks contained malformed rows; ignoring invalid entries",
+        );
+      }
+      rows = validRows;
     } else {
-      warnings.push("unable to use previous arrondissements for drift checks: invalid JSON shape");
+      warnings.push(
+        "unable to use previous arrondissements for drift checks: invalid JSON shape",
+      );
     }
   }
 
