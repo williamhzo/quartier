@@ -78,13 +78,14 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ## Data Pipeline
 
-**Build-time script** (`scripts/build-data.ts`), run manually (primary) or in CI (optional). Output is committed to the repo.
+**Primary build-time script** (`scripts/build-data.ts`), run manually (primary) or in CI (optional). Output is committed to the repo.  
+**Supplemental refresh script** (`scripts/data-refresh.ts`) is used for SIRENE snapshot pulls and cache refreshes.
 
 ### Operating model (v1)
 
 - Manual snapshot refresh only (no scheduled refresh)
 - Raw source artifacts cached under `data/raw/` and reused across runs
-- Third-party fetches happen only when running the refresh script
+- Third-party fetches happen only when running data scripts (`data:build`, `data:refresh`)
 - App build/deploy reads committed artifacts only
 - CI should default to `--offline` validation against committed artifacts
 
@@ -106,29 +107,29 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 3. Build shared base tables
    - Population per arrondissement from INSEE dossier complet (`NBPERSMENFISC21`)
 4. For each enabled dimension, fetch from cache-or-network and compute metrics
-   a. DVF:
+   a. DVF (implemented in `build-data.ts`):
       - Parse departement 75 CSV snapshots for target year + prior year, then filter arrondissement communes 75101..75120
       - Filter apartments, group by `id_mutation`, compute price/m2
       - Trim outliers using fixed percentile rule
-   b. Filosofi:
+   b. Filosofi (implemented in `build-data.ts`):
       - Parse INSEE dossier complet CSV-in-ZIP, filter `CODGEO` = `75101..75120`
       - Extract `MED21` (median income) + `TP6021` (poverty rate)
-   c. SSMSI:
+   c. SSMSI (planned):
       - Parse crime CSV, filter 75101..75120, compute per-1k with population
-   d. IDFM:
+   d. IDFM (planned):
       - Point-in-polygon station assignment, compute `station_count` + `stations_per_km2`
-   e. SIRENE:
+   e. SIRENE (refresh path implemented, build integration pending):
       - Query API by arrondissement + NAF bucket
       - Use `codeCommuneEtablissement` (not `communeEtablissement`)
       - Filter active establishments with `periode(etatAdministratifEtablissement:A ...)`
       - Paginate with retry/backoff/rate-limit guard
       - Cache raw responses before aggregation
-   f. Green space:
+   f. Green space (planned):
       - Intersect park polygons with arrondissement polygons
       - Sum clipped area and compute m2/resident
-   g. Noise:
+   g. Noise (planned):
       - Parse arrondissement-level exposure fields
-   h. BPE:
+   h. BPE (planned):
       - Filter 75101..75120 and aggregate selected amenity categories
 5. Run data-quality gates (fail/warn policy)
 6. Normalize enabled dimensions to 0-100 and invert where needed
@@ -137,6 +138,17 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    - `data/arrondissements.geojson` (boundaries + selected score props)
    - `data/metadata.json` (provenance + quality report)
 ```
+
+### Current implementation snapshot (as of 2026-02-27)
+
+- `DATA_CONFIG.enabledDimensions`: `housing`, `income`
+- `scripts/build-data.ts` currently emits production artifacts for:
+  - base fields (code/number/name/population/area)
+  - housing (DVF)
+  - income (Filosofi)
+  - normalized scores for enabled dimensions
+- `scripts/data-refresh.ts` + `scripts/sources/sirene.ts` currently produce cached nightlife snapshots only (not yet merged into `arrondissements.json`)
+- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, all other dimensions `0/20`
 
 ### Manual refresh commands
 
@@ -147,7 +159,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ### Dependencies for build script
 
-- Current implementation (through Phase 1B step 2) uses built-in `fetch` + Node fs/path/crypto/zlib + child-process streaming (`unzip`) for large CSV-in-ZIP extraction
+- Current implementation (through Phase 1B + SIRENE refresh prep) uses built-in `fetch` + Node fs/path/crypto/zlib + child-process streaming (`unzip`) for large CSV-in-ZIP extraction
 - `@turf/turf` and bounded-concurrency helpers are added in later Phase 1C/1D steps as parsers land
 
 ### Population and area sources
@@ -167,9 +179,11 @@ Hard-fail gates (build fails):
 
 Soft-fail gates (warning in metadata + console):
 
-- Source row count deviates materially from prior snapshot
-- A dimension has 1-2 missing arrondissements (explicit `null`)
-- Strong metric drift vs prior snapshot (> configured threshold)
+- Implemented now:
+  - A dimension has 1-2 missing arrondissements (explicit `null`)
+- Planned (not yet implemented):
+  - Source row count deviates materially from prior snapshot
+  - Strong metric drift vs prior snapshot (> configured threshold)
 
 ### Missing data behavior
 
@@ -185,7 +199,7 @@ Soft-fail gates (warning in metadata + console):
 - Free token required (register at api.insee.fr)
 - Rate limit: 30 requests/minute (sufficient for ~20 paginated queries)
 - Query pattern: filter by `codeCommuneEtablissement` + `activitePrincipaleEtablissement` (NAF Rev.2 code)
-- Token stored in `SIRENE_API_TOKEN` env var (used only in build script, not at runtime)
+- Token stored in `SIRENE_API_TOKEN` env var (used only in data scripts, never at runtime)
 - Use retry with exponential backoff for `429`/`5xx`
 - Cache every raw response page to `data/raw/sirene/` to avoid re-pulling unchanged pages
 
@@ -462,20 +476,21 @@ data/
   arrondissements.json      # pre-computed dimension data (committed)
   arrondissements.geojson   # boundary polygons (committed)
   metadata.json             # provenance + quality checks (committed)
-  raw/                      # cached source payloads/snapshots (gitignored)
+  raw/                      # cached source payloads/snapshots (currently committed in-repo)
 scripts/
   data-config.ts            # pinned source vintages + enabled dimensions
   build-data.ts             # orchestrator: download, parse, aggregate, output JSON
+  data-refresh.ts           # refresh utility for SIRENE nightlife snapshots
+  dry-run-sirene-queries.ts # inspect generated SIRENE query URLs
+  validate-sirene-naf.ts    # validate configured NAF bucket mapping
   sources/
     dvf.ts                  # DVF CSV parsing + median computation
     filosofi.ts             # INSEE dossier-complet CSV-in-ZIP parsing for income + shared population
-    crime.ts                # SSMSI CSV parsing + per-capita rates
-    transport.ts            # IDFM station point-in-polygon
     sirene.ts               # INSEE API SIRENE queries for nightlife/dining
-    green-space.ts           # GeoJSON polygon intersection
-    noise.ts                # noise CSV parsing
-    bpe.ts                  # BPE amenity counting
-    normalize.ts            # min-max normalization + inversion
+    sirene-query.ts         # canonical SIRENE search query builder
+    sirene-naf.ts           # NAF bucket definitions for nightlife
+    validate-sirene-naf.ts  # NAF mapping validation
+    # planned: crime.ts, transport.ts, green-space.ts, noise.ts, bpe.ts
 messages/
   fr.json                   # French UI strings
   en.json                   # English UI strings
@@ -500,7 +515,8 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 2. [x] Add `scripts/data-config.ts` for enabled dimensions + pinned vintages
 3. [x] Implement cache-or-network fetch layer with timeout/retry/rate-limit controls
 4. [x] Add provenance output (`data/metadata.json`)
-5. [x] Add hard-fail and soft-fail quality gates
+5. [x] Add hard-fail quality gates
+6. [ ] Add soft-fail drift gates (row-count/metric drift vs prior snapshot)
 
 ### Phase 1B: Core Dimensions (ship first snapshot)
 
@@ -521,7 +537,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 ### Phase 1D: High-risk Dimensions
 
 1. Green space polygon intersection module
-2. SIRENE nightlife API module (with cache and retry policy)
+2. SIRENE nightlife API module (with cache and retry policy) -- implemented in refresh path; build integration pending
 3. Validate runtime cost and data stability
 4. Commit refreshed snapshot
 
