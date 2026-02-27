@@ -40,12 +40,19 @@ export const PARIS_ARRONDISSEMENT_COMMUNES = [
 ] as const;
 
 export const DATA_CONFIG = {
-  enabledDimensions: ["housing", "income"] as DataDimension[],
+  enabledDimensions: [
+    "housing",
+    "income",
+    "safety",
+    "transport",
+  ] as DataDimension[],
   sourceVintages: {
     boundaries: "opendata-paris-arrondissements-snapshot-2026-02-27",
     filosofi: "insee-dossier-complet-2025-10-14",
     dvf_current: "geo-dvf-2024-departement-75",
     dvf_prior: "geo-dvf-2023-departement-75",
+    safety: "ssmsi-communal-2024-geographie2025-produit-2025-06-04",
+    transport: "idfm-emplacement-des-gares-idf-export-2026-02-27",
     sirene: "V3.11",
   },
   sourceUrls: {
@@ -56,6 +63,10 @@ export const DATA_CONFIG = {
       "https://files.data.gouv.fr/geo-dvf/latest/csv/2024/departements/75.csv.gz",
     dvf_prior:
       "https://files.data.gouv.fr/geo-dvf/latest/csv/2023/departements/75.csv.gz",
+    safety:
+      "https://static.data.gouv.fr/resources/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/20250710-144817/donnee-data.gouv-2024-geographie2025-produit-le2025-06-04.csv.gz",
+    transport:
+      "https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/emplacement-des-gares-idf/exports/geojson?where=mode%20in%20(%22METRO%22,%22RER%22)&limit=-1",
     sirene: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
   },
   sources: {
@@ -84,6 +95,24 @@ export const DATA_CONFIG = {
       initialRetryDelayMs: 500,
       outlierLowerQuantile: 0.01,
       outlierUpperQuantile: 0.99,
+    },
+    safety: {
+      sourceUrl:
+        "https://static.data.gouv.fr/resources/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/20250710-144817/donnee-data.gouv-2024-geographie2025-produit-le2025-06-04.csv.gz",
+      cachePath:
+        "data/raw/ssmsi/donnee-data.gouv-2024-geographie2025-produit-le2025-06-04.csv.gz",
+      year: 2024,
+      timeoutMs: 120_000,
+      maxRetries: 3,
+      initialRetryDelayMs: 500,
+    },
+    transport: {
+      sourceUrl:
+        "https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/emplacement-des-gares-idf/exports/geojson?where=mode%20in%20(%22METRO%22,%22RER%22)&limit=-1",
+      cachePath: "data/raw/idfm/emplacement-des-gares-idf-metro-rer.geojson",
+      timeoutMs: 120_000,
+      maxRetries: 3,
+      initialRetryDelayMs: 500,
     },
     sirene: {
       apiVersion: "V3.11",
