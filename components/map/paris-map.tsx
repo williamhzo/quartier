@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, {
   Layer,
   Source,
@@ -9,6 +9,7 @@ import Map, {
 } from "react-map-gl/maplibre";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { useQueryState, parseAsInteger } from "nuqs";
 import { useTranslations } from "next-intl";
 import type { Arrondissement, DimensionKey, PersonaKey } from "@/lib/types";
 import type { FeatureCollection, Geometry } from "geojson";
@@ -40,8 +41,21 @@ export function ParisMap({
   const [dimension, setDimension] = useState<DimensionKey | "composite">(
     "composite",
   );
-  const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
+  const [selectedNumber, setSelectedNumber] = useQueryState(
+    "arr",
+    parseAsInteger.withOptions({ history: "push", shallow: true }),
+  );
   const tooltipRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape" && selectedNumber != null) {
+        setSelectedNumber(null);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedNumber, setSelectedNumber]);
 
   const weights = PERSONA_WEIGHTS[persona];
   const ranked = useMemo(
@@ -128,10 +142,7 @@ export function ParisMap({
   const setHoverState = useCallback(
     (map: maplibregl.Map, id: number, hover: boolean) => {
       if (!map.getSource("arrondissements")) return;
-      map.setFeatureState(
-        { source: "arrondissements", id },
-        { hover },
-      );
+      map.setFeatureState({ source: "arrondissements", id }, { hover });
     },
     [],
   );
@@ -176,14 +187,17 @@ export function ParisMap({
     updateTooltip(null, 0, 0);
   }, [setHoverState, updateTooltip]);
 
-  const onClick = useCallback((e: MapLayerMouseEvent) => {
-    if (e.features && e.features.length > 0) {
-      const num = e.features[0].properties?.number;
-      setSelectedNumber(num ?? null);
-    } else {
-      setSelectedNumber(null);
-    }
-  }, []);
+  const onClick = useCallback(
+    (e: MapLayerMouseEvent) => {
+      if (e.features && e.features.length > 0) {
+        const num = e.features[0].properties?.number;
+        setSelectedNumber(num ?? null);
+      } else {
+        setSelectedNumber(null);
+      }
+    },
+    [setSelectedNumber],
+  );
 
   const fillColor: maplibregl.ExpressionSpecification = [
     "interpolate",
@@ -212,12 +226,7 @@ export function ParisMap({
         ["boolean", ["feature-state", "hover"], false],
         0.9,
         selectedNumber != null
-          ? [
-              "case",
-              ["==", ["get", "number"], selectedNumber],
-              0.85,
-              0.6,
-            ]
+          ? ["case", ["==", ["get", "number"], selectedNumber], 0.85, 0.6]
           : 0.7,
       ] as maplibregl.ExpressionSpecification,
     [selectedNumber],
@@ -357,11 +366,9 @@ export function ParisMap({
           arrondissement={selectedArrondissement}
           composite={selectedArrondissement.composite}
           rank={selectedArrondissement.rank}
-          weights={weights}
           onClose={() => setSelectedNumber(null)}
         />
       )}
-
     </div>
   );
 }
