@@ -80,7 +80,9 @@ async function refreshNightlife(options: RefreshOptions): Promise<void> {
   const accessToken = process.env.SIRENE_API_TOKEN ?? "";
 
   if (mode === "network-first" && accessToken.length === 0) {
-    throw new Error("SIRENE_API_TOKEN is required for online nightlife refresh");
+    throw new Error(
+      "SIRENE_API_TOKEN is required for online nightlife refresh",
+    );
   }
 
   const snapshots = [];

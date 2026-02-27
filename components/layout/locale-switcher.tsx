@@ -17,15 +17,13 @@ export function LocaleSwitcher() {
     <div className="flex items-center text-xs">
       {routing.locales.map((l, i) => (
         <span key={l} className="flex items-center">
-          {i > 0 && (
-            <span className="text-muted-foreground/50 mx-1">/</span>
-          )}
+          {i > 0 && <span className="text-muted-foreground/50 mx-1">/</span>}
           {locale === l ? (
             <span className="text-foreground">{l.toUpperCase()}</span>
           ) : (
             <button
               onClick={() => switchLocale(l)}
-              className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
             >
               {l.toUpperCase()}
             </button>

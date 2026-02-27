@@ -2,10 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { DATA_CONFIG } from "../data-config";
-import {
-  type SireneNightlifeBucket,
-  SIRENE_NAF_BUCKETS,
-} from "./sirene-naf";
+import { type SireneNightlifeBucket, SIRENE_NAF_BUCKETS } from "./sirene-naf";
 import { buildSireneNightlifeSearchParams } from "./sirene-query";
 import { assertValidSireneNafBuckets } from "./validate-sirene-naf";
 
@@ -109,7 +106,10 @@ function buildCachePagePath(
   query: string,
   pageOffset: number,
 ): string {
-  const queryHash = createHash("sha256").update(query).digest("hex").slice(0, 12);
+  const queryHash = createHash("sha256")
+    .update(query)
+    .digest("hex")
+    .slice(0, 12);
   return path.join(
     cacheRoot,
     communeCode,
@@ -145,7 +145,8 @@ function getApeAndNomenclature(etablissement: SireneEtablissement): {
 
   return {
     ape: activePeriod.activitePrincipaleEtablissement,
-    nomenclature: activePeriod.nomenclatureActivitePrincipaleEtablissement ?? null,
+    nomenclature:
+      activePeriod.nomenclatureActivitePrincipaleEtablissement ?? null,
   };
 }
 
@@ -213,7 +214,8 @@ async function fetchSirenePageFromApi(
         attempt < maxRetries
       ) {
         const delay =
-          initialRetryDelayMs * 2 ** attempt + randomJitter(initialRetryDelayMs);
+          initialRetryDelayMs * 2 ** attempt +
+          randomJitter(initialRetryDelayMs);
         await sleep(delay);
         attempt += 1;
         continue;
