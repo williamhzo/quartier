@@ -115,9 +115,9 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    b. Filosofi (implemented in `build-data.ts`):
       - Parse INSEE dossier complet CSV-in-ZIP, filter `CODGEO` = `75101..75120`
       - Extract `MED21` (median income) + `TP6021` (poverty rate)
-   c. SSMSI (planned):
+   c. SSMSI (implemented in `build-data.ts`, disabled unless `safety` is enabled):
       - Parse crime CSV, filter 75101..75120, compute per-1k with population
-   d. IDFM (planned):
+   d. IDFM (implemented in `build-data.ts`, disabled unless `transport` is enabled):
       - Point-in-polygon station assignment, compute `station_count` + `stations_per_km2`
    e. SIRENE (refresh path implemented, build integration pending):
       - Query API by arrondissement + NAF bucket
@@ -142,14 +142,16 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ### Current implementation snapshot (as of 2026-02-27)
 
-- `DATA_CONFIG.enabledDimensions`: `housing`, `income`
+- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`
 - `scripts/build-data.ts` currently emits production artifacts for:
   - base fields (code/number/name/population/area)
   - housing (DVF)
   - income (Filosofi)
+  - safety (SSMSI parser enabled)
+  - transport (IDFM parser enabled)
   - normalized scores for enabled dimensions
 - `scripts/data-refresh.ts` + `scripts/sources/sirene.ts` currently produce cached nightlife snapshots only (not yet merged into `arrondissements.json`)
-- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, all other dimensions `0/20`
+- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, nightlife/greenSpace/noise/amenities `0/20`
 
 ### Manual refresh commands
 
@@ -491,11 +493,13 @@ scripts/
   sources/
     dvf.ts                  # DVF CSV parsing + median computation
     filosofi.ts             # INSEE dossier-complet CSV-in-ZIP parsing for income + shared population
+    crime.ts                # SSMSI communal crime parsing for safety metrics
+    transport.ts            # IDFM station parsing + arrondissement assignment
     sirene.ts               # INSEE API SIRENE queries for nightlife/dining
     sirene-query.ts         # canonical SIRENE search query builder
     sirene-naf.ts           # NAF bucket definitions for nightlife
     validate-sirene-naf.ts  # NAF mapping validation
-    # planned: crime.ts, transport.ts, green-space.ts, noise.ts, bpe.ts
+    # planned: green-space.ts, noise.ts, bpe.ts
 messages/
   fr.json                   # French UI strings
   en.json                   # English UI strings
@@ -527,10 +531,10 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 1. [x] DVF housing parser
 2. [x] Filosofi income parser (+ shared population table)
-3. [ ] SSMSI safety parser
-4. [ ] IDFM transport parser
+3. [x] SSMSI safety parser
+4. [x] IDFM transport parser
 5. [x] Normalization + score output for enabled dimensions only
-6. [ ] Commit first production snapshot
+6. [x] Commit first production snapshot
 
 ### Phase 1C: Medium-risk Dimensions
 
