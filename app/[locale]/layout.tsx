@@ -1,5 +1,6 @@
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { notFound } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 import { routing } from "@/i18n/routing";
@@ -61,8 +62,10 @@ export default async function LocaleLayout({ children, params }: Props) {
     >
       <body className="bg-background text-foreground antialiased">
         <NextIntlClientProvider>
-          <Nav />
-          <main>{children}</main>
+          <NuqsAdapter>
+            <Nav />
+            <main>{children}</main>
+          </NuqsAdapter>
         </NextIntlClientProvider>
       </body>
     </html>
