@@ -3,6 +3,19 @@ import {
   type SireneNightlifeBucket,
 } from "./sources/sirene-naf";
 
+export const DIMENSION_KEYS = [
+  "housing",
+  "income",
+  "safety",
+  "transport",
+  "nightlife",
+  "greenSpace",
+  "noise",
+  "amenities",
+] as const;
+
+export type DataDimension = (typeof DIMENSION_KEYS)[number];
+
 export const PARIS_ARRONDISSEMENT_COMMUNES = [
   "75101",
   "75102",
@@ -27,8 +40,51 @@ export const PARIS_ARRONDISSEMENT_COMMUNES = [
 ] as const;
 
 export const DATA_CONFIG = {
-  enabledDimensions: ["housing", "income", "safety", "transport"] as const,
+  enabledDimensions: ["housing", "income"] as DataDimension[],
+  sourceVintages: {
+    boundaries: "opendata-paris-arrondissements-snapshot-2026-02-27",
+    filosofi: "insee-dossier-complet-2025-10-14",
+    dvf_current: "geo-dvf-2024-departement-75",
+    dvf_prior: "geo-dvf-2023-departement-75",
+    sirene: "V3.11",
+  },
+  sourceUrls: {
+    boundaries: "https://opendata.paris.fr/explore/dataset/arrondissements/",
+    filosofi:
+      "https://www.insee.fr/fr/statistiques/fichier/5359146/dossier_complet_31_12_2025.zip",
+    dvf_current:
+      "https://files.data.gouv.fr/geo-dvf/latest/csv/2024/departements/75.csv.gz",
+    dvf_prior:
+      "https://files.data.gouv.fr/geo-dvf/latest/csv/2023/departements/75.csv.gz",
+    sirene: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
+  },
   sources: {
+    filosofi: {
+      sourceUrl:
+        "https://www.insee.fr/fr/statistiques/fichier/5359146/dossier_complet_31_12_2025.zip",
+      csvFileName: "dossier_complet.csv",
+      cachePath: "data/raw/filosofi/dossier-complet-31-12-2025.zip",
+      timeoutMs: 180_000,
+      maxRetries: 3,
+      initialRetryDelayMs: 500,
+      fields: {
+        code: "CODGEO",
+        population: "NBPERSMENFISC21",
+        medianIncome: "MED21",
+        povertyRate: "TP6021",
+      },
+    },
+    dvf: {
+      currentYear: 2024,
+      priorYear: 2023,
+      departmentCode: "75",
+      cacheDir: "data/raw/dvf",
+      timeoutMs: 60_000,
+      maxRetries: 3,
+      initialRetryDelayMs: 500,
+      outlierLowerQuantile: 0.01,
+      outlierUpperQuantile: 0.99,
+    },
     sirene: {
       apiVersion: "V3.11",
       baseUrl: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
