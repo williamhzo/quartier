@@ -19,6 +19,7 @@
 
 # production
 /build
+/data/raw/
 
 # misc
 .DS_Store
