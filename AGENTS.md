@@ -12,6 +12,14 @@
 - Linting: fix ESLint warnings before opening PRs
 - File names are typically kebab-case (example: `component-example.tsx`), while component exports are PascalCase
 
+## Spec Tracking
+
+`spec.md` is the source of truth for Quartier's product definition. It must stay in sync with the code:
+
+- When implementing a feature or changing behavior, update the relevant `spec.md` section in the same commit
+- Mark completed phases in the Phasing section
+- If implementation diverges from the spec, update the spec to match reality -- never leave stale spec sections
+
 ## Commit & Pull Request Guidelines
 
 Follow the existing commit style: short, imperative subjects (examples: `Add format script`, `Format components with prettier`).
