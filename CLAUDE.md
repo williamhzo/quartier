@@ -2,7 +2,7 @@
 
 ## Project
 
-Baguette is a web app for exploring French open data from data.gouv.fr. See `ideas.md` for product direction.
+Quartier (quartier.sh) is a Paris arrondissement comparator built on French open data. See `spec.md` for the full product spec and `ideas.md` for broader product direction.
 
 ## Commands
 

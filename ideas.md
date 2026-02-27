@@ -1,4 +1,4 @@
-# Baguette -- App Ideas
+# Quartier -- App Ideas
 
 French open data web app built on the [datagouv MCP server](https://github.com/datagouv/datagouv-mcp).
 
