@@ -23,9 +23,20 @@ export async function generateMetadata({ params }: Props) {
   const { locale, number } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
   const label = formatArrondissement(Number(number));
+  const title = `${label} - ${t("title")}`;
+  const ogImage = `/api/og/${number}`;
 
   return {
-    title: `${label} - ${t("title")}`,
+    title,
+    openGraph: {
+      title,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      images: [ogImage],
+    },
   };
 }
 

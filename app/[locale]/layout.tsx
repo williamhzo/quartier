@@ -26,6 +26,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "metadata" });
 
   return {
+    metadataBase: new URL("https://quartier.sh"),
     title: t("title"),
     description: t("description"),
   };
