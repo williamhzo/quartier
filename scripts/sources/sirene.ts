@@ -54,6 +54,7 @@ export type FetchSireneNightlifeOptions = {
   communeCode: string;
   accessToken: string;
   buckets: readonly SireneNightlifeBucket[];
+  expectedNomenclatures?: readonly string[];
   cacheDir?: string;
   mode?: SireneFetchMode;
   pageSize?: number;
@@ -168,6 +169,24 @@ function createZeroBucketCounts(): NightlifeBucketCounts {
     bars_cafes: 0,
     nightlife_extension: 0,
   };
+}
+
+export function assertExpectedNomenclatures(
+  encountered: readonly string[],
+  expected: readonly string[],
+): void {
+  if (expected.length === 0) return;
+
+  const expectedSet = new Set(expected);
+  const unexpected = encountered.filter((item) => !expectedSet.has(item));
+
+  if (unexpected.length > 0) {
+    throw new Error(
+      `sirene nomenclature mismatch: expected one of [${expected.join(
+        ", ",
+      )}], received [${unexpected.join(", ")}]`,
+    );
+  }
 }
 
 async function fetchSirenePageFromApi(
@@ -372,6 +391,11 @@ export async function fetchSireneNightlifeSnapshot(
   const aggregate = aggregateNightlifeFromEtablissements(
     allEtablissements,
     options.buckets,
+  );
+
+  assertExpectedNomenclatures(
+    aggregate.nomenclaturesEncountered,
+    options.expectedNomenclatures ?? [],
   );
 
   return {

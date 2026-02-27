@@ -34,6 +34,7 @@ export const DATA_CONFIG = {
       baseUrl: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
       enabledNightlifeBuckets: DEFAULT_SIRENE_NIGHTLIFE_BUCKETS,
       includeNightlifeExtension: false,
+      expectedNomenclatures: ["NAFRev2"] as const,
     },
   },
 };
