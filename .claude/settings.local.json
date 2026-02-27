@@ -4,7 +4,19 @@
       "Bash(ls:*)",
       "WebFetch(domain:github.com)",
       "Bash(bun add:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "WebFetch(domain:www.data.gouv.fr)",
+      "WebSearch",
+      "WebFetch(domain:app.dvf.etalab.gouv.fr)",
+      "WebFetch(domain:api.gouv.fr)",
+      "WebFetch(domain:apidf-preprod.cerema.fr)",
+      "WebFetch(domain:www.insee.fr)",
+      "WebFetch(domain:opendata.paris.fr)",
+      "WebFetch(domain:data.ratp.fr)",
+      "WebFetch(domain:data.iledefrance-mobilites.fr)",
+      "WebFetch(domain:prim.iledefrance-mobilites.fr)",
+      "WebFetch(domain:www.interieur.gouv.fr)",
+      "Skill(interview)"
     ]
   }
 }
