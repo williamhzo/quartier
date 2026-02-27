@@ -71,10 +71,10 @@ export function LeaderboardTable({ data }: Props) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-12 text-center">
+              <TableHead className="bg-background sticky left-0 z-10 w-12 text-center">
                 {t("leaderboard.rank")}
               </TableHead>
-              <TableHead>
+              <TableHead className="bg-background sticky left-12 z-10">
                 <SortButton
                   active={sortKey === "number"}
                   onClick={() => toggleSort("number")}
@@ -115,10 +115,10 @@ export function LeaderboardTable({ data }: Props) {
             ) : (
               sorted.map((a) => (
                 <TableRow key={a.code}>
-                  <TableCell className="text-muted-foreground text-center font-mono text-xs">
+                  <TableCell className="bg-background text-muted-foreground sticky left-0 z-10 text-center font-mono text-xs">
                     {a.rank}
                   </TableCell>
-                  <TableCell className="font-medium">
+                  <TableCell className="bg-background sticky left-12 z-10 font-medium">
                     <Link
                       href={`/paris/${a.number}`}
                       className="hover:underline"
@@ -127,9 +127,7 @@ export function LeaderboardTable({ data }: Props) {
                     </Link>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Badge variant="secondary">
-                      {Math.round(a.composite)}
-                    </Badge>
+                    <Badge variant="secondary">{Math.round(a.composite)}</Badge>
                   </TableCell>
                   {DIMENSION_KEYS.map((key) => (
                     <TableCell
