@@ -9,6 +9,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "data:validate:sirene-naf": "bun scripts/validate-sirene-naf.ts",
+    "data:refresh": "bun scripts/data-refresh.ts",
     "data:dry-run:sirene:one": "bun scripts/dry-run-sirene-queries.ts --commune=75111",
     "data:dry-run:sirene:all": "bun scripts/dry-run-sirene-queries.ts --all"
   },
