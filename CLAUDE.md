@@ -33,6 +33,11 @@ bun run format   # prettier (with tailwind class sorting)
 - PRs should include: what changed, why, validation commands run, and screenshots/GIFs for UI changes
 - Link related issue/spec context when applicable
 
+## Testing
+
+- Use the Chrome browser extension (Claude in Chrome) to visually test UI changes on the dev server at localhost:3000
+- Use Chrome DevTools MCP for advanced debugging (network, console, performance)
+
 ## Data Sources
 
 - [datagouv MCP server](https://github.com/datagouv/datagouv-mcp) -- structured API access to data.gouv.fr datasets
