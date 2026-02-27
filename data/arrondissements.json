@@ -1,1 +1,682 @@
-[]
+[
+  {
+    "code": "75101",
+    "number": 1,
+    "name": "1er arrondissement",
+    "population": 14945,
+    "area_km2": 1.824613,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 12258.06,
+        "yoy_change": -4.06,
+        "transaction_count": 281
+      },
+      "income": {
+        "median_household": 35030,
+        "poverty_rate": 12
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 30.4,
+      "income": 54.02,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75102",
+    "number": 2,
+    "name": "2e arrondissement",
+    "population": 19407,
+    "area_km2": 0.991154,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 10994.5,
+        "yoy_change": -3.25,
+        "transaction_count": 391
+      },
+      "income": {
+        "median_household": 34050,
+        "poverty_rate": 14
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 49.95,
+      "income": 49.67,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75103",
+    "number": 3,
+    "name": "3e arrondissement",
+    "population": 30369,
+    "area_km2": 1.170883,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 11470.31,
+        "yoy_change": -4.41,
+        "transaction_count": 636
+      },
+      "income": {
+        "median_household": 34800,
+        "poverty_rate": 13
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 42.59,
+      "income": 53,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75104",
+    "number": 4,
+    "name": "4e arrondissement",
+    "population": 24174,
+    "area_km2": 1.600586,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 12400,
+        "yoy_change": -4.91,
+        "transaction_count": 509
+      },
+      "income": {
+        "median_household": 33040,
+        "poverty_rate": 14
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 28.2,
+      "income": 45.18,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75105",
+    "number": 5,
+    "name": "5e arrondissement",
+    "population": 45241,
+    "area_km2": 2.539375,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 11599.91,
+        "yoy_change": -4,
+        "transaction_count": 851
+      },
+      "income": {
+        "median_household": 35960,
+        "poverty_rate": 11
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 40.58,
+      "income": 58.15,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75106",
+    "number": 6,
+    "name": "6e arrondissement",
+    "population": 30862,
+    "area_km2": 2.153096,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 14222.22,
+        "yoy_change": -3.9,
+        "transaction_count": 815
+      },
+      "income": {
+        "median_household": 41750,
+        "poverty_rate": 11
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 0,
+      "income": 83.87,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75107",
+    "number": 7,
+    "name": "7e arrondissement",
+    "population": 45295,
+    "area_km2": 4.090057,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 13680,
+        "yoy_change": -5,
+        "transaction_count": 889
+      },
+      "income": {
+        "median_household": 45380,
+        "poverty_rate": 9
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 8.39,
+      "income": 100,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75108",
+    "number": 8,
+    "name": "8e arrondissement",
+    "population": 36632,
+    "area_km2": 3.880036,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 12142.86,
+        "yoy_change": -4.14,
+        "transaction_count": 684
+      },
+      "income": {
+        "median_household": 44100,
+        "poverty_rate": 10
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 32.18,
+      "income": 94.31,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75109",
+    "number": 9,
+    "name": "9e arrondissement",
+    "population": 54749,
+    "area_km2": 2.178303,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 10459.76,
+        "yoy_change": -6.14,
+        "transaction_count": 1065
+      },
+      "income": {
+        "median_household": 37220,
+        "poverty_rate": 11
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 58.23,
+      "income": 63.75,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75110",
+    "number": 10,
+    "name": "10e arrondissement",
+    "population": 82845,
+    "area_km2": 2.891739,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 9060,
+        "yoy_change": -7.08,
+        "transaction_count": 1367
+      },
+      "income": {
+        "median_household": 29470,
+        "poverty_rate": 17
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 79.89,
+      "income": 29.32,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75111",
+    "number": 11,
+    "name": "11e arrondissement",
+    "population": 134425,
+    "area_km2": 3.665442,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 9717.54,
+        "yoy_change": -4.84,
+        "transaction_count": 2224
+      },
+      "income": {
+        "median_household": 30210,
+        "poverty_rate": 15
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 69.71,
+      "income": 32.61,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75112",
+    "number": 12,
+    "name": "12e arrondissement",
+    "population": 128812,
+    "area_km2": 16.314783,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 8750,
+        "yoy_change": -6.87,
+        "transaction_count": 1473
+      },
+      "income": {
+        "median_household": 29940,
+        "poverty_rate": 14
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 84.69,
+      "income": 31.41,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75113",
+    "number": 13,
+    "name": "13e arrondissement",
+    "population": 165983,
+    "area_km2": 7.149311,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 8549.09,
+        "yoy_change": -4.36,
+        "transaction_count": 1388
+      },
+      "income": {
+        "median_household": 25670,
+        "poverty_rate": 18
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 87.8,
+      "income": 12.44,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75114",
+    "number": 14,
+    "name": "14e arrondissement",
+    "population": 117671,
+    "area_km2": 5.614877,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 9183.67,
+        "yoy_change": -6.21,
+        "transaction_count": 1437
+      },
+      "income": {
+        "median_household": 29460,
+        "poverty_rate": 14
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 77.97,
+      "income": 29.28,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75115",
+    "number": 15,
+    "name": "15e arrondissement",
+    "population": 210667,
+    "area_km2": 8.494994,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 9361.57,
+        "yoy_change": -5.42,
+        "transaction_count": 2802
+      },
+      "income": {
+        "median_household": 32780,
+        "poverty_rate": 13
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 75.22,
+      "income": 44.02,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75116",
+    "number": 16,
+    "name": "16e arrondissement",
+    "population": 155005,
+    "area_km2": 16.372542,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 10654.76,
+        "yoy_change": -5.27,
+        "transaction_count": 2149
+      },
+      "income": {
+        "median_household": 41550,
+        "poverty_rate": 12
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 55.21,
+      "income": 82.99,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75117",
+    "number": 17,
+    "name": "17e arrondissement",
+    "population": 153366,
+    "area_km2": 5.668835,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 9925.11,
+        "yoy_change": -6.47,
+        "transaction_count": 2338
+      },
+      "income": {
+        "median_household": 33390,
+        "poverty_rate": 14
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 66.5,
+      "income": 46.73,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75118",
+    "number": 18,
+    "name": "18e arrondissement",
+    "population": 158226,
+    "area_km2": 5.996051,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 8510.64,
+        "yoy_change": -7.13,
+        "transaction_count": 2641
+      },
+      "income": {
+        "median_household": 24910,
+        "poverty_rate": 21
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 88.39,
+      "income": 9.06,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75119",
+    "number": 19,
+    "name": "19e arrondissement",
+    "population": 168246,
+    "area_km2": 6.792651,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 7760.45,
+        "yoy_change": -9.46,
+        "transaction_count": 1373
+      },
+      "income": {
+        "median_household": 22870,
+        "poverty_rate": 22
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 100,
+      "income": 0,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  },
+  {
+    "code": "75120",
+    "number": 20,
+    "name": "20e arrondissement",
+    "population": 181521,
+    "area_km2": 5.983446,
+    "dimensions": {
+      "housing": {
+        "median_price_m2": 8148.05,
+        "yoy_change": -6.88,
+        "transaction_count": 1778
+      },
+      "income": {
+        "median_household": 23570,
+        "poverty_rate": 21
+      },
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    },
+    "scores": {
+      "housing": 94,
+      "income": 3.11,
+      "safety": null,
+      "transport": null,
+      "nightlife": null,
+      "greenSpace": null,
+      "noise": null,
+      "amenities": null
+    }
+  }
+]

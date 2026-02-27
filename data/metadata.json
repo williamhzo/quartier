@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-02-27T23:27:30.527Z",
+  "enabled_dimensions": [
+    "housing",
+    "income"
+  ],
+  "source_vintages": {
+    "boundaries": "opendata-paris-arrondissements-snapshot-2026-02-27",
+    "filosofi": "insee-dossier-complet-2025-10-14",
+    "dvf_current": "geo-dvf-2024-departement-75",
+    "dvf_prior": "geo-dvf-2023-departement-75",
+    "sirene": "V3.11"
+  },
+  "source_urls": {
+    "boundaries": "https://opendata.paris.fr/explore/dataset/arrondissements/",
+    "filosofi": "https://www.insee.fr/fr/statistiques/fichier/5359146/dossier_complet_31_12_2025.zip",
+    "dvf_current": "https://files.data.gouv.fr/geo-dvf/latest/csv/2024/departements/75.csv.gz",
+    "dvf_prior": "https://files.data.gouv.fr/geo-dvf/latest/csv/2023/departements/75.csv.gz",
+    "sirene": "https://api.insee.fr/entreprises/sirene/V3.11/siret"
+  },
+  "source_row_counts": {
+    "boundaries": 20,
+    "filosofi_rows_scanned": 29241,
+    "filosofi_rows_matched": 20,
+    "dvf_current": 74677,
+    "dvf_prior": 80964
+  },
+  "source_checksums": {
+    "boundaries": "76869351b68cf72183d6896fa9508c7b313aad763349fe5e8fa6cf79e870fd79",
+    "filosofi": "845dc47c4643271542c56819011802850f6a382f336d240dcc1e1ccde44603f2",
+    "dvf_current": "fef7fb65c52137888ef8c1aa0098660011532f20a1f2e5f34b803691abffb300",
+    "dvf_prior": "c62481e00be2cf2c135618c0a16ea5bb0422edda3f9d8607dadad7daf5959fb7"
+  },
+  "quality": {
+    "hard_fail_checks_passed": true,
+    "hard_fail_errors": [],
+    "warnings": [],
+    "coverage_by_dimension": {
+      "housing": 20,
+      "income": 20,
+      "safety": 0,
+      "transport": 0,
+      "nightlife": 0,
+      "greenSpace": 0,
+      "noise": 0,
+      "amenities": 0
+    }
+  }
+}
