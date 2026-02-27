@@ -503,10 +503,10 @@ messages/
 
 ## Environment Variables
 
-| Variable                   | Where used                | Secret?     | Notes                                                                                                                   |
-| -------------------------- | ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_MAPTILER_KEY` | Client-side map rendering | No (public) | MapTiler free tier API key. Exposed in browser JS.                                                                      |
-| `SIRENE_API_TOKEN`         | Data scripts only         | Yes         | Required only for online nightlife refresh/build ingestion. Never exposed at runtime. Register at api.insee.fr.          |
+| Variable                   | Where used                | Secret?     | Notes                                                                                                           |
+| -------------------------- | ------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_MAPTILER_KEY` | Client-side map rendering | No (public) | MapTiler free tier API key. Exposed in browser JS.                                                              |
+| `SIRENE_API_TOKEN`         | Data scripts only         | Yes         | Required only for online nightlife refresh/build ingestion. Never exposed at runtime. Register at api.insee.fr. |
 
 ## Design Approach
 
