@@ -15,8 +15,39 @@
         "median_household": 35030,
         "poverty_rate": 12
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 755.7,
+        "categories": {
+          "Cambriolages de logement": 147,
+          "Destructions et dégradations volontaires": 344,
+          "Escroqueries et fraudes aux moyens de paiement": 323,
+          "Trafic de stupéfiants": 86,
+          "Usage de stupéfiants": 1683,
+          "Usage de stupéfiants (AFD)": 1550,
+          "Violences physiques hors cadre familial": 360,
+          "Violences physiques intrafamiliales": 89,
+          "Violences sexuelles": 189,
+          "Vols avec armes": 12,
+          "Vols d'accessoires sur véhicules": 53,
+          "Vols dans les véhicules": 470,
+          "Vols de véhicule": 54,
+          "Vols sans violence contre des personnes": 5587,
+          "Vols violents sans arme": 347
+        }
+      },
+      "transport": {
+        "stations_per_km2": 8.2209,
+        "metro_lines": [
+          "METRO 1",
+          "METRO 14",
+          "METRO 4",
+          "METRO 7",
+          "METRO 8",
+          "RER A",
+          "RER B",
+          "RER D"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -25,8 +56,8 @@
     "scores": {
       "housing": 30.4,
       "income": 54.02,
-      "safety": null,
-      "transport": null,
+      "safety": 0,
+      "transport": 74.1,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -49,8 +80,36 @@
         "median_household": 34050,
         "poverty_rate": 14
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 266.86,
+        "categories": {
+          "Cambriolages de logement": 193,
+          "Destructions et dégradations volontaires": 366,
+          "Escroqueries et fraudes aux moyens de paiement": 363,
+          "Trafic de stupéfiants": 126,
+          "Usage de stupéfiants": 349,
+          "Usage de stupéfiants (AFD)": 241,
+          "Violences physiques hors cadre familial": 148,
+          "Violences physiques intrafamiliales": 67,
+          "Violences sexuelles": 96,
+          "Vols avec armes": 7,
+          "Vols d'accessoires sur véhicules": 53,
+          "Vols dans les véhicules": 342,
+          "Vols de véhicule": 76,
+          "Vols sans violence contre des personnes": 2601,
+          "Vols violents sans arme": 151
+        }
+      },
+      "transport": {
+        "stations_per_km2": 9.0803,
+        "metro_lines": [
+          "METRO 3",
+          "METRO 4",
+          "METRO 7",
+          "METRO 8",
+          "METRO 9"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -59,8 +118,8 @@
     "scores": {
       "housing": 49.95,
       "income": 49.67,
-      "safety": null,
-      "transport": null,
+      "safety": 70.71,
+      "transport": 83.62,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -83,8 +142,35 @@
         "median_household": 34800,
         "poverty_rate": 13
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 162.11,
+        "categories": {
+          "Cambriolages de logement": 263,
+          "Destructions et dégradations volontaires": 466,
+          "Escroqueries et fraudes aux moyens de paiement": 476,
+          "Trafic de stupéfiants": 113,
+          "Usage de stupéfiants": 421,
+          "Usage de stupéfiants (AFD)": 321,
+          "Violences physiques hors cadre familial": 191,
+          "Violences physiques intrafamiliales": 104,
+          "Violences sexuelles": 100,
+          "Vols d'accessoires sur véhicules": 41,
+          "Vols dans les véhicules": 312,
+          "Vols de véhicule": 61,
+          "Vols sans violence contre des personnes": 1916,
+          "Vols violents sans arme": 138
+        }
+      },
+      "transport": {
+        "stations_per_km2": 7.6865,
+        "metro_lines": [
+          "METRO 11",
+          "METRO 3",
+          "METRO 4",
+          "METRO 8",
+          "METRO 9"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -93,8 +179,8 @@
     "scores": {
       "housing": 42.59,
       "income": 53,
-      "safety": null,
-      "transport": null,
+      "safety": 85.86,
+      "transport": 68.18,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -117,8 +203,36 @@
         "median_household": 33040,
         "poverty_rate": 14
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 229.92,
+        "categories": {
+          "Cambriolages de logement": 198,
+          "Destructions et dégradations volontaires": 392,
+          "Escroqueries et fraudes aux moyens de paiement": 391,
+          "Trafic de stupéfiants": 81,
+          "Usage de stupéfiants": 485,
+          "Usage de stupéfiants (AFD)": 409,
+          "Violences physiques hors cadre familial": 254,
+          "Violences physiques intrafamiliales": 117,
+          "Violences sexuelles": 113,
+          "Vols avec armes": 7,
+          "Vols d'accessoires sur véhicules": 34,
+          "Vols dans les véhicules": 255,
+          "Vols de véhicule": 51,
+          "Vols sans violence contre des personnes": 2611,
+          "Vols violents sans arme": 160
+        }
+      },
+      "transport": {
+        "stations_per_km2": 6.2477,
+        "metro_lines": [
+          "METRO 1",
+          "METRO 11",
+          "METRO 4",
+          "METRO 5",
+          "METRO 7"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -127,8 +241,8 @@
     "scores": {
       "housing": 28.2,
       "income": 45.18,
-      "safety": null,
-      "transport": null,
+      "safety": 76.05,
+      "transport": 52.24,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -151,8 +265,35 @@
         "median_household": 35960,
         "poverty_rate": 11
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 124.51,
+        "categories": {
+          "Cambriolages de logement": 323,
+          "Destructions et dégradations volontaires": 408,
+          "Escroqueries et fraudes aux moyens de paiement": 701,
+          "Trafic de stupéfiants": 90,
+          "Usage de stupéfiants": 242,
+          "Usage de stupéfiants (AFD)": 194,
+          "Violences physiques hors cadre familial": 218,
+          "Violences physiques intrafamiliales": 114,
+          "Violences sexuelles": 149,
+          "Vols avec armes": 6,
+          "Vols d'accessoires sur véhicules": 25,
+          "Vols dans les véhicules": 267,
+          "Vols de véhicule": 71,
+          "Vols sans violence contre des personnes": 2718,
+          "Vols violents sans arme": 107
+        }
+      },
+      "transport": {
+        "stations_per_km2": 3.938,
+        "metro_lines": [
+          "METRO 10",
+          "METRO 7",
+          "RER B",
+          "RER C"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -161,8 +302,8 @@
     "scores": {
       "housing": 40.58,
       "income": 58.15,
-      "safety": null,
-      "transport": null,
+      "safety": 91.3,
+      "transport": 26.65,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -185,8 +326,34 @@
         "median_household": 41750,
         "poverty_rate": 11
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 165.84,
+        "categories": {
+          "Cambriolages de logement": 315,
+          "Destructions et dégradations volontaires": 338,
+          "Escroqueries et fraudes aux moyens de paiement": 594,
+          "Trafic de stupéfiants": 109,
+          "Usage de stupéfiants": 168,
+          "Usage de stupéfiants (AFD)": 92,
+          "Violences physiques hors cadre familial": 175,
+          "Violences physiques intrafamiliales": 80,
+          "Violences sexuelles": 106,
+          "Vols d'accessoires sur véhicules": 50,
+          "Vols dans les véhicules": 357,
+          "Vols de véhicule": 72,
+          "Vols sans violence contre des personnes": 2551,
+          "Vols violents sans arme": 111
+        }
+      },
+      "transport": {
+        "stations_per_km2": 6.5023,
+        "metro_lines": [
+          "METRO 10",
+          "METRO 12",
+          "METRO 4",
+          "RER B"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -195,8 +362,8 @@
     "scores": {
       "housing": 0,
       "income": 83.87,
-      "safety": null,
-      "transport": null,
+      "safety": 85.32,
+      "transport": 55.06,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -219,8 +386,35 @@
         "median_household": 45380,
         "poverty_rate": 9
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 147.74,
+        "categories": {
+          "Cambriolages de logement": 346,
+          "Destructions et dégradations volontaires": 436,
+          "Escroqueries et fraudes aux moyens de paiement": 731,
+          "Trafic de stupéfiants": 69,
+          "Usage de stupéfiants": 600,
+          "Usage de stupéfiants (AFD)": 488,
+          "Violences physiques hors cadre familial": 299,
+          "Violences physiques intrafamiliales": 141,
+          "Violences sexuelles": 142,
+          "Vols d'accessoires sur véhicules": 47,
+          "Vols dans les véhicules": 340,
+          "Vols de véhicule": 103,
+          "Vols sans violence contre des personnes": 2801,
+          "Vols violents sans arme": 149
+        }
+      },
+      "transport": {
+        "stations_per_km2": 3.9119,
+        "metro_lines": [
+          "METRO 10",
+          "METRO 12",
+          "METRO 13",
+          "METRO 8",
+          "RER C"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -229,8 +423,8 @@
     "scores": {
       "housing": 8.39,
       "income": 100,
-      "safety": null,
-      "transport": null,
+      "safety": 87.94,
+      "transport": 26.36,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -253,8 +447,39 @@
         "median_household": 44100,
         "poverty_rate": 10
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 443.66,
+        "categories": {
+          "Cambriolages de logement": 296,
+          "Destructions et dégradations volontaires": 626,
+          "Escroqueries et fraudes aux moyens de paiement": 828,
+          "Trafic de stupéfiants": 177,
+          "Usage de stupéfiants": 3227,
+          "Usage de stupéfiants (AFD)": 3005,
+          "Violences physiques hors cadre familial": 442,
+          "Violences physiques intrafamiliales": 122,
+          "Violences sexuelles": 288,
+          "Vols avec armes": 17,
+          "Vols d'accessoires sur véhicules": 120,
+          "Vols dans les véhicules": 774,
+          "Vols de véhicule": 175,
+          "Vols sans violence contre des personnes": 5842,
+          "Vols violents sans arme": 313
+        }
+      },
+      "transport": {
+        "stations_per_km2": 6.701,
+        "metro_lines": [
+          "METRO 1",
+          "METRO 12",
+          "METRO 13",
+          "METRO 14",
+          "METRO 2",
+          "METRO 3",
+          "METRO 8",
+          "METRO 9"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -263,8 +488,8 @@
     "scores": {
       "housing": 32.18,
       "income": 94.31,
-      "safety": null,
-      "transport": null,
+      "safety": 45.14,
+      "transport": 57.26,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -287,8 +512,40 @@
         "median_household": 37220,
         "poverty_rate": 11
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 248.11,
+        "categories": {
+          "Cambriolages de logement": 310,
+          "Destructions et dégradations volontaires": 725,
+          "Escroqueries et fraudes aux moyens de paiement": 1000,
+          "Trafic de stupéfiants": 282,
+          "Usage de stupéfiants": 2120,
+          "Usage de stupéfiants (AFD)": 1831,
+          "Violences physiques hors cadre familial": 328,
+          "Violences physiques intrafamiliales": 144,
+          "Violences sexuelles": 206,
+          "Vols avec armes": 16,
+          "Vols d'accessoires sur véhicules": 83,
+          "Vols dans les véhicules": 605,
+          "Vols de véhicule": 122,
+          "Vols sans violence contre des personnes": 5487,
+          "Vols violents sans arme": 325
+        }
+      },
+      "transport": {
+        "stations_per_km2": 10.5587,
+        "metro_lines": [
+          "METRO 12",
+          "METRO 13",
+          "METRO 2",
+          "METRO 3",
+          "METRO 7",
+          "METRO 8",
+          "METRO 9",
+          "RER A",
+          "RER E"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -297,8 +554,8 @@
     "scores": {
       "housing": 58.23,
       "income": 63.75,
-      "safety": null,
-      "transport": null,
+      "safety": 73.42,
+      "transport": 100,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -321,8 +578,41 @@
         "median_household": 29470,
         "poverty_rate": 17
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 257.24,
+        "categories": {
+          "Cambriolages de logement": 321,
+          "Destructions et dégradations volontaires": 1023,
+          "Escroqueries et fraudes aux moyens de paiement": 1072,
+          "Trafic de stupéfiants": 437,
+          "Usage de stupéfiants": 3584,
+          "Usage de stupéfiants (AFD)": 2958,
+          "Violences physiques hors cadre familial": 902,
+          "Violences physiques intrafamiliales": 318,
+          "Violences sexuelles": 422,
+          "Vols avec armes": 25,
+          "Vols d'accessoires sur véhicules": 86,
+          "Vols dans les véhicules": 746,
+          "Vols de véhicule": 161,
+          "Vols sans violence contre des personnes": 8460,
+          "Vols violents sans arme": 796
+        }
+      },
+      "transport": {
+        "stations_per_km2": 7.9537,
+        "metro_lines": [
+          "METRO 2",
+          "METRO 4",
+          "METRO 5",
+          "METRO 7",
+          "METRO 7bis",
+          "METRO 8",
+          "METRO 9",
+          "RER B",
+          "RER D",
+          "RER E"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -331,8 +621,8 @@
     "scores": {
       "housing": 79.89,
       "income": 29.32,
-      "safety": null,
-      "transport": null,
+      "safety": 72.1,
+      "transport": 71.14,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -355,8 +645,37 @@
         "median_household": 30210,
         "poverty_rate": 15
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 95.2,
+        "categories": {
+          "Cambriolages de logement": 465,
+          "Destructions et dégradations volontaires": 1383,
+          "Escroqueries et fraudes aux moyens de paiement": 1953,
+          "Trafic de stupéfiants": 188,
+          "Usage de stupéfiants": 789,
+          "Usage de stupéfiants (AFD)": 505,
+          "Violences physiques hors cadre familial": 550,
+          "Violences physiques intrafamiliales": 373,
+          "Violences sexuelles": 351,
+          "Vols avec armes": 17,
+          "Vols d'accessoires sur véhicules": 140,
+          "Vols dans les véhicules": 546,
+          "Vols de véhicule": 212,
+          "Vols sans violence contre des personnes": 4956,
+          "Vols violents sans arme": 369
+        }
+      },
+      "transport": {
+        "stations_per_km2": 5.1835,
+        "metro_lines": [
+          "METRO 11",
+          "METRO 2",
+          "METRO 3",
+          "METRO 5",
+          "METRO 8",
+          "METRO 9"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -365,8 +684,8 @@
     "scores": {
       "housing": 69.71,
       "income": 32.61,
-      "safety": null,
-      "transport": null,
+      "safety": 95.54,
+      "transport": 40.45,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -389,8 +708,39 @@
         "median_household": 29940,
         "poverty_rate": 14
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 150.35,
+        "categories": {
+          "Cambriolages de logement": 404,
+          "Destructions et dégradations volontaires": 1112,
+          "Escroqueries et fraudes aux moyens de paiement": 1471,
+          "Trafic de stupéfiants": 214,
+          "Usage de stupéfiants": 3043,
+          "Usage de stupéfiants (AFD)": 2747,
+          "Violences physiques hors cadre familial": 837,
+          "Violences physiques intrafamiliales": 392,
+          "Violences sexuelles": 466,
+          "Vols avec armes": 24,
+          "Vols d'accessoires sur véhicules": 247,
+          "Vols dans les véhicules": 874,
+          "Vols de véhicule": 285,
+          "Vols sans violence contre des personnes": 6812,
+          "Vols violents sans arme": 439
+        }
+      },
+      "transport": {
+        "stations_per_km2": 1.5324,
+        "metro_lines": [
+          "METRO 1",
+          "METRO 14",
+          "METRO 2",
+          "METRO 5",
+          "METRO 6",
+          "METRO 8",
+          "RER A",
+          "RER D"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -399,8 +749,8 @@
     "scores": {
       "housing": 84.69,
       "income": 31.41,
-      "safety": null,
-      "transport": null,
+      "safety": 87.56,
+      "transport": 0,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -423,8 +773,37 @@
         "median_household": 25670,
         "poverty_rate": 18
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 102.73,
+        "categories": {
+          "Cambriolages de logement": 436,
+          "Destructions et dégradations volontaires": 1156,
+          "Escroqueries et fraudes aux moyens de paiement": 1583,
+          "Trafic de stupéfiants": 227,
+          "Usage de stupéfiants": 2644,
+          "Usage de stupéfiants (AFD)": 2041,
+          "Violences physiques hors cadre familial": 740,
+          "Violences physiques intrafamiliales": 568,
+          "Violences sexuelles": 484,
+          "Vols avec armes": 17,
+          "Vols d'accessoires sur véhicules": 110,
+          "Vols dans les véhicules": 900,
+          "Vols de véhicule": 284,
+          "Vols sans violence contre des personnes": 5515,
+          "Vols violents sans arme": 347
+        }
+      },
+      "transport": {
+        "stations_per_km2": 3.2171,
+        "metro_lines": [
+          "METRO 10",
+          "METRO 14",
+          "METRO 5",
+          "METRO 6",
+          "METRO 7",
+          "RER C"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -433,8 +812,8 @@
     "scores": {
       "housing": 87.8,
       "income": 12.44,
-      "safety": null,
-      "transport": null,
+      "safety": 94.45,
+      "transport": 18.66,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -457,8 +836,35 @@
         "median_household": 29460,
         "poverty_rate": 14
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 92.21,
+        "categories": {
+          "Cambriolages de logement": 490,
+          "Destructions et dégradations volontaires": 1049,
+          "Escroqueries et fraudes aux moyens de paiement": 1355,
+          "Trafic de stupéfiants": 135,
+          "Usage de stupéfiants": 759,
+          "Usage de stupéfiants (AFD)": 466,
+          "Violences physiques hors cadre familial": 419,
+          "Violences physiques intrafamiliales": 270,
+          "Violences sexuelles": 262,
+          "Vols avec armes": 5,
+          "Vols d'accessoires sur véhicules": 110,
+          "Vols dans les véhicules": 636,
+          "Vols de véhicule": 221,
+          "Vols sans violence contre des personnes": 4457,
+          "Vols violents sans arme": 217
+        }
+      },
+      "transport": {
+        "stations_per_km2": 2.6715,
+        "metro_lines": [
+          "METRO 13",
+          "METRO 4",
+          "METRO 6",
+          "RER B"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -467,8 +873,8 @@
     "scores": {
       "housing": 77.97,
       "income": 29.28,
-      "safety": null,
-      "transport": null,
+      "safety": 95.97,
+      "transport": 12.62,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -491,8 +897,37 @@
         "median_household": 32780,
         "poverty_rate": 13
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 90.34,
+        "categories": {
+          "Cambriolages de logement": 1097,
+          "Destructions et dégradations volontaires": 1221,
+          "Escroqueries et fraudes aux moyens de paiement": 2681,
+          "Trafic de stupéfiants": 287,
+          "Usage de stupéfiants": 2346,
+          "Usage de stupéfiants (AFD)": 1941,
+          "Violences physiques hors cadre familial": 669,
+          "Violences physiques intrafamiliales": 568,
+          "Violences sexuelles": 527,
+          "Vols avec armes": 15,
+          "Vols d'accessoires sur véhicules": 176,
+          "Vols dans les véhicules": 820,
+          "Vols de véhicule": 366,
+          "Vols sans violence contre des personnes": 5963,
+          "Vols violents sans arme": 354
+        }
+      },
+      "transport": {
+        "stations_per_km2": 3.2961,
+        "metro_lines": [
+          "METRO 10",
+          "METRO 12",
+          "METRO 13",
+          "METRO 6",
+          "METRO 8",
+          "RER C"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -501,8 +936,8 @@
     "scores": {
       "housing": 75.22,
       "income": 44.02,
-      "safety": null,
-      "transport": null,
+      "safety": 96.24,
+      "transport": 19.54,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -525,8 +960,37 @@
         "median_household": 41550,
         "poverty_rate": 12
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 95.21,
+        "categories": {
+          "Cambriolages de logement": 701,
+          "Destructions et dégradations volontaires": 1537,
+          "Escroqueries et fraudes aux moyens de paiement": 1722,
+          "Trafic de stupéfiants": 140,
+          "Usage de stupéfiants": 846,
+          "Usage de stupéfiants (AFD)": 704,
+          "Violences physiques hors cadre familial": 426,
+          "Violences physiques intrafamiliales": 400,
+          "Violences sexuelles": 376,
+          "Vols avec armes": 47,
+          "Vols d'accessoires sur véhicules": 255,
+          "Vols dans les véhicules": 1952,
+          "Vols de véhicule": 382,
+          "Vols sans violence contre des personnes": 4849,
+          "Vols violents sans arme": 421
+        }
+      },
+      "transport": {
+        "stations_per_km2": 1.7102,
+        "metro_lines": [
+          "METRO 1",
+          "METRO 10",
+          "METRO 2",
+          "METRO 6",
+          "METRO 9",
+          "RER C"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -535,8 +999,8 @@
     "scores": {
       "housing": 55.21,
       "income": 82.99,
-      "safety": null,
-      "transport": null,
+      "safety": 95.54,
+      "transport": 1.97,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -559,8 +1023,39 @@
         "median_household": 33390,
         "poverty_rate": 14
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 90.34,
+        "categories": {
+          "Cambriolages de logement": 671,
+          "Destructions et dégradations volontaires": 1268,
+          "Escroqueries et fraudes aux moyens de paiement": 1775,
+          "Trafic de stupéfiants": 344,
+          "Usage de stupéfiants": 1027,
+          "Usage de stupéfiants (AFD)": 814,
+          "Violences physiques hors cadre familial": 438,
+          "Violences physiques intrafamiliales": 395,
+          "Violences sexuelles": 338,
+          "Vols avec armes": 14,
+          "Vols d'accessoires sur véhicules": 206,
+          "Vols dans les véhicules": 1085,
+          "Vols de véhicule": 316,
+          "Vols sans violence contre des personnes": 4761,
+          "Vols violents sans arme": 403
+        }
+      },
+      "transport": {
+        "stations_per_km2": 2.8224,
+        "metro_lines": [
+          "METRO 1",
+          "METRO 13",
+          "METRO 14",
+          "METRO 3",
+          "METRO 6",
+          "RER A",
+          "RER C",
+          "RER E"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -569,8 +1064,8 @@
     "scores": {
       "housing": 66.5,
       "income": 46.73,
-      "safety": null,
-      "transport": null,
+      "safety": 96.24,
+      "transport": 14.29,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -593,8 +1088,35 @@
         "median_household": 24910,
         "poverty_rate": 21
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 159.83,
+        "categories": {
+          "Cambriolages de logement": 1018,
+          "Destructions et dégradations volontaires": 1471,
+          "Escroqueries et fraudes aux moyens de paiement": 1412,
+          "Trafic de stupéfiants": 1075,
+          "Usage de stupéfiants": 3249,
+          "Usage de stupéfiants (AFD)": 1663,
+          "Violences physiques hors cadre familial": 1002,
+          "Violences physiques intrafamiliales": 540,
+          "Violences sexuelles": 453,
+          "Vols avec armes": 67,
+          "Vols d'accessoires sur véhicules": 160,
+          "Vols dans les véhicules": 1374,
+          "Vols de véhicule": 358,
+          "Vols sans violence contre des personnes": 10195,
+          "Vols violents sans arme": 1252
+        }
+      },
+      "transport": {
+        "stations_per_km2": 2.3349,
+        "metro_lines": [
+          "METRO 12",
+          "METRO 13",
+          "METRO 2",
+          "METRO 4"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -603,8 +1125,8 @@
     "scores": {
       "housing": 88.39,
       "income": 9.06,
-      "safety": null,
-      "transport": null,
+      "safety": 86.19,
+      "transport": 8.89,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -627,8 +1149,37 @@
         "median_household": 22870,
         "poverty_rate": 22
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 113.89,
+        "categories": {
+          "Cambriolages de logement": 683,
+          "Destructions et dégradations volontaires": 1411,
+          "Escroqueries et fraudes aux moyens de paiement": 1774,
+          "Trafic de stupéfiants": 587,
+          "Usage de stupéfiants": 1846,
+          "Usage de stupéfiants (AFD)": 831,
+          "Violences physiques hors cadre familial": 838,
+          "Violences physiques intrafamiliales": 682,
+          "Violences sexuelles": 418,
+          "Vols avec armes": 45,
+          "Vols d'accessoires sur véhicules": 134,
+          "Vols dans les véhicules": 1588,
+          "Vols de véhicule": 298,
+          "Vols sans violence contre des personnes": 7313,
+          "Vols violents sans arme": 714
+        }
+      },
+      "transport": {
+        "stations_per_km2": 3.0916,
+        "metro_lines": [
+          "METRO 11",
+          "METRO 2",
+          "METRO 5",
+          "METRO 7",
+          "METRO 7bis",
+          "RER E"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -637,8 +1188,8 @@
     "scores": {
       "housing": 100,
       "income": 0,
-      "safety": null,
-      "transport": null,
+      "safety": 92.84,
+      "transport": 17.27,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -661,8 +1212,37 @@
         "median_household": 23570,
         "poverty_rate": 21
       },
-      "safety": null,
-      "transport": null,
+      "safety": {
+        "crime_rate_per_1k": 64.38,
+        "categories": {
+          "Cambriolages de logement": 558,
+          "Destructions et dégradations volontaires": 1126,
+          "Escroqueries et fraudes aux moyens de paiement": 2073,
+          "Trafic de stupéfiants": 204,
+          "Usage de stupéfiants": 623,
+          "Usage de stupéfiants (AFD)": 351,
+          "Violences physiques hors cadre familial": 625,
+          "Violences physiques intrafamiliales": 626,
+          "Violences sexuelles": 424,
+          "Vols avec armes": 16,
+          "Vols d'accessoires sur véhicules": 168,
+          "Vols dans les véhicules": 589,
+          "Vols de véhicule": 269,
+          "Vols sans violence contre des personnes": 3715,
+          "Vols violents sans arme": 319
+        }
+      },
+      "transport": {
+        "stations_per_km2": 3.0083,
+        "metro_lines": [
+          "METRO 1",
+          "METRO 11",
+          "METRO 2",
+          "METRO 3",
+          "METRO 3bis",
+          "METRO 9"
+        ]
+      },
       "nightlife": null,
       "greenSpace": null,
       "noise": null,
@@ -671,8 +1251,8 @@
     "scores": {
       "housing": 94,
       "income": 3.11,
-      "safety": null,
-      "transport": null,
+      "safety": 100,
+      "transport": 16.35,
       "nightlife": null,
       "greenSpace": null,
       "noise": null,

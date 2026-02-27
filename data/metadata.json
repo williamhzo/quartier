@@ -1,14 +1,18 @@
 {
-  "generated_at": "2026-02-27T23:27:30.527Z",
+  "generated_at": "2026-02-27T23:52:08.817Z",
   "enabled_dimensions": [
     "housing",
-    "income"
+    "income",
+    "safety",
+    "transport"
   ],
   "source_vintages": {
     "boundaries": "opendata-paris-arrondissements-snapshot-2026-02-27",
     "filosofi": "insee-dossier-complet-2025-10-14",
     "dvf_current": "geo-dvf-2024-departement-75",
     "dvf_prior": "geo-dvf-2023-departement-75",
+    "safety": "ssmsi-communal-2024-geographie2025-produit-2025-06-04",
+    "transport": "idfm-emplacement-des-gares-idf-export-2026-02-27",
     "sirene": "V3.11"
   },
   "source_urls": {
@@ -16,6 +20,8 @@
     "filosofi": "https://www.insee.fr/fr/statistiques/fichier/5359146/dossier_complet_31_12_2025.zip",
     "dvf_current": "https://files.data.gouv.fr/geo-dvf/latest/csv/2024/departements/75.csv.gz",
     "dvf_prior": "https://files.data.gouv.fr/geo-dvf/latest/csv/2023/departements/75.csv.gz",
+    "safety": "https://static.data.gouv.fr/resources/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/20250710-144817/donnee-data.gouv-2024-geographie2025-produit-le2025-06-04.csv.gz",
+    "transport": "https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/emplacement-des-gares-idf/exports/geojson?where=mode%20in%20(%22METRO%22,%22RER%22)&limit=-1",
     "sirene": "https://api.insee.fr/entreprises/sirene/V3.11/siret"
   },
   "source_row_counts": {
@@ -23,23 +29,32 @@
     "filosofi_rows_scanned": 29241,
     "filosofi_rows_matched": 20,
     "dvf_current": 74677,
-    "dvf_prior": 80964
+    "dvf_prior": 80964,
+    "ssmsi_rows_scanned": 4714200,
+    "ssmsi_rows_matched": 300,
+    "transport_rows_total": 657,
+    "transport_rows_mode_filtered": 657,
+    "transport_rows_assigned": 362
   },
   "source_checksums": {
-    "boundaries": "76869351b68cf72183d6896fa9508c7b313aad763349fe5e8fa6cf79e870fd79",
+    "boundaries": "74ada3293a45642fdb70e6c199ff34dc814953864ad5c3b09443a94696f0e1dd",
     "filosofi": "845dc47c4643271542c56819011802850f6a382f336d240dcc1e1ccde44603f2",
     "dvf_current": "fef7fb65c52137888ef8c1aa0098660011532f20a1f2e5f34b803691abffb300",
-    "dvf_prior": "c62481e00be2cf2c135618c0a16ea5bb0422edda3f9d8607dadad7daf5959fb7"
+    "dvf_prior": "c62481e00be2cf2c135618c0a16ea5bb0422edda3f9d8607dadad7daf5959fb7",
+    "safety": "24c0ae955facf0bdac66053c9a197587c61c888ff6ecc2703360ded23ae0f283",
+    "transport": "10ad2b16f97ed5645a6c2ca5ec6188ad08bb5386cc0c919bfe826e03f6504855"
   },
   "quality": {
     "hard_fail_checks_passed": true,
     "hard_fail_errors": [],
-    "warnings": [],
+    "warnings": [
+      "ssmsi rows skipped due missing/non-numeric \"nombre\": 3"
+    ],
     "coverage_by_dimension": {
       "housing": 20,
       "income": 20,
-      "safety": 0,
-      "transport": 0,
+      "safety": 20,
+      "transport": 20,
       "nightlife": 0,
       "greenSpace": 0,
       "noise": 0,
