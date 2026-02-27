@@ -26,14 +26,9 @@ const INITIAL_ZOOM = 11.5;
 type Props = {
   arrondissements: Arrondissement[];
   boundaries: FeatureCollection<Geometry>;
-  contextBoundaries: FeatureCollection<Geometry>;
 };
 
-export function ParisMap({
-  arrondissements,
-  boundaries,
-  contextBoundaries,
-}: Props) {
+export function ParisMap({ arrondissements, boundaries }: Props) {
   const t = useTranslations();
   const mapRef = useRef<MapRef>(null);
   const hoveredIdRef = useRef<number | null>(null);
@@ -273,6 +268,7 @@ export function ParisMap({
           ...PARIS_CENTER,
           zoom: INITIAL_ZOOM,
         }}
+        minZoom={10.5}
         style={{ width: "100%", height: "100%" }}
         mapStyle={{
           version: 8,
@@ -281,7 +277,7 @@ export function ParisMap({
             {
               id: "background",
               type: "background",
-              paint: { "background-color": "#f0f0f0" },
+              paint: { "background-color": "#ffffff" },
             },
           ],
         }}
@@ -291,31 +287,12 @@ export function ParisMap({
         onClick={onClick}
         cursor="grab"
       >
-        <Source id="idf-context" type="geojson" data={contextBoundaries}>
-          <Layer
-            id="idf-context-fill"
-            type="fill"
-            paint={{
-              "fill-color": "#e8e8e8",
-              "fill-opacity": 0.5,
-            }}
-          />
-        </Source>
-
         <Source
           id="arrondissements"
           type="geojson"
           data={enrichedGeojson}
           promoteId="number"
         >
-          <Layer
-            id="arrondissements-mask"
-            type="fill"
-            paint={{
-              "fill-color": "#f0f0f0",
-              "fill-opacity": 1,
-            }}
-          />
           <Layer
             id="arrondissements-fill"
             type="fill"
