@@ -32,6 +32,7 @@ All data is pre-computed at build time by a TypeScript script and shipped as sta
 - **Map:** MapLibre GL JS + react-map-gl, MapTiler free tier for base tiles
 - **Spatial:** @turf/turf (point-in-polygon, area computation, polygon intersection in build script)
 - **Charts:** Recharts (phase 6 only)
+- **URL state:** nuqs (type-safe search params for `?arr=N` selection syncing)
 - **i18n:** next-intl (French + English)
 - **Data:** Pre-computed static JSON, bundled in repo
 - **GeoJSON:** Paris arrondissement boundaries bundled in repo (from opendata.paris.fr)
@@ -181,9 +182,8 @@ Soft-fail gates (warning in metadata + console):
 
 - Implemented now:
   - A dimension has 1-2 missing arrondissements (explicit `null`)
-- Planned (not yet implemented):
-  - Source row count deviates materially from prior snapshot
-  - Strong metric drift vs prior snapshot (> configured threshold)
+  - Source row count deviates materially from prior snapshot (current threshold: 15% absolute delta)
+  - Strong metric drift vs prior snapshot on enabled dimensions (current threshold: 20% absolute delta on median raw value)
 
 ### Missing data behavior
 
@@ -323,9 +323,14 @@ type DataMetadata = {
 - Dimension selector dropdown in toolbar to change what the map shows
 - Persona selector dropdown: "Young professional", "Family", "Tourist", "Business owner"
   - Each preset adjusts dimension weights for composite score
-- Click arrondissement: side panel slides in (desktop) / bottom sheet slides up (mobile)
-  - Shows all dimension scores as a vertical card list
-  - "View full details" link to detail page
+- Click arrondissement: wider drawer slides in (desktop: 384-448px) / taller bottom sheet slides up (mobile: 85vh)
+  - URL updates to `?arr=N` via nuqs (`useQueryState` with `history: 'push'`)
+  - Shows composite score bar + all 8 dimension cards with scores and raw values (reuses `DimensionSection` component)
+  - Escape key or close button dismisses the drawer and removes `?arr` from URL
+  - Direct visit to `/?arr=9` hydrates from URL and opens drawer immediately
+  - Browser back/forward navigates between selections
+  - Invalid `?arr` values (out of 1-20 range) are ignored gracefully
+  - Dynamic OG metadata: visiting `/?arr=9` sets OG title/image to that arrondissement
 - Hover arrondissement: tooltip with name + current score (rendered via DOM refs to avoid React re-renders/flicker)
 
 ### `/{locale}/leaderboard` -- Ranking Table
@@ -387,13 +392,12 @@ Weight sliders for user customization are a future addition. v1 ships with prese
 
 - Map fills viewport
 - Floating toolbar at top: dimension selector + persona dropdown
-- Tap arrondissement: bottom sheet slides up with summary
-- "See details" button navigates to detail page
+- Tap arrondissement: bottom sheet slides up (85vh) with drag handle, all dimension cards, URL syncs to `?arr=N`
 
 **Map view (desktop):**
 
 - Map fills left ~65% of viewport
-- Click arrondissement: right panel slides in with summary
+- Click arrondissement: wider right panel (384-448px) slides in with full dimension cards
 - Toolbar at top of map area
 
 **Leaderboard (mobile):**
@@ -470,6 +474,7 @@ components/
 lib/
   data.ts                   # load and type the static JSON
   scoring.ts                # weight + composite computation (client-side)
+  search-params.ts          # nuqs parser + cache for ?arr=N URL state
   i18n.ts                   # next-intl config
   arrondissements.ts        # metadata (names, numbers, colors)
 data/
@@ -501,7 +506,7 @@ messages/
 | Variable                   | Where used                | Secret?     | Notes                                                                                                                   |
 | -------------------------- | ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_MAPTILER_KEY` | Client-side map rendering | No (public) | MapTiler free tier API key. Exposed in browser JS.                                                                      |
-| `SIRENE_API_TOKEN`         | Build script only         | Yes         | Required only when nightlife dimension is enabled/refreshed online. Never exposed at runtime. Register at api.insee.fr. |
+| `SIRENE_API_TOKEN`         | Data scripts only         | Yes         | Required only for online nightlife refresh/build ingestion. Never exposed at runtime. Register at api.insee.fr.          |
 
 ## Design Approach
 
@@ -516,7 +521,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 3. [x] Implement cache-or-network fetch layer with timeout/retry/rate-limit controls
 4. [x] Add provenance output (`data/metadata.json`)
 5. [x] Add hard-fail quality gates
-6. [ ] Add soft-fail drift gates (row-count/metric drift vs prior snapshot)
+6. [x] Add soft-fail drift gates (row-count/metric drift vs prior snapshot)
 
 ### Phase 1B: Core Dimensions (ship first snapshot)
 
