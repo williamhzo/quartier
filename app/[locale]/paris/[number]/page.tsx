@@ -1,15 +1,32 @@
-import { setRequestLocale } from "next-intl/server";
-import { useTranslations } from "next-intl";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { loadArrondissements } from "@/lib/data";
+import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
+import { EQUAL_WEIGHTS } from "@/lib/personas";
+import { computeComposite, rankByComposite } from "@/lib/scoring";
+import { Badge } from "@/components/ui/badge";
+import { DimensionSection } from "@/components/detail/dimension-section";
+import { Link } from "@/i18n/navigation";
+import { ArrowLeft } from "lucide-react";
+
+const VALID_NUMBERS = Array.from({ length: 20 }, (_, i) => String(i + 1));
 
 type Props = {
   params: Promise<{ locale: string; number: string }>;
 };
 
-const VALID_NUMBERS = Array.from({ length: 20 }, (_, i) => String(i + 1));
-
 export function generateStaticParams() {
   return VALID_NUMBERS.map((number) => ({ number }));
+}
+
+export async function generateMetadata({ params }: Props) {
+  const { locale, number } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata" });
+  const label = formatArrondissement(Number(number));
+
+  return {
+    title: `${label} - ${t("title")}`,
+  };
 }
 
 export default async function DetailPage({ params }: Props) {
@@ -19,20 +36,61 @@ export default async function DetailPage({ params }: Props) {
   }
   setRequestLocale(locale);
 
-  return <DetailPageContent number={Number(number)} />;
-}
+  const t = await getTranslations({ locale });
+  const data = await loadArrondissements();
+  const arrondissement = data.find((a) => a.number === Number(number));
 
-function DetailPageContent({ number }: { number: number }) {
-  const t = useTranslations("detail");
-  const suffix = number === 1 ? "er" : "e";
+  if (!arrondissement) {
+    return (
+      <div className="mx-auto max-w-4xl px-4 py-8">
+        <Link
+          href="/"
+          className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm transition-colors"
+        >
+          <ArrowLeft className="size-4" />
+          {t("detail.backToMap")}
+        </Link>
+        <h1 className="mt-4 text-2xl font-semibold">
+          {formatArrondissement(Number(number))}
+        </h1>
+        <p className="text-muted-foreground mt-2">{t("common.na")}</p>
+      </div>
+    );
+  }
+
+  const ranked = rankByComposite(data, EQUAL_WEIGHTS);
+  const rank = ranked.find((a) => a.number === Number(number))?.rank ?? 0;
+  const composite = computeComposite(arrondissement.scores, EQUAL_WEIGHTS);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="text-2xl font-semibold">
-        {number}
-        <sup>{suffix}</sup> arrondissement
-      </h1>
-      <p className="text-muted-foreground mt-1">{t("scores")}</p>
+      <Link
+        href="/"
+        className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm transition-colors"
+      >
+        <ArrowLeft className="size-4" />
+        {t("detail.backToMap")}
+      </Link>
+      <div className="mt-4 flex items-baseline gap-4">
+        <h1 className="text-2xl font-semibold">
+          {formatArrondissement(arrondissement.number)}
+        </h1>
+        <Badge variant="secondary" className="text-base">
+          {Math.round(composite)}/100
+        </Badge>
+        <span className="text-muted-foreground text-sm tabular-nums">
+          #{rank}/20
+        </span>
+      </div>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        {DIMENSION_KEYS.map((key) => (
+          <DimensionSection
+            key={key}
+            dimensionKey={key}
+            arrondissement={arrondissement}
+          />
+        ))}
+      </div>
     </div>
   );
 }
