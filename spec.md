@@ -481,7 +481,7 @@ data/
   arrondissements.json      # pre-computed dimension data (committed)
   arrondissements.geojson   # boundary polygons (committed)
   metadata.json             # provenance + quality checks (committed)
-  raw/                      # cached source payloads/snapshots (currently committed in-repo)
+  raw/                      # cached source payloads/snapshots (gitignored)
 scripts/
   data-config.ts            # pinned source vintages + enabled dimensions
   build-data.ts             # orchestrator: download, parse, aggregate, output JSON
