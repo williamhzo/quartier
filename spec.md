@@ -43,16 +43,16 @@ All data is pre-computed at build time by a TypeScript script and shipped as sta
 
 All data is pre-computed per arrondissement and shipped as static JSON.
 
-| # | Dimension | Source | Format | Metric | Processing notes |
-|---|---|---|---|---|---|
-| 1 | Housing affordability | DVF (data.gouv.fr) | CSV, pre-split per arrondissement | Median price/m2 (apartments), YoY trend | Filter `type_local = "Appartement"`. Multi-row mutations: group by `id_mutation`, use `valeur_fonciere / surface_reelle_bati`. Drop rows with missing surface. Trim outliers (below 1st and above 99th percentile). |
-| 2 | Income | Filosofi / INSEE | **XLSX** | Median household income, poverty rate | Needs XLSX parser (`xlsx` or `exceljs`). Wide format with coded column names. Map codes to fields. |
-| 3 | Safety | SSMSI crime stats | CSV | Total crime rate per 1k residents, breakdown by category | Population data needed from separate INSEE source to compute per-capita rates. |
-| 4 | Transport density | IDFM station data | GeoJSON/CSV with lat/lon | Metro/RER stations per km2 | **Spatial: point-in-polygon** test each station against arrondissement boundaries using turf.js. |
-| 5 | Nightlife & dining | SIRENE (API) | JSON via API | Restaurants per km2, bars+cafes per km2 | **Cannot download full SIRENE (5GB+).** Use INSEE API SIRENE: query by commune code (75101-75120) + validated NAF Rev.2 codes. Free token required, 30 req/min rate limit. ~20 paginated queries. |
-| 6 | Green space | opendata.paris.fr | GeoJSON polygons | m2 of green space per resident | **Spatial: polygon intersection.** Parks can span arrondissements. Clip with turf.js `intersect()`, compute area with `turf.area()`. |
-| 7 | Noise | Bruitparif / data.gouv.fr | CSV | % residents exposed above Lden thresholds | Straightforward. Already per arrondissement. |
-| 8 | Amenities | BPE (INSEE) | CSV | Pharmacies, doctors, schools, gyms, cinemas per km2 | Filter by commune codes 75101-75120. Count equipment by type code. |
+| #   | Dimension             | Source                    | Format                            | Metric                                                   | Processing notes                                                                                                                                                                                                    |
+| --- | --------------------- | ------------------------- | --------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Housing affordability | DVF (data.gouv.fr)        | CSV.gz by departement             | Median price/m2 (apartments), YoY trend                  | Parse departement 75 yearly snapshots and filter `code_commune` 75101..75120. Filter `type_local = "Appartement"`. Multi-row mutations: group by `id_mutation`, use `valeur_fonciere / surface_reelle_bati`. Drop rows with missing surface. Trim outliers (below 1st and above 99th percentile). |
+| 2   | Income                | Filosofi / INSEE          | **XLSX**                          | Median household income, poverty rate                    | Needs XLSX parser (`xlsx` or `exceljs`). Wide format with coded column names. Map codes to fields.                                                                                                                  |
+| 3   | Safety                | SSMSI crime stats         | CSV                               | Total crime rate per 1k residents, breakdown by category | Population data needed from separate INSEE source to compute per-capita rates.                                                                                                                                      |
+| 4   | Transport density     | IDFM station data         | GeoJSON/CSV with lat/lon          | Metro/RER stations per km2                               | **Spatial: point-in-polygon** test each station against arrondissement boundaries using turf.js.                                                                                                                    |
+| 5   | Nightlife & dining    | SIRENE (API)              | JSON via API                      | Restaurants per km2, bars+cafes per km2                  | **Cannot download full SIRENE (5GB+).** Use INSEE API SIRENE: query by commune code (75101-75120) + validated NAF Rev.2 codes. Free token required, 30 req/min rate limit. ~20 paginated queries.                   |
+| 6   | Green space           | opendata.paris.fr         | GeoJSON polygons                  | m2 of green space per resident                           | **Spatial: polygon intersection.** Parks can span arrondissements. Clip with turf.js `intersect()`, compute area with `turf.area()`.                                                                                |
+| 7   | Noise                 | Bruitparif / data.gouv.fr | CSV                               | % residents exposed above Lden thresholds                | Straightforward. Already per arrondissement.                                                                                                                                                                        |
+| 8   | Amenities             | BPE (INSEE)               | CSV                               | Pharmacies, doctors, schools, gyms, cinemas per km2      | Filter by commune codes 75101-75120. Count equipment by type code.                                                                                                                                                  |
 
 **Score direction:** All dimensions are scored so that higher = better for the resident. Housing uses affordability (cheap = high score). Safety uses inverse crime rate (low crime = high score). Noise uses inverse exposure (low noise = high score). Persona weights control importance, not direction.
 
@@ -69,12 +69,12 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 **Stretch dimensions (future):**
 
-| # | Dimension | Source | Metric | Notes |
-|---|---|---|---|---|
-| 9 | Air quality | Airparif station data | Avg NO2/PM2.5 | Only ~15-20 stations in Paris. Would need spatial interpolation (IDW or nearest-neighbor) per arrondissement. Non-trivial. |
-| 10 | Velib density | Velib GBFS | Stations per km2, avg bike availability | Real-time GBFS API, no auth. Snapshot at build time. Point-in-polygon for station counts. |
-| 11 | Political color | Election results | Raw vote % per party from latest presidential + municipal elections | Commune-level election data on data.gouv.fr. Paris arrondissements have their own results. |
-| 12 | Walkability | Derived | Composite of transport + amenity + green space density | Meta-dimension computed from other scores. No new data source needed. |
+| #   | Dimension       | Source                | Metric                                                              | Notes                                                                                                                      |
+| --- | --------------- | --------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| 9   | Air quality     | Airparif station data | Avg NO2/PM2.5                                                       | Only ~15-20 stations in Paris. Would need spatial interpolation (IDW or nearest-neighbor) per arrondissement. Non-trivial. |
+| 10  | Velib density   | Velib GBFS            | Stations per km2, avg bike availability                             | Real-time GBFS API, no auth. Snapshot at build time. Point-in-polygon for station counts.                                  |
+| 11  | Political color | Election results      | Raw vote % per party from latest presidential + municipal elections | Commune-level election data on data.gouv.fr. Paris arrondissements have their own results.                                 |
+| 12  | Walkability     | Derived               | Composite of transport + amenity + green space density              | Meta-dimension computed from other scores. No new data source needed.                                                      |
 
 ## Data Pipeline
 
@@ -91,7 +91,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 ### Reproducibility contract
 
 - Every source is pinned by explicit vintage/version in `scripts/data-config.ts` (year, dataset resource id, or download URL)
-- Avoid mutable `latest` URLs in committed config; resolve to explicit vintage at refresh time
+- Prefer explicit vintage URLs; when upstream only exposes `latest` paths, pin year in config and rely on checksums in `metadata.json` to detect drift
 - `data/metadata.json` records `generated_at`, source vintages, fetch URLs, row counts, and checksums
 
 ### Step-by-step pipeline
@@ -102,12 +102,13 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    - Source vintages/URLs (pinned)
 2. Load bundled arrondissement boundaries (source-controlled file)
    - Validate exactly 20 arrondissements: commune codes 75101..75120
-   - Compute `area_km2` with turf.area()
+   - Compute `area_km2` from boundary `surface` (m2) in the pinned GeoJSON snapshot
 3. Build shared base tables
-   - Population per arrondissement from pinned INSEE/Filosofi source
+   - Population per arrondissement from cached legal-population snapshot (`geo.api.gouv.fr`)
+   - (Phase 1B follow-up) replace population source with Filosofi shared table
 4. For each enabled dimension, fetch from cache-or-network and compute metrics
    a. DVF:
-      - Parse arrondissement CSVs for target year + prior year
+      - Parse departement 75 CSV snapshots for target year + prior year, then filter arrondissement communes 75101..75120
       - Filter apartments, group by `id_mutation`, compute price/m2
       - Trim outliers using fixed percentile rule
    b. Filosofi:
@@ -137,24 +138,23 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    - `data/metadata.json` (provenance + quality report)
 ```
 
-### Manual refresh commands (planned)
+### Manual refresh commands
 
-- `bun run data:refresh` -- refresh all enabled dimensions from config
-- `bun run data:refresh --dimensions=housing,income,safety,transport` -- partial refresh
-- `bun run data:refresh --offline` -- rebuild outputs from cached `data/raw` only
+- `bun run data:build` -- build `arrondissements.json`, enrich `arrondissements.geojson`, write `metadata.json`
+- `bun run data:build --offline` -- same build, but fail if cached raw population snapshot or enabled-dimension raw snapshots are missing
+- `bun run data:refresh --dimensions=nightlife --all` -- refresh SIRENE nightlife raw snapshots for all arrondissements
+- `bun run data:refresh --dimensions=nightlife --offline --all` -- rebuild nightlife raw snapshots from cache only
 
 ### Dependencies for build script
 
-- `exceljs` -- XLSX parsing for Filosofi data
-- `@turf/turf` -- spatial operations (point-in-polygon, intersect, area)
-- `csv-parse` -- streaming CSV parser
-- `p-limit` (or equivalent) -- bounded concurrency for API-backed dimensions
-- Built-in `fetch` -- downloading files and querying APIs
+- Current implementation (through Phase 1B step 1) uses built-in `fetch` + Node fs/path/crypto/zlib only
+- `exceljs`, `@turf/turf`, and bounded-concurrency helpers are added in later Phase 1B/1C steps as parsers land
 
 ### Population and area sources
 
-- **Population:** INSEE Filosofi dataset (same download as income data). Field: `NBPERSMENFISC` (number of people in fiscal households) or similar. Alternative: INSEE "dossier complet" population tables.
-- **Area:** Computed from GeoJSON boundary polygons via `turf.area()`. More accurate than any published table since it uses the exact same boundaries we render on the map.
+- **Population (current Phase 1A):** cached legal-population snapshot from `geo.api.gouv.fr` (`data/raw/population/legal-population.geo-api.json`), pinned by refresh date in `data-config.ts`.
+- **Population (planned Phase 1B):** switch to Filosofi shared table for income + population together.
+- **Area:** `surface` field from the pinned arrondissement GeoJSON snapshot (m2), converted to `area_km2`.
 
 ### Data quality gates
 
@@ -213,6 +213,7 @@ Counts and per-km2 metrics are computed per bucket and as a total nightlife dens
 - Add a dedicated migration task before NAF 2025 becomes mandatory in SIRENE queries
 
 **Tradeoff vs alternatives:**
+
 - data.gouv.fr Tabular API: simpler auth but 200-row page limit, slower for filtered queries
 - Full SIRENE download: 5GB+, overkill for counting restaurants in 20 arrondissements
 - Pre-filtered Paris extract: none exists on data.gouv.fr as of writing
@@ -226,78 +227,73 @@ type DimensionKey =
   | "safety"
   | "transport"
   | "nightlife"
-  | "green_space"
+  | "greenSpace"
   | "noise"
-  | "amenities"
-
-type MetricWithDensity = {
-  count: number
-  per_km2: number
-}
+  | "amenities";
 
 type Arrondissement = {
-  code: string           // "75109"
-  number: number         // 9
-  name: string           // "9e arrondissement"
-  population: number
-  area_km2: number
+  code: string; // "75109"
+  number: number; // 9
+  name: string; // "9e arrondissement"
+  population: number;
+  area_km2: number;
   dimensions: {
     housing: {
-      median_price_m2: number
-      yoy_change: number  // percentage
-      transaction_count: number
-    } | null
+      median_price_m2: number;
+      yoy_change: number; // percentage
+      transaction_count: number;
+    } | null;
     income: {
-      median_household: number
-      poverty_rate: number
-    } | null
+      median_household: number;
+      poverty_rate: number;
+    } | null;
     safety: {
-      crime_rate_per_1k: number
-      categories: Record<string, number>
-    } | null
+      crime_rate_per_1k: number;
+      categories: Record<string, number>;
+    } | null;
     transport: {
-      station_count: number
-      stations_per_km2: number
-      // Optional enrichment if source provides line names consistently
-      lines: string[] | null
-    } | null
+      stations_per_km2: number;
+      metro_lines: string[];
+    } | null;
     nightlife: {
-      restaurants: MetricWithDensity
-      bars_cafes: MetricWithDensity
-      nightlife_extension: MetricWithDensity | null // optional 93.29Z bucket
-      total_per_km2: number
-    } | null
-    green_space: {
-      total_area_m2: number
-      m2_per_resident: number
-      park_count: number
-    } | null
+      restaurants_per_km2: number;
+      bars_per_km2: number;
+      cafes_per_km2: number;
+    } | null;
+    greenSpace: {
+      total_area_m2: number;
+      m2_per_resident: number;
+      park_count: number;
+    } | null;
     noise: {
-      pct_above_lden_threshold: number
-      pct_above_night_threshold: number
-    } | null
+      pct_above_lden_threshold: number;
+      pct_above_night_threshold: number;
+    } | null;
     amenities: {
-      pharmacies: MetricWithDensity
-      doctors: MetricWithDensity
-      schools: MetricWithDensity
-      gyms: MetricWithDensity
-      cinemas: MetricWithDensity
-    } | null
-  }
-  scores: Record<DimensionKey, number | null>  // 0-100 per enabled dimension
-}
+      pharmacies: number;
+      doctors: number;
+      schools: number;
+      gyms: number;
+      cinemas: number;
+    } | null;
+  };
+  scores: Record<DimensionKey, number | null>; // 0-100 per enabled dimension
+};
 
 type DataMetadata = {
-  generated_at: string // ISO timestamp
-  enabled_dimensions: DimensionKey[]
-  source_vintages: Record<string, string> // e.g. "dvf":"2024", "filosofi":"2021"
-  source_urls: Record<string, string>
+  generated_at: string; // ISO timestamp
+  enabled_dimensions: DimensionKey[];
+  source_vintages: Record<string, string>; // e.g. "dvf":"2024", "filosofi":"2021"
+  source_urls: Record<string, string>;
+  source_row_counts: Record<string, number>;
+  source_checksums: Record<string, string>;
   quality: {
-    hard_fail_checks_passed: boolean
-    warnings: string[]
-    coverage_by_dimension: Record<DimensionKey, number> // populated arrondissements count
-  }
-}
+    hard_fail_checks_passed: boolean;
+    hard_fail_errors: string[];
+    warnings: string[];
+    coverage_by_dimension: Record<DimensionKey, number>; // populated arrondissements count
+  };
+};
 ```
 
 **Composite score is NOT stored in the JSON.** It depends on persona weights which change client-side. The JSON stores only normalized 0-100 scores per enabled dimension. The client computes `composite = sum(weight[i] * score[i]) / sum(weights)` over non-null dimensions only (weights re-normalized after dropping nulls). For OG images, a default composite is computed server-side using equal weights over available dimensions.
@@ -307,6 +303,8 @@ type DataMetadata = {
 ### `/{locale}` -- Home / Map View
 
 - Full-screen interactive map of Paris (MapLibre)
+- IDF context layer (surrounding departments as subtle fill, no outlines) for geographic context
+- Opaque mask layer between IDF context and choropleth prevents bleed-through
 - Arrondissements rendered as colored choropleth polygons
 - Color intensity = currently selected dimension's score (or composite score)
 - Dimension selector dropdown in toolbar to change what the map shows
@@ -315,7 +313,7 @@ type DataMetadata = {
 - Click arrondissement: side panel slides in (desktop) / bottom sheet slides up (mobile)
   - Shows all dimension scores as a vertical card list
   - "View full details" link to detail page
-- Hover arrondissement: tooltip with name + composite score
+- Hover arrondissement: tooltip with name + current score (rendered via DOM refs to avoid React re-renders/flicker)
 
 ### `/{locale}/leaderboard` -- Ranking Table
 
@@ -348,16 +346,16 @@ type DataMetadata = {
 
 Each persona defines default weights (0-100) per dimension. Weights are normalized to sum to 100.
 
-| Dimension | Young Pro | Family | Tourist | Business |
-|---|---|---|---|---|
-| Housing affordability | 25 | 30 | 5 | 15 |
-| Income | 10 | 15 | 0 | 20 |
-| Safety | 15 | 25 | 20 | 15 |
-| Transport | 20 | 10 | 25 | 10 |
-| Nightlife & dining | 20 | 5 | 30 | 15 |
-| Green space | 5 | 10 | 10 | 5 |
-| Noise | 5 | 15 | 5 | 5 |
-| Amenities | 0 | 20 | 5 | 15 |
+| Dimension             | Young Pro | Family | Tourist | Business |
+| --------------------- | --------- | ------ | ------- | -------- |
+| Housing affordability | 25        | 30     | 5       | 15       |
+| Income                | 10        | 15     | 0       | 20       |
+| Safety                | 15        | 25     | 20      | 15       |
+| Transport             | 20        | 10     | 25      | 10       |
+| Nightlife & dining    | 20        | 5      | 30      | 15       |
+| Green space           | 5         | 10     | 10      | 5        |
+| Noise                 | 5         | 15     | 5       | 5        |
+| Amenities             | 0         | 20     | 5       | 15       |
 
 Weight sliders for user customization are a future addition. v1 ships with preset-only selection via dropdown.
 
@@ -436,8 +434,7 @@ app/
         route.tsx           # dynamic OG image generation (outside [locale])
 components/
   map/
-    paris-map.tsx           # MapLibre + arrondissement polygons
-    map-tooltip.tsx         # hover tooltip
+    paris-map.tsx           # MapLibre + arrondissement polygons + inline tooltip
     map-panel.tsx           # side panel / bottom sheet on click
   leaderboard/
     leaderboard-table.tsx   # sortable table
@@ -482,10 +479,10 @@ messages/
 
 ## Environment Variables
 
-| Variable | Where used | Secret? | Notes |
-|---|---|---|---|
-| `NEXT_PUBLIC_MAPTILER_KEY` | Client-side map rendering | No (public) | MapTiler free tier API key. Exposed in browser JS. |
-| `SIRENE_API_TOKEN` | Build script only | Yes | Required only when nightlife dimension is enabled/refreshed online. Never exposed at runtime. Register at api.insee.fr. |
+| Variable                   | Where used                | Secret?     | Notes                                                                                                                   |
+| -------------------------- | ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_MAPTILER_KEY` | Client-side map rendering | No (public) | MapTiler free tier API key. Exposed in browser JS.                                                                      |
+| `SIRENE_API_TOKEN`         | Build script only         | Yes         | Required only when nightlife dimension is enabled/refreshed online. Never exposed at runtime. Register at api.insee.fr. |
 
 ## Design Approach
 
@@ -495,20 +492,20 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 ### Phase 1A: Ingestion Contract + Infrastructure
 
-1. Lock schema contract (`null` handling, units, dimension keys, score keys)
-2. Add `scripts/data-config.ts` for enabled dimensions + pinned vintages
-3. Implement cache-or-network fetch layer with timeout/retry/rate-limit controls
-4. Add provenance output (`data/metadata.json`)
-5. Add hard-fail and soft-fail quality gates
+1. [x] Lock schema contract (`null` handling, units, dimension keys, score keys)
+2. [x] Add `scripts/data-config.ts` for enabled dimensions + pinned vintages
+3. [x] Implement cache-or-network fetch layer with timeout/retry/rate-limit controls
+4. [x] Add provenance output (`data/metadata.json`)
+5. [x] Add hard-fail and soft-fail quality gates
 
 ### Phase 1B: Core Dimensions (ship first snapshot)
 
-1. DVF housing parser
-2. Filosofi income parser (+ shared population table)
-3. SSMSI safety parser
-4. IDFM transport parser
-5. Normalization + score output for enabled dimensions only
-6. Commit first production snapshot
+1. [x] DVF housing parser
+2. [ ] Filosofi income parser (+ shared population table)
+3. [ ] SSMSI safety parser
+4. [ ] IDFM transport parser
+5. [x] Normalization + score output for enabled dimensions only
+6. [ ] Commit first production snapshot
 
 ### Phase 1C: Medium-risk Dimensions
 

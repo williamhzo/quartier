@@ -17,7 +17,6 @@ import { rankByComposite } from "@/lib/scoring";
 import { formatArrondissement } from "@/lib/arrondissements";
 import { PersonaSelector } from "@/components/scoring/persona-selector";
 import { DimensionSelect } from "@/components/scoring/dimension-select";
-import { MapTooltip } from "./map-tooltip";
 import { MapPanel } from "./map-panel";
 
 const PARIS_CENTER = { longitude: 2.3488, latitude: 48.8566 };
@@ -41,12 +40,8 @@ export function ParisMap({
   const [dimension, setDimension] = useState<DimensionKey | "composite">(
     "composite",
   );
-  const [hoveredNumber, setHoveredNumber] = useState<number | null>(null);
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
-  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   const weights = PERSONA_WEIGHTS[persona];
   const ranked = useMemo(
@@ -94,21 +89,41 @@ export function ParisMap({
     [ranked, selectedNumber],
   );
 
-  const hoveredInfo = useMemo(() => {
-    if (hoveredNumber == null) return null;
-    const a = ranked.find((r) => r.number === hoveredNumber);
-    if (!a) {
-      return {
-        name: formatArrondissement(hoveredNumber),
-        score: null,
-      };
-    }
-    return {
-      name: formatArrondissement(a.number),
-      score:
-        dimension === "composite" ? a.composite : (a.scores[dimension] ?? null),
-    };
-  }, [ranked, hoveredNumber, dimension]);
+  const updateTooltip = useCallback(
+    (num: number | null, x: number, y: number) => {
+      const el = tooltipRef.current;
+      if (!el) return;
+      if (num == null) {
+        el.style.display = "none";
+        return;
+      }
+      const a = ranked.find((r) => r.number === num);
+      const name = formatArrondissement(num);
+      const score =
+        a != null
+          ? dimension === "composite"
+            ? a.composite
+            : (a.scores[dimension] ?? null)
+          : null;
+      const dimLabel = t(
+        dimension === "composite"
+          ? "map.compositeScore"
+          : `dimensions.${dimension}`,
+      );
+      el.style.display = "block";
+      el.style.left = `${x + 12}px`;
+      el.style.top = `${y - 12}px`;
+      el.querySelector<HTMLElement>("[data-name]")!.textContent = name;
+      const scoreEl = el.querySelector<HTMLElement>("[data-score]")!;
+      if (score != null) {
+        scoreEl.textContent = `${dimLabel}: ${Math.round(score)}`;
+        scoreEl.style.display = "block";
+      } else {
+        scoreEl.style.display = "none";
+      }
+    },
+    [ranked, dimension, t],
+  );
 
   const setHoverState = useCallback(
     (map: maplibregl.Map, id: number, hover: boolean) => {
@@ -138,17 +153,18 @@ export function ParisMap({
           hoveredIdRef.current = num;
         }
 
-        setHoveredNumber(num ?? null);
-        setTooltipPos({ x: e.point.x, y: e.point.y });
+        map.getCanvas().style.cursor = num != null ? "pointer" : "grab";
+        updateTooltip(num ?? null, e.point.x, e.point.y);
       } else {
         if (hoveredIdRef.current != null) {
           setHoverState(map, hoveredIdRef.current, false);
           hoveredIdRef.current = null;
         }
-        setHoveredNumber(null);
+        map.getCanvas().style.cursor = "grab";
+        updateTooltip(null, 0, 0);
       }
     },
-    [setHoverState],
+    [setHoverState, updateTooltip],
   );
 
   const onMouseLeave = useCallback(() => {
@@ -157,8 +173,8 @@ export function ParisMap({
       setHoverState(map, hoveredIdRef.current, false);
       hoveredIdRef.current = null;
     }
-    setHoveredNumber(null);
-  }, [setHoverState]);
+    updateTooltip(null, 0, 0);
+  }, [setHoverState, updateTooltip]);
 
   const onClick = useCallback((e: MapLayerMouseEvent) => {
     if (e.features && e.features.length > 0) {
@@ -264,7 +280,7 @@ export function ParisMap({
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
         onClick={onClick}
-        cursor={hoveredNumber ? "pointer" : "grab"}
+        cursor="grab"
       >
         <Source id="idf-context" type="geojson" data={contextBoundaries}>
           <Layer
@@ -272,15 +288,7 @@ export function ParisMap({
             type="fill"
             paint={{
               "fill-color": "#e8e8e8",
-              "fill-opacity": 0.6,
-            }}
-          />
-          <Layer
-            id="idf-context-outline"
-            type="line"
-            paint={{
-              "line-color": "#c0c0c0",
-              "line-width": 0.5,
+              "fill-opacity": 0.5,
             }}
           />
         </Source>
@@ -291,6 +299,14 @@ export function ParisMap({
           data={enrichedGeojson}
           promoteId="number"
         >
+          <Layer
+            id="arrondissements-mask"
+            type="fill"
+            paint={{
+              "fill-color": "#f0f0f0",
+              "fill-opacity": 1,
+            }}
+          />
           <Layer
             id="arrondissements-fill"
             type="fill"
@@ -325,19 +341,16 @@ export function ParisMap({
         </Source>
       </Map>
 
-      {hoveredInfo && (
-        <MapTooltip
-          x={tooltipPos.x}
-          y={tooltipPos.y}
-          name={hoveredInfo.name}
-          score={hoveredInfo.score}
-          dimensionLabel={t(
-            dimension === "composite"
-              ? "map.compositeScore"
-              : `dimensions.${dimension}`,
-          )}
-        />
-      )}
+      <div
+        ref={tooltipRef}
+        className="pointer-events-none absolute z-20"
+        style={{ display: "none" }}
+      >
+        <div className="bg-popover text-popover-foreground rounded-md border px-3 py-2 shadow-md">
+          <p className="text-sm font-medium" data-name />
+          <p className="text-muted-foreground text-xs" data-score />
+        </div>
+      </div>
 
       {selectedArrondissement && (
         <MapPanel
