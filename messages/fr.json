@@ -1,0 +1,96 @@
+{
+  "metadata": {
+    "title": "Quartier - Comparez les arrondissements de Paris",
+    "description": "Comparez les 20 arrondissements de Paris : logement, revenus, sécurité, transports, vie nocturne, espaces verts, bruit et équipements."
+  },
+  "nav": {
+    "map": "Carte",
+    "leaderboard": "Classement",
+    "title": "Quartier"
+  },
+  "dimensions": {
+    "housing": "Logement",
+    "income": "Revenus",
+    "safety": "Sécurité",
+    "transport": "Transports",
+    "nightlife": "Vie nocturne",
+    "greenSpace": "Espaces verts",
+    "noise": "Bruit",
+    "amenities": "Équipements",
+    "composite": "Score global"
+  },
+  "personas": {
+    "label": "Profil",
+    "youngPro": "Jeune actif",
+    "family": "Famille",
+    "tourist": "Touriste",
+    "business": "Entrepreneur"
+  },
+  "map": {
+    "title": "Carte de Paris",
+    "clickToExplore": "Cliquez sur un arrondissement pour explorer",
+    "compositeScore": "Score global"
+  },
+  "leaderboard": {
+    "title": "Classement des arrondissements",
+    "description": "Comparez les 20 arrondissements de Paris selon vos critères.",
+    "rank": "#",
+    "arrondissement": "Arrondissement",
+    "score": "Score",
+    "viewDetails": "Voir le détail"
+  },
+  "detail": {
+    "backToMap": "Retour à la carte",
+    "scores": "Scores",
+    "rawValues": "Valeurs brutes",
+    "viewDetails": "Voir le détail",
+    "rank": "Rang",
+    "outOf": "sur 20",
+    "housing": {
+      "medianPrice": "Prix médian au m²",
+      "yoyChange": "Évolution annuelle",
+      "transactions": "Transactions"
+    },
+    "income": {
+      "medianHousehold": "Revenu médian",
+      "povertyRate": "Taux de pauvreté"
+    },
+    "safety": {
+      "crimeRate": "Délits pour 1 000 hab."
+    },
+    "transport": {
+      "stationsPerKm2": "Stations par km²",
+      "metroLines": "Lignes de métro"
+    },
+    "nightlife": {
+      "restaurantsPerKm2": "Restaurants par km²",
+      "barsPerKm2": "Bars par km²",
+      "cafesPerKm2": "Cafés par km²"
+    },
+    "greenSpace": {
+      "m2PerResident": "m² par habitant",
+      "totalArea": "Surface totale",
+      "parkCount": "Nombre de parcs"
+    },
+    "noise": {
+      "dayExposure": "Exposition jour (Lden)",
+      "nightExposure": "Exposition nuit"
+    },
+    "amenities": {
+      "pharmacies": "Pharmacies",
+      "doctors": "Médecins",
+      "schools": "Écoles",
+      "gyms": "Salles de sport",
+      "cinemas": "Cinémas"
+    }
+  },
+  "localeSwitcher": {
+    "fr": "FR",
+    "en": "EN"
+  },
+  "common": {
+    "perKm2": "par km²",
+    "na": "N/A",
+    "loading": "Chargement..."
+  }
+}

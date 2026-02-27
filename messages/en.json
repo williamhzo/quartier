@@ -1,0 +1,96 @@
+{
+  "metadata": {
+    "title": "Quartier - Compare Paris Arrondissements",
+    "description": "Compare all 20 Paris arrondissements across housing, income, safety, transport, nightlife, green space, noise, and amenities."
+  },
+  "nav": {
+    "map": "Map",
+    "leaderboard": "Leaderboard",
+    "title": "Quartier"
+  },
+  "dimensions": {
+    "housing": "Housing",
+    "income": "Income",
+    "safety": "Safety",
+    "transport": "Transport",
+    "nightlife": "Nightlife",
+    "greenSpace": "Green space",
+    "noise": "Noise",
+    "amenities": "Amenities",
+    "composite": "Composite score"
+  },
+  "personas": {
+    "label": "Profile",
+    "youngPro": "Young professional",
+    "family": "Family",
+    "tourist": "Tourist",
+    "business": "Business owner"
+  },
+  "map": {
+    "title": "Paris Map",
+    "clickToExplore": "Click an arrondissement to explore",
+    "compositeScore": "Composite score"
+  },
+  "leaderboard": {
+    "title": "Arrondissement Rankings",
+    "description": "Compare all 20 Paris arrondissements by your criteria.",
+    "rank": "#",
+    "arrondissement": "Arrondissement",
+    "score": "Score",
+    "viewDetails": "View details"
+  },
+  "detail": {
+    "backToMap": "Back to map",
+    "scores": "Scores",
+    "rawValues": "Raw values",
+    "viewDetails": "View details",
+    "rank": "Rank",
+    "outOf": "out of 20",
+    "housing": {
+      "medianPrice": "Median price per m²",
+      "yoyChange": "Year-over-year change",
+      "transactions": "Transactions"
+    },
+    "income": {
+      "medianHousehold": "Median household income",
+      "povertyRate": "Poverty rate"
+    },
+    "safety": {
+      "crimeRate": "Crimes per 1,000 residents"
+    },
+    "transport": {
+      "stationsPerKm2": "Stations per km²",
+      "metroLines": "Metro lines"
+    },
+    "nightlife": {
+      "restaurantsPerKm2": "Restaurants per km²",
+      "barsPerKm2": "Bars per km²",
+      "cafesPerKm2": "Cafés per km²"
+    },
+    "greenSpace": {
+      "m2PerResident": "m² per resident",
+      "totalArea": "Total area",
+      "parkCount": "Parks"
+    },
+    "noise": {
+      "dayExposure": "Day exposure (Lden)",
+      "nightExposure": "Night exposure"
+    },
+    "amenities": {
+      "pharmacies": "Pharmacies",
+      "doctors": "Doctors",
+      "schools": "Schools",
+      "gyms": "Gyms",
+      "cinemas": "Cinemas"
+    }
+  },
+  "localeSwitcher": {
+    "fr": "FR",
+    "en": "EN"
+  },
+  "common": {
+    "perKm2": "per km²",
+    "na": "N/A",
+    "loading": "Loading..."
+  }
+}
