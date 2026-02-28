@@ -119,13 +119,15 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
       - Parse crime CSV, filter 75101..75120, compute per-1k with population
    d. IDFM (implemented in `build-data.ts`, disabled unless `transport` is enabled):
       - Point-in-polygon station assignment, compute `station_count` + `stations_per_km2`
-   e. SIRENE (refresh path implemented, build integration pending):
+   e. SIRENE (implemented in `build-data.ts` + `data-refresh.ts`, enabled when `nightlife` is in `enabledDimensions`):
       - Query API by arrondissement + NAF bucket
       - Use `codeCommuneEtablissement` (not `communeEtablissement`)
       - Filter active establishments with `periode(etatAdministratifEtablissement:A ...)`
       - Paginate with retry/backoff/rate-limit guard
       - Cache raw responses before aggregation
-   f. Green space (planned):
+      - Compute nightlife densities from buckets (restaurants and bars+cafes)
+      - `cafes_per_km2` currently mirrors `bars_per_km2` because SIRENE v1 groups both under NAF `56.30Z`
+   f. Green space (implemented in `build-data.ts`, enabled when `greenSpace` is in `enabledDimensions`):
       - Intersect park polygons with arrondissement polygons
       - Sum clipped area and compute m2/resident
    g. Noise (implemented in `build-data.ts`, enabled when `noise` is in `enabledDimensions`):
@@ -144,19 +146,23 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ### Current implementation snapshot (as of 2026-02-28)
 
-- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `noise`, `amenities`
+- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `greenSpace`, `noise`, `amenities`
 - `scripts/build-data.ts` currently emits production artifacts for:
   - base fields (code/number/name/population/area)
   - housing (DVF)
   - income (Filosofi)
   - safety (SSMSI parser enabled)
   - transport (IDFM parser enabled)
+  - nightlife (SIRENE parser integrated; populated only when `nightlife` is enabled in config)
+  - greenSpace (polygon intersection parser integrated; populated only when `greenSpace` is enabled in config)
   - noise (Ville de Paris road-noise parser enabled)
   - amenities (BPE parser enabled)
   - normalized scores for enabled dimensions
-- `scripts/data-refresh.ts` + `scripts/sources/sirene.ts` currently produce cached nightlife snapshots only (not yet merged into `arrondissements.json`)
-- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, noise `20/20`, amenities `20/20`, nightlife/greenSpace `0/20`
-- Latest drift validation (`bun run data:build --offline` on 2026-02-28): no row-count or metric drift warnings; only SSMSI field-quality warning remains
+- `scripts/data-refresh.ts` pre-warms/rebuilds cached SIRENE nightlife snapshots used by the build path
+- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, nightlife `0/20` (nightlife remains disabled in `enabledDimensions`)
+- Latest stability validation (2026-02-28):
+  - `bun run data:build`: completed in ~16.7s with 2 warnings (`SSMSI nombre` + 2 non-polygon green-space features skipped)
+  - `bun run data:build --offline`: completed in ~16.3s with the same 2 warnings
 
 ### Manual refresh commands
 
@@ -167,8 +173,8 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ### Dependencies for build script
 
-- Current implementation (through Phase 1B + SIRENE refresh prep) uses built-in `fetch` + Node fs/path/crypto/zlib + child-process streaming (`unzip`) for large CSV-in-ZIP extraction
-- `@turf/turf` and bounded-concurrency helpers are added in later Phase 1C/1D steps as parsers land
+- Current implementation (through Phase 1D SIRENE + green-space build integration) uses built-in `fetch` + Node fs/path/crypto/zlib + child-process streaming (`unzip`) for large CSV-in-ZIP extraction
+- `@turf/turf` is now used in data parsers for polygon intersection + area computation
 
 ### Population and area sources
 
@@ -502,11 +508,11 @@ scripts/
     transport.ts            # IDFM station parsing + arrondissement assignment
     noise.ts                # Ville de Paris road-noise exposure parsing
     amenities.ts            # BPE arrondissement amenities aggregation
+    green-space.ts          # Paris green-space polygon intersection by arrondissement
     sirene.ts               # INSEE API SIRENE queries for nightlife/dining
     sirene-query.ts         # canonical SIRENE search query builder
     sirene-naf.ts           # NAF bucket definitions for nightlife
     validate-sirene-naf.ts  # NAF mapping validation
-    # planned: green-space.ts
 messages/
   fr.json                   # French UI strings
   en.json                   # English UI strings
@@ -552,9 +558,9 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 ### Phase 1D: High-risk Dimensions
 
-1. Green space polygon intersection module
-2. SIRENE nightlife API module (with cache and retry policy) -- implemented in refresh path; build integration pending
-3. Validate runtime cost and data stability
+1. [x] Green space polygon intersection module
+2. [x] SIRENE nightlife API module (with cache and retry policy) -- integrated in refresh + build paths
+3. Validate runtime cost and data stability (greenSpace validated; nightlife runtime validation pending `SIRENE_API_TOKEN` or cached SIRENE pages)
 4. Commit refreshed snapshot
 
 ### Phase 2: Core Functionality
