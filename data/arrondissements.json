@@ -70,7 +70,12 @@
         "cultural_buildings_per_km2": 0.55,
         "cultural_buildings_per_10k_residents": 0.67,
         "by_type": {
-          "cinemas": 1
+          "cinemas": 1,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -154,7 +159,12 @@
         "cultural_buildings_per_km2": 3.03,
         "cultural_buildings_per_10k_residents": 1.55,
         "by_type": {
-          "cinemas": 3
+          "cinemas": 3,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -237,7 +247,12 @@
         "cultural_buildings_per_km2": 0.85,
         "cultural_buildings_per_10k_residents": 0.33,
         "by_type": {
-          "cinemas": 1
+          "cinemas": 1,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -321,7 +336,12 @@
         "cultural_buildings_per_km2": 0.62,
         "cultural_buildings_per_10k_residents": 0.41,
         "by_type": {
-          "cinemas": 1
+          "cinemas": 1,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -404,7 +424,12 @@
         "cultural_buildings_per_km2": 4.73,
         "cultural_buildings_per_10k_residents": 2.65,
         "by_type": {
-          "cinemas": 12
+          "cinemas": 12,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -486,7 +511,12 @@
         "cultural_buildings_per_km2": 6.97,
         "cultural_buildings_per_10k_residents": 4.86,
         "by_type": {
-          "cinemas": 15
+          "cinemas": 15,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -569,7 +599,12 @@
         "cultural_buildings_per_km2": 0.24,
         "cultural_buildings_per_10k_residents": 0.22,
         "by_type": {
-          "cinemas": 1
+          "cinemas": 1,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -656,7 +691,12 @@
         "cultural_buildings_per_km2": 2.32,
         "cultural_buildings_per_10k_residents": 2.46,
         "by_type": {
-          "cinemas": 9
+          "cinemas": 9,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -744,7 +784,12 @@
         "cultural_buildings_per_km2": 2.3,
         "cultural_buildings_per_10k_residents": 0.91,
         "by_type": {
-          "cinemas": 5
+          "cinemas": 5,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -833,7 +878,12 @@
         "cultural_buildings_per_km2": 1.04,
         "cultural_buildings_per_10k_residents": 0.36,
         "by_type": {
-          "cinemas": 3
+          "cinemas": 3,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -918,7 +968,12 @@
         "cultural_buildings_per_km2": 0.82,
         "cultural_buildings_per_10k_residents": 0.22,
         "by_type": {
-          "cinemas": 3
+          "cinemas": 3,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -1005,7 +1060,12 @@
         "cultural_buildings_per_km2": 0.18,
         "cultural_buildings_per_10k_residents": 0.23,
         "by_type": {
-          "cinemas": 3
+          "cinemas": 3,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -1090,7 +1150,12 @@
         "cultural_buildings_per_km2": 0.7,
         "cultural_buildings_per_10k_residents": 0.3,
         "by_type": {
-          "cinemas": 5
+          "cinemas": 5,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -1173,7 +1238,12 @@
         "cultural_buildings_per_km2": 1.07,
         "cultural_buildings_per_10k_residents": 0.51,
         "by_type": {
-          "cinemas": 6
+          "cinemas": 6,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -1258,7 +1328,12 @@
         "cultural_buildings_per_km2": 0.35,
         "cultural_buildings_per_10k_residents": 0.14,
         "by_type": {
-          "cinemas": 3
+          "cinemas": 3,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -1343,7 +1418,12 @@
         "cultural_buildings_per_km2": 0.06,
         "cultural_buildings_per_10k_residents": 0.06,
         "by_type": {
-          "cinemas": 1
+          "cinemas": 1,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -1430,7 +1510,12 @@
         "cultural_buildings_per_km2": 0.71,
         "cultural_buildings_per_10k_residents": 0.26,
         "by_type": {
-          "cinemas": 4
+          "cinemas": 4,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -1513,7 +1598,12 @@
         "cultural_buildings_per_km2": 0.33,
         "cultural_buildings_per_10k_residents": 0.13,
         "by_type": {
-          "cinemas": 2
+          "cinemas": 2,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -1598,7 +1688,12 @@
         "cultural_buildings_per_km2": 0.74,
         "cultural_buildings_per_10k_residents": 0.3,
         "by_type": {
-          "cinemas": 5
+          "cinemas": 5,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },
@@ -1683,7 +1778,12 @@
         "cultural_buildings_per_km2": 0.33,
         "cultural_buildings_per_10k_residents": 0.11,
         "by_type": {
-          "cinemas": 2
+          "cinemas": 2,
+          "libraries": 0,
+          "heritage": 0,
+          "livePerformanceVenues": 0,
+          "archives": 0,
+          "museums": 0
         }
       }
     },

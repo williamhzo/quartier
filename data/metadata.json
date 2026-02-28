@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-28T01:29:32.847Z",
+  "generated_at": "2026-02-28T01:54:57.356Z",
   "enabled_dimensions": [
     "housing",
     "income",
@@ -20,6 +20,7 @@
     "greenSpace": "opendata-paris-espaces-verts-export-2026-02-28",
     "noise": "ville-paris-bruit-routier-cnossos-2022",
     "bpe": "buildingref-france-bpe-all-millesime-2016",
+    "bpe_culture_codebook": "bpe-culture-v2",
     "sirene": "V3.11"
   },
   "source_urls": {
@@ -31,7 +32,7 @@
     "transport": "https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/emplacement-des-gares-idf/exports/geojson?where=mode%20in%20(%22METRO%22,%22RER%22)&limit=-1",
     "greenSpace": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/espaces_verts/exports/geojson?limit=-1",
     "noise": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/bruit-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journ/exports/csv",
-    "bpe": "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/buildingref-france-bpe-all-millesime/records?select=com_arm_code%2Cequipment_code%2Csum%28ctvalue%29+as+count&group_by=com_arm_code%2Cequipment_code&where=year%3Ddate%272016-01-01%27+and+com_arm_code+in+%28%2275101%22%2C%2275102%22%2C%2275103%22%2C%2275104%22%2C%2275105%22%2C%2275106%22%2C%2275107%22%2C%2275108%22%2C%2275109%22%2C%2275110%22%2C%2275111%22%2C%2275112%22%2C%2275113%22%2C%2275114%22%2C%2275115%22%2C%2275116%22%2C%2275117%22%2C%2275118%22%2C%2275119%22%2C%2275120%22%29+and+equipment_code+in+%28%22D301%22%2C%22D201%22%2C%22D202%22%2C%22D203%22%2C%22D204%22%2C%22D205%22%2C%22D206%22%2C%22D207%22%2C%22D208%22%2C%22D209%22%2C%22D210%22%2C%22D211%22%2C%22D212%22%2C%22D213%22%2C%22C101%22%2C%22C102%22%2C%22C104%22%2C%22C105%22%2C%22C201%22%2C%22C301%22%2C%22C302%22%2C%22C303%22%2C%22F120%22%2C%22F121%22%2C%22F303%22%29&limit=2000",
+    "bpe": "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/buildingref-france-bpe-all-millesime/records?select=com_arm_code%2Cequipment_code%2Csum%28ctvalue%29+as+count&group_by=com_arm_code%2Cequipment_code&where=year%3Ddate%272016-01-01%27+and+com_arm_code+in+%28%2275101%22%2C%2275102%22%2C%2275103%22%2C%2275104%22%2C%2275105%22%2C%2275106%22%2C%2275107%22%2C%2275108%22%2C%2275109%22%2C%2275110%22%2C%2275111%22%2C%2275112%22%2C%2275113%22%2C%2275114%22%2C%2275115%22%2C%2275116%22%2C%2275117%22%2C%2275118%22%2C%2275119%22%2C%2275120%22%29+and+equipment_code+in+%28%22D301%22%2C%22D201%22%2C%22D202%22%2C%22D203%22%2C%22D204%22%2C%22D205%22%2C%22D206%22%2C%22D207%22%2C%22D208%22%2C%22D209%22%2C%22D210%22%2C%22D211%22%2C%22D212%22%2C%22D213%22%2C%22C101%22%2C%22C102%22%2C%22C104%22%2C%22C105%22%2C%22C201%22%2C%22C301%22%2C%22C302%22%2C%22C303%22%2C%22F120%22%2C%22F121%22%2C%22F303%22%2C%22F305%22%2C%22F307%22%2C%22F312%22%2C%22F314%22%2C%22F315%22%29&limit=2000",
     "sirene": "https://api.insee.fr/entreprises/sirene/V3.11/siret"
   },
   "source_row_counts": {
@@ -55,7 +56,7 @@
     "bpe_rows_matched": 431
   },
   "source_checksums": {
-    "boundaries": "641bdfaad925b8e813cba1e84e9dee52a2c8490e03ac236bb045c4d143893cf0",
+    "boundaries": "865be41fd15b1b2445ac4f152e554284bf45994f51b28da66f0dc1d35b99736a",
     "filosofi": "845dc47c4643271542c56819011802850f6a382f336d240dcc1e1ccde44603f2",
     "dvf_current": "fef7fb65c52137888ef8c1aa0098660011532f20a1f2e5f34b803691abffb300",
     "dvf_prior": "c62481e00be2cf2c135618c0a16ea5bb0422edda3f9d8607dadad7daf5959fb7",
@@ -70,7 +71,12 @@
     "hard_fail_errors": [],
     "warnings": [
       "ssmsi rows skipped due missing/non-numeric \"nombre\": 3",
-      "green-space parser skipped 2 non-polygon features"
+      "green-space parser skipped 2 non-polygon features",
+      "culture codebook bucket \"libraries\" has zero count across all arrondissements for the cached BPE payload",
+      "culture codebook bucket \"heritage\" has zero count across all arrondissements for the cached BPE payload",
+      "culture codebook bucket \"livePerformanceVenues\" has zero count across all arrondissements for the cached BPE payload",
+      "culture codebook bucket \"archives\" has zero count across all arrondissements for the cached BPE payload",
+      "culture codebook bucket \"museums\" has zero count across all arrondissements for the cached BPE payload"
     ],
     "coverage_by_dimension": {
       "housing": 20,
