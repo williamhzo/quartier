@@ -58,7 +58,7 @@ export function MiniMap({ boundaries, highlightNumber, center }: Props) {
             {
               id: "background",
               type: "background",
-              paint: { "background-color": "#ffffff" },
+              paint: { "background-color": "#fafafa" },
             },
           ],
         }}

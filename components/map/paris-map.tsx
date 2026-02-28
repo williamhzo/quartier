@@ -270,7 +270,7 @@ export function ParisMap({
             {
               id: "background",
               type: "background",
-              paint: { "background-color": "#ffffff" },
+              paint: { "background-color": "#fafafa" },
             },
           ],
         }}
@@ -282,12 +282,20 @@ export function ParisMap({
       >
         <Source id="idf-context" type="geojson" data={contextBoundaries}>
           <Layer
+            id="idf-context-fill"
+            type="fill"
+            paint={{
+              "fill-color": "#f1f5f9",
+              "fill-opacity": 0.5,
+            }}
+          />
+          <Layer
             id="idf-context-outline"
             type="line"
             paint={{
               "line-color": "#cbd5e1",
               "line-width": 0.5,
-              "line-opacity": 0.3,
+              "line-opacity": 0.5,
             }}
           />
         </Source>
