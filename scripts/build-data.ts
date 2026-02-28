@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   DATA_CONFIG,
@@ -119,6 +119,7 @@ const BOUNDARIES_PATH = path.join(
   "data",
   "arrondissements.geojson",
 );
+const SIRENE_CACHE_ROOT = path.join(process.cwd(), "data", "raw", "sirene");
 const ROW_COUNT_DRIFT_WARN_THRESHOLD_PCT = 15;
 const METRIC_DRIFT_WARN_THRESHOLD_PCT = 20;
 
@@ -126,6 +127,57 @@ function parseOptions(argv: string[]): BuildOptions {
   return {
     offline: argv.includes("--offline"),
   };
+}
+
+async function directoryHasFiles(root: string): Promise<boolean> {
+  const stack: string[] = [root];
+
+  while (stack.length > 0) {
+    const current = stack.pop();
+    if (!current) continue;
+
+    let entries: Awaited<ReturnType<typeof readdir>> | null = null;
+    try {
+      entries = await readdir(current, { withFileTypes: true });
+    } catch (error) {
+      const code = (error as { code?: string }).code;
+      if (code === "ENOENT" || String(error).includes("ENOENT")) {
+        continue;
+      }
+      throw error;
+    }
+
+    for (const entry of entries) {
+      if (entry.isFile()) {
+        return true;
+      }
+      if (entry.isDirectory()) {
+        stack.push(path.join(current, entry.name));
+      }
+    }
+  }
+
+  return false;
+}
+
+async function validateBuildPreconditions(
+  mode: "network-first" | "cache-only",
+): Promise<void> {
+  if (!DATA_CONFIG.enabledDimensions.includes("nightlife")) {
+    return;
+  }
+  if (mode !== "cache-only") {
+    return;
+  }
+
+  const hasSireneCache = await directoryHasFiles(SIRENE_CACHE_ROOT);
+  if (hasSireneCache) {
+    return;
+  }
+
+  throw new Error(
+    `nightlife is enabled but no cached SIRENE pages were found in ${SIRENE_CACHE_ROOT}. In --offline mode either disable nightlife in scripts/data-config.ts or prewarm cache with: bun run data:refresh --dimensions=nightlife --all`,
+  );
 }
 
 function assertParisCode(value: unknown): string {
@@ -965,6 +1017,7 @@ function sha256(input: string): string {
 async function main(): Promise<void> {
   const options = parseOptions(process.argv.slice(2));
   const mode = options.offline ? "cache-only" : "network-first";
+  await validateBuildPreconditions(mode);
   const generatedAt = new Date().toISOString();
   const driftBaseline = await loadDriftBaseline();
 
