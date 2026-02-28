@@ -10,7 +10,7 @@
     "title": "quartier"
   },
   "about": {
-    "title": "à propos de quartier",
+    "title": "À propos de quartier",
     "tagline": "Tout le monde a un avis sur le meilleur arrondissement de Paris. quartier remplace ces avis par des données (et après, on se dispute sur les données).",
     "body": "Choisissez un profil et comparez les arrondissements sur les prix immobiliers, la criminalité, l'accès métro, les revenus, le bruit, les espaces verts, et le reste. Construit sur les données ouvertes de data.gouv.fr, l'INSEE et la Ville de Paris.",
     "openSource": "Open source, contributions bienvenues sur"
