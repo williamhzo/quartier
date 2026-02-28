@@ -1,5 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
 import { loadArrondissements } from "@/lib/data";
 import { loadBoundaries, loadSeine } from "@/lib/geo";
 import {
@@ -39,14 +40,23 @@ export async function generateMetadata({ params }: Props) {
   const title = `${label} - ${t("title")}`;
   const ogImage = `/api/og/${number}`;
 
+  const languages = Object.fromEntries(
+    routing.locales.map((l) => [l, `https://quartier.sh/${l}/paris/${number}`]),
+  );
+
   return {
     title,
+    alternates: {
+      canonical: `https://quartier.sh/${locale}/paris/${number}`,
+      languages,
+    },
     openGraph: {
       title,
+      url: `https://quartier.sh/${locale}/paris/${number}`,
       images: [{ url: ogImage, width: 1200, height: 630 }],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary_large_image" as const,
       title,
       images: [ogImage],
     },
