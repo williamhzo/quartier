@@ -12,7 +12,7 @@ export default function LeaderboardLoading() {
         <div className="overflow-hidden rounded-lg border">
           <div className="space-y-0">
             <Skeleton className="h-10 w-full rounded-none" />
-            {Array.from({ length: 10 }).map((_, i) => (
+            {Array.from({ length: 20 }).map((_, i) => (
               <Skeleton key={i} className="h-12 w-full rounded-none border-t" />
             ))}
           </div>

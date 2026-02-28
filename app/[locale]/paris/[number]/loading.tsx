@@ -9,6 +9,13 @@ export default function DetailLoading() {
         <Skeleton className="h-6 w-16 rounded-full" />
         <Skeleton className="h-5 w-14" />
       </div>
+      <div className="mt-6">
+        <Skeleton className="h-[200px] w-full rounded-lg" />
+      </div>
+      <div className="mt-6">
+        <Skeleton className="mb-2 h-4 w-28" />
+        <Skeleton className="h-[250px] w-full rounded-lg" />
+      </div>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="rounded-lg border p-4">
