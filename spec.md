@@ -145,10 +145,10 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    h. BPE (implemented in `build-data.ts`, enabled when `amenities` is in `enabledDimensions`):
       - Query aggregated BPE records by arrondissement (`com_arm_code`) and equipment code
       - Aggregate counts for pharmacies, doctors, schools, gyms, and cinemas
-   i. BPE culture (planned, not yet implemented):
-      - Query aggregated BPE records by arrondissement (`com_arm_code`) and validated cultural equipment codes
-      - Aggregate `cultural_buildings_total`, `cultural_buildings_per_km2`, and `cultural_buildings_per_10k_residents`
-      - Hard-fail if configured cultural equipment codes are missing from the pinned BPE nomenclature mapping
+   i. BPE culture (implemented in `build-data.ts`, enabled when `culture` is in `enabledDimensions`):
+      - Reuse BPE aggregation and derive culture from pinned codebook v1 (`cinemas` = `F303`)
+      - Emit `cultural_buildings_total`, `cultural_buildings_per_km2`, `cultural_buildings_per_10k_residents`, and `by_type`
+      - Hard-fail if configured culture mapping drifts from pinned codebook (`bpe-culture-v1`)
 5. Run data-quality gates (fail/warn policy)
 6. Normalize enabled dimensions to 0-100 and invert where needed
 7. Emit:
@@ -159,7 +159,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ### Current implementation snapshot (as of 2026-02-28)
 
-- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `greenSpace`, `noise`, `amenities` (`culture` planned, not wired yet)
+- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `greenSpace`, `noise`, `amenities`, `culture`
 - `scripts/build-data.ts` currently emits production artifacts for:
   - base fields (code/number/name/population/area)
   - housing (DVF)
@@ -170,10 +170,10 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
   - greenSpace (polygon intersection parser integrated; populated only when `greenSpace` is enabled in config)
   - noise (Ville de Paris road-noise parser enabled)
   - amenities (BPE parser enabled)
-  - culture (planned BPE cultural-building parser; not implemented yet)
+  - culture (BPE cultural-building parser enabled; pinned codebook v1 uses `F303`)
   - normalized scores for enabled dimensions
 - `scripts/data-refresh.ts` pre-warms/rebuilds cached SIRENE nightlife snapshots used by the build path
-- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, nightlife `0/20` (nightlife remains disabled in `enabledDimensions`; culture is not yet emitted as a metadata key)
+- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, culture `20/20`, nightlife `0/20` (nightlife remains disabled in `enabledDimensions`)
 - Latest stability validation (2026-02-28):
   - `bun run data:build`: completed in ~16.7s with 2 warnings (`SSMSI nombre` + 2 non-polygon green-space features skipped)
   - `bun run data:build --offline`: completed in ~16.3s with the same 2 warnings
@@ -271,7 +271,8 @@ type DimensionKey =
   | "nightlife"
   | "greenSpace"
   | "noise"
-  | "amenities";
+  | "amenities"
+  | "culture";
 
 type Arrondissement = {
   code: string; // "75109"
@@ -318,6 +319,14 @@ type Arrondissement = {
       gyms: number;
       cinemas: number;
     } | null;
+    culture: {
+      cultural_buildings_total: number;
+      cultural_buildings_per_km2: number;
+      cultural_buildings_per_10k_residents: number;
+      by_type: {
+        cinemas: number;
+      };
+    } | null;
   };
   scores: Record<DimensionKey, number | null>; // 0-100 per enabled dimension
 };
@@ -338,25 +347,6 @@ type DataMetadata = {
 };
 ```
 
-**Planned schema delta for culture (Phase 1E, not shipped yet):**
-
-```typescript
-type DimensionKey = /* existing keys */ | "culture";
-
-type Arrondissement = {
-  dimensions: {
-    culture: {
-      cultural_buildings_total: number;
-      cultural_buildings_per_km2: number;
-      cultural_buildings_per_10k_residents: number;
-      by_type: Record<string, number>; // e.g. libraries, museums, theaters
-    } | null;
-  };
-};
-```
-
-Until the culture parser lands, this key is intentionally absent from emitted JSON and metadata coverage.
-
 **Composite score is NOT stored in the JSON.** It depends on persona weights which change client-side. The JSON stores only normalized 0-100 scores per enabled dimension. The client computes `composite = sum(weight[i] * score[i]) / sum(weights)` over non-null dimensions only (weights re-normalized after dropping nulls). For OG images, a default composite is computed server-side using equal weights over available dimensions.
 
 ## Pages & Routes
@@ -372,7 +362,7 @@ Until the culture parser lands, this key is intentionally absent from emitted JS
   - Each preset adjusts dimension weights for composite score
 - Click arrondissement: wider drawer slides in (desktop: 384-448px) / taller bottom sheet slides up (mobile: 85vh)
   - URL updates to `?arr=N` via nuqs (`useQueryState` with `history: 'push'`)
-  - Shows composite score bar + all live dimension cards with scores and raw values (currently 8; will include culture when enabled)
+  - Shows composite score bar + all 9 dimension cards with scores and raw values
   - "View full details" link at bottom navigates to `/paris/{number}` detail page
   - Escape key or close button dismisses the drawer and removes `?arr` from URL
   - Direct visit to `/?arr=9` hydrates from URL and opens drawer immediately
@@ -414,23 +404,15 @@ Each persona defines default weights (0-100) per dimension. Weights are normaliz
 
 | Dimension             | Young Pro | Family | Tourist | Business |
 | --------------------- | --------- | ------ | ------- | -------- |
-| Housing affordability | 25        | 30     | 5       | 15       |
-| Income                | 10        | 15     | 0       | 20       |
+| Housing affordability | 20        | 25     | 5       | 15       |
+| Income                | 10        | 15     | 0       | 15       |
 | Safety                | 15        | 25     | 20      | 15       |
-| Transport             | 20        | 10     | 25      | 10       |
-| Nightlife & dining    | 20        | 5      | 30      | 15       |
+| Transport             | 20        | 10     | 15      | 10       |
+| Nightlife & dining    | 15        | 5      | 20      | 15       |
 | Green space           | 5         | 10     | 10      | 5        |
 | Noise                 | 5         | 15     | 5       | 5        |
-| Amenities             | 0         | 20     | 5       | 15       |
-
-**Planned culture weighting targets (applied when `culture` is enabled):**
-
-| Persona   | Culture weight target | Rebalancing note                              |
-| --------- | --------------------- | --------------------------------------------- |
-| Young Pro | 10                    | shift weight from housing/nightlife           |
-| Family    | 10                    | shift weight from housing/amenities           |
-| Tourist   | 20                    | shift weight mostly from nightlife/transport  |
-| Business  | 10                    | shift weight from income/amenities            |
+| Amenities             | 0         | 15     | 5       | 10       |
+| Culture               | 10        | 10     | 20      | 10       |
 
 Weight sliders for user customization are a future addition. v1 ships with preset-only selection via dropdown.
 
@@ -474,7 +456,7 @@ Weight sliders for user customization are a future addition. v1 ships with prese
 - Default OG image for home/leaderboard at `app/api/og/route.tsx`
 - Uses `next/og` (ImageResponse API) with Geist font loaded from `assets/fonts/`
 - Per-arrondissement image shows: arrondissement number (large), composite score (equal weights), rank, top 3 dimension scores
-- Default image shows: "Quartier" brand, tagline, all live dimension names as tags (currently 8; culture tag added when enabled)
+- Default image shows: "Quartier" brand, tagline, all 9 dimension names as tags
 - Design: light background (#fafafa), clean minimalist typography, Geist sans-serif
 - All OG routes are **outside** the `[locale]` prefix (images are language-independent)
 - Twitter Card (`summary_large_image`) + Open Graph meta tags set per page via `generateMetadata`
@@ -609,10 +591,10 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 ### Phase 1E: Culture Dimension (BPE)
 
-1. [ ] Freeze cultural equipment-code mapping against pinned BPE nomenclature
-2. [ ] Add culture aggregation in build pipeline (`total`, `per_km2`, `per_10k_residents`, `by_type`)
-3. [ ] Add `culture` dimension key across types, scoring, persona weights, and i18n labels
-4. [ ] Regenerate snapshots and validate coverage/drift gates
+1. [x] Freeze cultural equipment-code mapping against pinned BPE codebook (`bpe-culture-v1`: `cinemas` = `F303`)
+2. [x] Add culture aggregation in build pipeline (`total`, `per_km2`, `per_10k_residents`, `by_type`)
+3. [x] Add `culture` dimension key across types, scoring, persona weights, and i18n labels
+4. [x] Regenerate snapshots and validate coverage/drift gates
 
 ### Phase 2: Core Functionality
 
