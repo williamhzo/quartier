@@ -4,7 +4,7 @@ quartier.sh
 
 ## Overview
 
-Interactive tool for comparing Paris's 20 arrondissements across 8+ data dimensions (housing prices, income, safety, transport, nightlife, green space, noise, amenities). Map-first, mobile-first, bilingual (FR/EN).
+Interactive tool for comparing Paris's 20 arrondissements across 9 target data dimensions (8 currently live + 1 planned): housing prices, income, safety, transport, nightlife, green space, noise, amenities, and culture. Map-first, mobile-first, bilingual (FR/EN).
 
 **Target users:** Parisians exploring their city, people moving to/within Paris, tourists choosing where to stay, business owners scouting locations.
 
@@ -18,9 +18,9 @@ All data is pre-computed at build time by a TypeScript script and shipped as sta
 
 **Data refresh model (v1):** Ingestion is snapshot-based and manually triggered. We do not fetch third-party datasets at app runtime and we do not auto-refresh on deploy. Generated artifacts (`data/arrondissements.json`, `data/arrondissements.geojson`, `data/metadata.json`) are committed and can stay unchanged for weeks/months until a deliberate refresh run.
 
-**Sequential dimension rollout is allowed:** v1 does not require all 8 dimensions on day one. Dimensions can be enabled one-by-one in the ingestion config; non-enabled dimensions are emitted as `null` and shown as `N/A` in UI.
+**Sequential dimension rollout is allowed:** v1 does not require all target dimensions on day one. Dimensions can be enabled one-by-one in the ingestion config; non-enabled dimensions are emitted as `null` and shown as `N/A` in UI.
 
-**Why not Rust/Go:** The heaviest runtime operation is `sum(weight[i] * score[i])` for 20 arrondissements across 8 dimensions (160 multiplications). The build script processes ~50MB of CSVs, which TypeScript handles in seconds. A compiled backend adds toolchain complexity for zero measurable gain.
+**Why not Rust/Go:** The heaviest runtime operation is `sum(weight[i] * score[i])` for 20 arrondissements across 9 dimensions (180 multiplications). The build script processes ~50MB of CSVs, which TypeScript handles in seconds. A compiled backend adds toolchain complexity for zero measurable gain.
 
 **Why not a monorepo:** One app, one build script. No shared packages, no mobile app, no separate services. Turborepo/nx config overhead for nothing. Revisit if a separate backend is ever needed.
 
@@ -54,8 +54,16 @@ All data is pre-computed per arrondissement and shipped as static JSON.
 | 6   | Green space           | opendata.paris.fr                       | GeoJSON polygons         | m2 of green space per resident                           | **Spatial: polygon intersection.** Parks can span arrondissements. Clip with turf.js `intersect()`, compute area with `turf.area()`.                                                                                                                                                              |
 | 7   | Noise                 | Bruitparif / data.gouv.fr               | CSV                      | % residents exposed above Lden thresholds                | Straightforward. Already per arrondissement.                                                                                                                                                                                                                                                      |
 | 8   | Amenities             | BPE (INSEE)                             | CSV                      | Pharmacies, doctors, schools, gyms, cinemas per km2      | Filter by commune codes 75101-75120. Count equipment by type code.                                                                                                                                                                                                                                |
+| 9   | Culture               | BPE (INSEE)                             | CSV                      | Cultural buildings per km2 (+ per 10k residents helper)  | Reuse BPE arrondissement aggregation (`com_arm_code`, `equipment_code`) with a validated cultural code list (libraries, museums, theaters, conservatories, cultural centers, cinemas). Hard-fail if code mapping drifts from the pinned codebook.                                              |
 
-**Score direction:** All dimensions are scored so that higher = better for the resident. Housing uses affordability (cheap = high score). Safety uses inverse crime rate (low crime = high score). Noise uses inverse exposure (low noise = high score). Persona weights control importance, not direction.
+### Culture Dimension Feasibility (2026-02-28)
+
+- **Doable with current pipeline architecture.** BPE ingestion is already code-based aggregation by arrondissement and can be extended with additional equipment-code buckets without changing the fetch model.
+- **Dataset evidence:** cached BPE response currently has `431` grouped rows for Paris (`20` arrondissements) with full cinema signal (`F303` present for `20/20` arrondissements, counts `1..15`).
+- **Operational risk:** low to medium. Main risk is codebook correctness (mapping the right BPE equipment codes to "cultural buildings"), not data transport or performance.
+- **Data caveat:** BPE vintage is currently pinned to 2016, so this dimension will be geographically useful but not real-time.
+
+**Score direction:** All dimensions are scored so that higher = better for the resident. Housing uses affordability (cheap = high score). Safety uses inverse crime rate (low crime = high score). Noise uses inverse exposure (low noise = high score). Culture uses higher cultural-building availability = higher score. Persona weights control importance, not direction.
 
 ### v1 Dimension Rollout Order
 
@@ -63,8 +71,9 @@ Dimensions are implemented and shipped sequentially, not all-at-once.
 
 1. Housing (DVF), Income (Filosofi), Safety (SSMSI), Transport (IDFM)
 2. Noise (Bruitparif), Amenities (BPE)
-3. Green space (polygon intersection)
-4. Nightlife (SIRENE API; highest operational risk)
+3. Culture (BPE cultural-building aggregation)
+4. Green space (polygon intersection)
+5. Nightlife (SIRENE API; highest operational risk)
 
 At any intermediate milestone, missing dimensions are represented as `null` in data and excluded from composite scoring.
 
@@ -72,10 +81,10 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 | #   | Dimension       | Source                | Metric                                                              | Notes                                                                                                                      |
 | --- | --------------- | --------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| 9   | Air quality     | Airparif station data | Avg NO2/PM2.5                                                       | Only ~15-20 stations in Paris. Would need spatial interpolation (IDW or nearest-neighbor) per arrondissement. Non-trivial. |
-| 10  | Velib density   | Velib GBFS            | Stations per km2, avg bike availability                             | Real-time GBFS API, no auth. Snapshot at build time. Point-in-polygon for station counts.                                  |
-| 11  | Political color | Election results      | Raw vote % per party from latest presidential + municipal elections | Commune-level election data on data.gouv.fr. Paris arrondissements have their own results.                                 |
-| 12  | Walkability     | Derived               | Composite of transport + amenity + green space density              | Meta-dimension computed from other scores. No new data source needed.                                                      |
+| 10  | Air quality     | Airparif station data | Avg NO2/PM2.5                                                       | Only ~15-20 stations in Paris. Would need spatial interpolation (IDW or nearest-neighbor) per arrondissement. Non-trivial. |
+| 11  | Velib density   | Velib GBFS            | Stations per km2, avg bike availability                             | Real-time GBFS API, no auth. Snapshot at build time. Point-in-polygon for station counts.                                  |
+| 12  | Political color | Election results      | Raw vote % per party from latest presidential + municipal elections | Commune-level election data on data.gouv.fr. Paris arrondissements have their own results.                                 |
+| 13  | Walkability     | Derived               | Composite of transport + amenity + green space density              | Meta-dimension computed from other scores. No new data source needed.                                                      |
 
 ## Data Pipeline
 
@@ -136,6 +145,10 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    h. BPE (implemented in `build-data.ts`, enabled when `amenities` is in `enabledDimensions`):
       - Query aggregated BPE records by arrondissement (`com_arm_code`) and equipment code
       - Aggregate counts for pharmacies, doctors, schools, gyms, and cinemas
+   i. BPE culture (planned, not yet implemented):
+      - Query aggregated BPE records by arrondissement (`com_arm_code`) and validated cultural equipment codes
+      - Aggregate `cultural_buildings_total`, `cultural_buildings_per_km2`, and `cultural_buildings_per_10k_residents`
+      - Hard-fail if configured cultural equipment codes are missing from the pinned BPE nomenclature mapping
 5. Run data-quality gates (fail/warn policy)
 6. Normalize enabled dimensions to 0-100 and invert where needed
 7. Emit:
@@ -146,7 +159,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ### Current implementation snapshot (as of 2026-02-28)
 
-- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `greenSpace`, `noise`, `amenities`
+- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `greenSpace`, `noise`, `amenities` (`culture` planned, not wired yet)
 - `scripts/build-data.ts` currently emits production artifacts for:
   - base fields (code/number/name/population/area)
   - housing (DVF)
@@ -157,12 +170,14 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
   - greenSpace (polygon intersection parser integrated; populated only when `greenSpace` is enabled in config)
   - noise (Ville de Paris road-noise parser enabled)
   - amenities (BPE parser enabled)
+  - culture (planned BPE cultural-building parser; not implemented yet)
   - normalized scores for enabled dimensions
 - `scripts/data-refresh.ts` pre-warms/rebuilds cached SIRENE nightlife snapshots used by the build path
-- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, nightlife `0/20` (nightlife remains disabled in `enabledDimensions`)
+- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, nightlife `0/20` (nightlife remains disabled in `enabledDimensions`; culture is not yet emitted as a metadata key)
 - Latest stability validation (2026-02-28):
   - `bun run data:build`: completed in ~16.7s with 2 warnings (`SSMSI nombre` + 2 non-polygon green-space features skipped)
   - `bun run data:build --offline`: completed in ~16.3s with the same 2 warnings
+  - Offline preflight now verifies query-specific SIRENE cache readiness per arrondissement when `nightlife` is enabled (first page required for all 20 communes)
 
 ### Manual refresh commands
 
@@ -170,7 +185,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 - `bun run data:build --offline` -- same build, but fail if cached INSEE dossier-complet archive or enabled-dimension raw snapshots are missing
 - `bun run data:refresh --dimensions=nightlife --all` -- refresh SIRENE nightlife raw snapshots for all arrondissements
 - `bun run data:refresh --dimensions=nightlife --offline --all` -- rebuild nightlife raw snapshots from cache only
-- Offline guard: if `nightlife` is enabled, `data:build --offline` hard-fails when `data/raw/sirene/` has no cached pages
+- Offline guard: if `nightlife` is enabled, `data:build --offline` hard-fails when query-specific SIRENE cache `page-00000` is missing for any arrondissement (`75101`..`75120`)
 
 ### Dependencies for build script
 
@@ -323,6 +338,25 @@ type DataMetadata = {
 };
 ```
 
+**Planned schema delta for culture (Phase 1E, not shipped yet):**
+
+```typescript
+type DimensionKey = /* existing keys */ | "culture";
+
+type Arrondissement = {
+  dimensions: {
+    culture: {
+      cultural_buildings_total: number;
+      cultural_buildings_per_km2: number;
+      cultural_buildings_per_10k_residents: number;
+      by_type: Record<string, number>; // e.g. libraries, museums, theaters
+    } | null;
+  };
+};
+```
+
+Until the culture parser lands, this key is intentionally absent from emitted JSON and metadata coverage.
+
 **Composite score is NOT stored in the JSON.** It depends on persona weights which change client-side. The JSON stores only normalized 0-100 scores per enabled dimension. The client computes `composite = sum(weight[i] * score[i]) / sum(weights)` over non-null dimensions only (weights re-normalized after dropping nulls). For OG images, a default composite is computed server-side using equal weights over available dimensions.
 
 ## Pages & Routes
@@ -338,7 +372,7 @@ type DataMetadata = {
   - Each preset adjusts dimension weights for composite score
 - Click arrondissement: wider drawer slides in (desktop: 384-448px) / taller bottom sheet slides up (mobile: 85vh)
   - URL updates to `?arr=N` via nuqs (`useQueryState` with `history: 'push'`)
-  - Shows composite score bar + all 8 dimension cards with scores and raw values (reuses `DimensionSection` component)
+  - Shows composite score bar + all live dimension cards with scores and raw values (currently 8; will include culture when enabled)
   - "View full details" link at bottom navigates to `/paris/{number}` detail page
   - Escape key or close button dismisses the drawer and removes `?arr` from URL
   - Direct visit to `/?arr=9` hydrates from URL and opens drawer immediately
@@ -389,6 +423,15 @@ Each persona defines default weights (0-100) per dimension. Weights are normaliz
 | Noise                 | 5         | 15     | 5       | 5        |
 | Amenities             | 0         | 20     | 5       | 15       |
 
+**Planned culture weighting targets (applied when `culture` is enabled):**
+
+| Persona   | Culture weight target | Rebalancing note                              |
+| --------- | --------------------- | --------------------------------------------- |
+| Young Pro | 10                    | shift weight from housing/nightlife           |
+| Family    | 10                    | shift weight from housing/amenities           |
+| Tourist   | 20                    | shift weight mostly from nightlife/transport  |
+| Business  | 10                    | shift weight from income/amenities            |
+
 Weight sliders for user customization are a future addition. v1 ships with preset-only selection via dropdown.
 
 ## i18n Strategy
@@ -431,7 +474,7 @@ Weight sliders for user customization are a future addition. v1 ships with prese
 - Default OG image for home/leaderboard at `app/api/og/route.tsx`
 - Uses `next/og` (ImageResponse API) with Geist font loaded from `assets/fonts/`
 - Per-arrondissement image shows: arrondissement number (large), composite score (equal weights), rank, top 3 dimension scores
-- Default image shows: "Quartier" brand, tagline, all 8 dimension names as tags
+- Default image shows: "Quartier" brand, tagline, all live dimension names as tags (currently 8; culture tag added when enabled)
 - Design: light background (#fafafa), clean minimalist typography, Geist sans-serif
 - All OG routes are **outside** the `[locale]` prefix (images are language-independent)
 - Twitter Card (`summary_large_image`) + Open Graph meta tags set per page via `generateMetadata`
@@ -561,8 +604,15 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 1. [x] Green space polygon intersection module
 2. [x] SIRENE nightlife API module (with cache and retry policy) -- integrated in refresh + build paths
-3. Validate runtime cost and data stability (greenSpace validated; nightlife runtime validation pending `SIRENE_API_TOKEN` or cached SIRENE pages)
+3. Validate runtime cost and data stability (greenSpace validated; nightlife runtime validation pending `SIRENE_API_TOKEN` or full cached SIRENE snapshots; offline cache readiness preflight for all 20 communes is implemented)
 4. Commit refreshed snapshot
+
+### Phase 1E: Culture Dimension (BPE)
+
+1. [ ] Freeze cultural equipment-code mapping against pinned BPE nomenclature
+2. [ ] Add culture aggregation in build pipeline (`total`, `per_km2`, `per_10k_residents`, `by_type`)
+3. [ ] Add `culture` dimension key across types, scoring, persona weights, and i18n labels
+4. [ ] Regenerate snapshots and validate coverage/drift gates
 
 ### Phase 2: Core Functionality
 

@@ -52,7 +52,7 @@ export async function GET() {
             letterSpacing: "-0.04em",
           }}
         >
-          Quartier
+          quartier
         </span>
         <span
           style={{

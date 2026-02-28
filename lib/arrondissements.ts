@@ -53,6 +53,7 @@ export const DIMENSION_KEYS = [
   "greenSpace",
   "noise",
   "amenities",
+  "culture",
 ] as const;
 
 export function arrondissementSuffix(n: number): string {

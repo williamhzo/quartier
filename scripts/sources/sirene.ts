@@ -119,21 +119,24 @@ function getCacheRootPath(customCacheDir?: string): string {
   return customCacheDir ?? path.join(process.cwd(), "data", "raw", "sirene");
 }
 
-function buildCachePagePath(
-  cacheRoot: string,
-  communeCode: string,
-  query: string,
-  pageOffset: number,
-): string {
-  const queryHash = createHash("sha256")
-    .update(query)
-    .digest("hex")
-    .slice(0, 12);
+export function buildSireneNightlifeQueryHash(query: string): string {
+  return createHash("sha256").update(query).digest("hex").slice(0, 12);
+}
+
+export function buildSireneNightlifeCachePagePath(options: {
+  communeCode: string;
+  query: string;
+  pageOffset: number;
+  cacheDir?: string;
+}): string {
+  const cacheRoot = getCacheRootPath(options.cacheDir);
+  const queryHash = buildSireneNightlifeQueryHash(options.query);
+
   return path.join(
     cacheRoot,
-    communeCode,
+    options.communeCode,
     queryHash,
-    `page-${String(pageOffset).padStart(5, "0")}.json`,
+    `page-${String(options.pageOffset).padStart(5, "0")}.json`,
   );
 }
 
@@ -372,12 +375,12 @@ export async function fetchSireneNightlifeSnapshot(
     pageParams.set("nombre", String(pageSize));
 
     const url = `${DATA_CONFIG.sources.sirene.baseUrl}?${pageParams.toString()}`;
-    const cachePath = buildCachePagePath(
-      cacheRoot,
-      options.communeCode,
+    const cachePath = buildSireneNightlifeCachePagePath({
+      cacheDir: cacheRoot,
+      communeCode: options.communeCode,
       query,
       pageOffset,
-    );
+    });
     const page = await getSirenePage(
       url,
       cachePath,

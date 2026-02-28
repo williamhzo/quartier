@@ -1,12 +1,19 @@
 {
   "metadata": {
-    "title": "Quartier - Comparez les arrondissements de Paris",
+    "title": "quartier - Comparez les arrondissements de Paris",
     "description": "Comparez les 20 arrondissements de Paris : logement, revenus, sécurité, transports, vie nocturne, espaces verts, bruit et équipements."
   },
   "nav": {
-    "map": "Carte",
-    "leaderboard": "Classement",
-    "title": "Quartier"
+    "map": "carte",
+    "leaderboard": "classement",
+    "about": "à propos",
+    "title": "quartier"
+  },
+  "about": {
+    "title": "à propos de quartier",
+    "tagline": "Tout le monde a un avis sur le meilleur arrondissement de Paris. quartier remplace ces avis par des données (et après, on se dispute sur les données).",
+    "body": "Choisissez un profil et comparez les arrondissements sur les prix immobiliers, la criminalité, l'accès métro, les revenus, le bruit, les espaces verts, et le reste. Construit sur les données ouvertes de data.gouv.fr, l'INSEE et la Ville de Paris.",
+    "openSource": "Open source, contributions bienvenues sur"
   },
   "dimensions": {
     "housing": "Logement",
@@ -17,6 +24,7 @@
     "greenSpace": "Espaces verts",
     "noise": "Bruit",
     "amenities": "Équipements",
+    "culture": "Culture",
     "composite": "Score global"
   },
   "personas": {
@@ -89,11 +97,22 @@
       "schools": "Écoles",
       "gyms": "Salles de sport",
       "cinemas": "Cinémas"
+    },
+    "culture": {
+      "total": "Lieux culturels",
+      "perKm2": "Par km²",
+      "per10k": "Pour 10 000 hab.",
+      "libraries": "Bibliothèques",
+      "museums": "Musées",
+      "theaters": "Théâtres",
+      "conservatories": "Conservatoires",
+      "performanceVenues": "Salles de spectacle",
+      "cinemas": "Cinémas"
     }
   },
   "localeSwitcher": {
-    "fr": "FR",
-    "en": "EN"
+    "fr": "fr",
+    "en": "en"
   },
   "error": {
     "title": "Une erreur est survenue",

@@ -1,12 +1,19 @@
 {
   "metadata": {
-    "title": "Quartier - Compare Paris Arrondissements",
+    "title": "quartier - Compare Paris Arrondissements",
     "description": "Compare all 20 Paris arrondissements across housing, income, safety, transport, nightlife, green space, noise, and amenities."
   },
   "nav": {
-    "map": "Map",
-    "leaderboard": "Leaderboard",
-    "title": "Quartier"
+    "map": "map",
+    "leaderboard": "leaderboard",
+    "about": "about",
+    "title": "quartier"
+  },
+  "about": {
+    "title": "about quartier",
+    "tagline": "Everyone who's lived in Paris has opinions about which arrondissement is best. quartier replaces those opinions with data (and then you argue about the data instead).",
+    "body": "Pick a profile and see how each arrondissement scores on housing prices, crime, metro access, income, noise, green space, and more. Built on open data from data.gouv.fr, INSEE, and the City of Paris.",
+    "openSource": "Open source, contributions welcome on"
   },
   "dimensions": {
     "housing": "Housing",
@@ -17,6 +24,7 @@
     "greenSpace": "Green space",
     "noise": "Noise",
     "amenities": "Amenities",
+    "culture": "Culture",
     "composite": "Composite score"
   },
   "personas": {
@@ -89,11 +97,22 @@
       "schools": "Schools",
       "gyms": "Gyms",
       "cinemas": "Cinemas"
+    },
+    "culture": {
+      "total": "Cultural buildings",
+      "perKm2": "Per km²",
+      "per10k": "Per 10k residents",
+      "libraries": "Libraries",
+      "museums": "Museums",
+      "theaters": "Theaters",
+      "conservatories": "Conservatories",
+      "performanceVenues": "Performance venues",
+      "cinemas": "Cinemas"
     }
   },
   "localeSwitcher": {
-    "fr": "FR",
-    "en": "EN"
+    "fr": "fr",
+    "en": "en"
   },
   "error": {
     "title": "Something went wrong",

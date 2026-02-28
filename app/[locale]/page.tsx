@@ -18,7 +18,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
 
   if (arr != null && arr >= 1 && arr <= 20) {
     const name = ARRONDISSEMENT_NAMES[arr];
-    const title = `${name} - Quartier`;
+    const title = `${name} - quartier`;
     return {
       title,
       openGraph: {

@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LocaleSwitcher } from "./locale-switcher";
+import { AboutDialog } from "./about-dialog";
 
 export function Nav() {
   const t = useTranslations("nav");
@@ -33,6 +34,11 @@ export function Nav() {
               {link.label}
             </Link>
           ))}
+          <AboutDialog>
+            <button className="text-muted-foreground hover:text-foreground cursor-pointer text-sm transition-colors">
+              {t("about")}
+            </button>
+          </AboutDialog>
         </div>
       </div>
       <LocaleSwitcher />

@@ -17,7 +17,8 @@ import { PERSONA_WEIGHTS } from "@/lib/personas";
 import { rankByComposite } from "@/lib/scoring";
 import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
 import type { Arrondissement, DimensionKey, PersonaKey } from "@/lib/types";
-import { ArrowUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
 
 type SortKey = DimensionKey | "composite" | "number";
 
@@ -54,7 +55,6 @@ export function LeaderboardTable({ data }: Props) {
   }, [ranked, sortKey, sortAsc]);
 
   function toggleSort(key: SortKey) {
-    const nextAsc = sortKey === key ? !sortAsc : false;
     if (sortKey === key) {
       setSortAsc(!sortAsc);
     } else {
@@ -62,6 +62,8 @@ export function LeaderboardTable({ data }: Props) {
       setSortAsc(false);
     }
   }
+
+  const colHighlight = "bg-primary/[0.04] dark:bg-primary/[0.06]";
 
   return (
     <div className="space-y-4">
@@ -71,30 +73,44 @@ export function LeaderboardTable({ data }: Props) {
       <div className="overflow-x-auto rounded-lg border">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="bg-background sticky left-0 z-10 w-12 text-center">
+            <TableRow className="bg-muted/50 hover:bg-muted/50">
+              <TableHead className="bg-muted/50 sticky left-0 z-10 w-12 text-center">
                 {t("leaderboard.rank")}
               </TableHead>
-              <TableHead className="bg-background sticky left-12 z-10">
+              <TableHead className="bg-muted/50 sticky left-12 z-10">
                 <SortButton
                   active={sortKey === "number"}
+                  asc={sortAsc}
                   onClick={() => toggleSort("number")}
                 >
                   {t("leaderboard.arrondissement")}
                 </SortButton>
               </TableHead>
-              <TableHead className="text-right">
+              <TableHead
+                className={cn(
+                  "text-right",
+                  sortKey === "composite" && colHighlight,
+                )}
+              >
                 <SortButton
                   active={sortKey === "composite"}
+                  asc={sortAsc}
                   onClick={() => toggleSort("composite")}
                 >
                   {t("dimensions.composite")}
                 </SortButton>
               </TableHead>
               {DIMENSION_KEYS.map((key) => (
-                <TableHead key={key} className="text-right">
+                <TableHead
+                  key={key}
+                  className={cn(
+                    "text-right",
+                    sortKey === key && colHighlight,
+                  )}
+                >
                   <SortButton
                     active={sortKey === key}
+                    asc={sortAsc}
                     onClick={() => toggleSort(key)}
                   >
                     {t(`dimensions.${key}`)}
@@ -123,24 +139,36 @@ export function LeaderboardTable({ data }: Props) {
             ) : (
               sorted.map((a) => (
                 <TableRow key={a.code}>
-                  <TableCell className="bg-background text-muted-foreground sticky left-0 z-10 text-center font-mono text-xs">
-                    {a.rank}
+                  <TableCell className="bg-background sticky left-0 z-10 text-center font-mono text-xs">
+                    <RankBadge rank={a.rank} />
                   </TableCell>
                   <TableCell className="bg-background sticky left-12 z-10 font-medium">
                     <Link
                       href={`/paris/${a.number}`}
-                      className="hover:underline"
+                      className="hover:text-primary transition-colors hover:underline"
                     >
                       {formatArrondissement(a.number)}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <Badge variant="secondary">{Math.round(a.composite)}</Badge>
+                  <TableCell
+                    className={cn(
+                      "text-right",
+                      sortKey === "composite" && colHighlight,
+                    )}
+                  >
+                    <Badge variant={a.rank <= 3 ? "default" : "secondary"}>
+                      {Math.round(a.composite)}
+                    </Badge>
                   </TableCell>
                   {DIMENSION_KEYS.map((key) => (
                     <TableCell
                       key={key}
-                      className="text-muted-foreground text-right tabular-nums"
+                      className={cn(
+                        "text-right tabular-nums",
+                        sortKey === key
+                          ? cn(colHighlight, "text-foreground")
+                          : "text-muted-foreground",
+                      )}
                     >
                       {a.scores[key] != null ? Math.round(a.scores[key]) : "-"}
                     </TableCell>
@@ -155,22 +183,56 @@ export function LeaderboardTable({ data }: Props) {
   );
 }
 
+function RankBadge({ rank }: { rank: number }) {
+  if (rank <= 3) {
+    const styles = [
+      "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
+      "bg-zinc-100 text-zinc-600 dark:bg-zinc-700/40 dark:text-zinc-300",
+      "bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400",
+    ];
+    return (
+      <span
+        className={cn(
+          "inline-flex size-6 items-center justify-center rounded-full text-xs font-semibold",
+          styles[rank - 1],
+        )}
+      >
+        {rank}
+      </span>
+    );
+  }
+  return <span className="text-muted-foreground">{rank}</span>;
+}
+
 function SortButton({
   children,
   active,
+  asc,
   onClick,
 }: {
   children: React.ReactNode;
   active: boolean;
+  asc: boolean;
   onClick: () => void;
 }) {
+  const Icon = active ? (asc ? ChevronUp : ChevronDown) : ArrowUpDown;
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-1 ${active ? "text-foreground" : ""}`}
+      className={cn(
+        "inline-flex items-center gap-1",
+        active
+          ? "text-foreground font-semibold"
+          : "text-muted-foreground hover:text-foreground/70",
+      )}
     >
       {children}
-      <ArrowUpDown className="size-3" />
+      <Icon
+        className={cn(
+          "size-3.5 shrink-0",
+          active ? "text-primary" : "opacity-20",
+        )}
+      />
     </button>
   );
 }

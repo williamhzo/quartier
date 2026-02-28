@@ -6,7 +6,8 @@ export type DimensionKey =
   | "nightlife"
   | "greenSpace"
   | "noise"
-  | "amenities";
+  | "amenities"
+  | "culture";
 
 export type HousingData = {
   median_price_m2: number;
@@ -54,6 +55,13 @@ export type AmenitiesData = {
   cinemas: number;
 };
 
+export type CultureData = {
+  cultural_buildings_total: number;
+  cultural_buildings_per_km2: number;
+  cultural_buildings_per_10k_residents: number;
+  by_type: Record<string, number>;
+};
+
 export type Dimensions = {
   housing: HousingData | null;
   income: IncomeData | null;
@@ -63,6 +71,7 @@ export type Dimensions = {
   greenSpace: GreenSpaceData | null;
   noise: NoiseData | null;
   amenities: AmenitiesData | null;
+  culture: CultureData | null;
 };
 
 export type Arrondissement = {

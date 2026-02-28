@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFile, readdir, writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   DATA_CONFIG,
@@ -29,8 +29,10 @@ import {
 } from "./sources/green-space";
 import {
   buildNightlifeFromSirene,
+  buildSireneNightlifeCachePagePath,
   type NightlifeMetric,
 } from "./sources/sirene";
+import { buildSireneNightlifeSearchParams } from "./sources/sirene-query";
 
 type BuildOptions = {
   offline: boolean;
@@ -129,35 +131,53 @@ function parseOptions(argv: string[]): BuildOptions {
   };
 }
 
-async function directoryHasFiles(root: string): Promise<boolean> {
-  const stack: string[] = [root];
+function isMissingFileError(error: unknown): boolean {
+  const code = (error as { code?: string }).code;
+  return code === "ENOENT" || String(error).includes("ENOENT");
+}
 
-  while (stack.length > 0) {
-    const current = stack.pop();
-    if (!current) continue;
+async function validateNightlifeOfflineCacheReadiness(): Promise<void> {
+  const buckets = getEnabledSireneBuckets();
+  const missingCommunes: string[] = [];
 
-    let entries: Awaited<ReturnType<typeof readdir>> | null = null;
+  for (const communeCode of PARIS_ARRONDISSEMENT_COMMUNES) {
+    const query = buildSireneNightlifeSearchParams(communeCode, buckets).get(
+      "q",
+    );
+    if (!query) {
+      throw new Error(`failed to build nightlife query for ${communeCode}`);
+    }
+
+    const firstPagePath = buildSireneNightlifeCachePagePath({
+      cacheDir: SIRENE_CACHE_ROOT,
+      communeCode,
+      query,
+      pageOffset: 0,
+    });
+
     try {
-      entries = await readdir(current, { withFileTypes: true });
+      await readFile(firstPagePath, "utf8");
     } catch (error) {
-      const code = (error as { code?: string }).code;
-      if (code === "ENOENT" || String(error).includes("ENOENT")) {
+      if (isMissingFileError(error)) {
+        missingCommunes.push(communeCode);
         continue;
       }
       throw error;
     }
-
-    for (const entry of entries) {
-      if (entry.isFile()) {
-        return true;
-      }
-      if (entry.isDirectory()) {
-        stack.push(path.join(current, entry.name));
-      }
-    }
   }
 
-  return false;
+  if (missingCommunes.length === 0) {
+    return;
+  }
+
+  const previewLimit = 8;
+  const preview = missingCommunes.slice(0, previewLimit).join(", ");
+  const remainder = missingCommunes.length - Math.min(missingCommunes.length, previewLimit);
+  const suffix = remainder > 0 ? ` (+${remainder} more)` : "";
+
+  throw new Error(
+    `nightlife is enabled but offline SIRENE cache is incomplete: missing first page for ${missingCommunes.length}/${PARIS_ARRONDISSEMENT_COMMUNES.length} communes (${preview}${suffix}). In --offline mode prewarm cache with: bun run data:refresh --dimensions=nightlife --all`,
+  );
 }
 
 async function validateBuildPreconditions(
@@ -170,14 +190,7 @@ async function validateBuildPreconditions(
     return;
   }
 
-  const hasSireneCache = await directoryHasFiles(SIRENE_CACHE_ROOT);
-  if (hasSireneCache) {
-    return;
-  }
-
-  throw new Error(
-    `nightlife is enabled but no cached SIRENE pages were found in ${SIRENE_CACHE_ROOT}. In --offline mode either disable nightlife in scripts/data-config.ts or prewarm cache with: bun run data:refresh --dimensions=nightlife --all`,
-  );
+  await validateNightlifeOfflineCacheReadiness();
 }
 
 function assertParisCode(value: unknown): string {
