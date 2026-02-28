@@ -55,7 +55,7 @@ export function MapPanel({ arrondissement, allArrondissements, composite, rank, 
         }}
         modal={false}
       >
-        <DrawerContent className="max-h-[85vh] pb-[env(safe-area-inset-bottom)] md:hidden">
+        <DrawerContent className="max-h-[80vh] pb-[env(safe-area-inset-bottom)] md:hidden">
           <VisuallyHidden>
             <DrawerTitle>
               <ArrondissementLabel number={num} locale="fr" />
