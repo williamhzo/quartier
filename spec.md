@@ -391,9 +391,12 @@ type DataMetadata = {
 ### `/{locale}` -- Home / Map View
 
 - Full-screen interactive map of Paris (MapLibre)
-- IDF context layer (surrounding departments as subtle outlines on white background) for geographic context
-- Arrondissements rendered as colored choropleth polygons
+- IDF context layer (surrounding departments with faint fill + subtle outlines on `#fafafa` background) for geographic context
+- Seine river rendered as a soft blue line (`#93c5fd`, 2.5px, 0.5 opacity) between IDF context and arrondissements
+- Arrondissements rendered as teal-navy choropleth polygons (warmer ramp: `#f0f4f8` to `#0c3547`)
 - Color intensity = currently selected dimension's score (or composite score)
+- Selected arrondissement gets a subtle glow outline (5px, 0.15 opacity); unselected fade to 0.5 opacity
+- Arrondissement labels zoom-interpolate (11px at z11, 14px at z13); softer default borders (`#94a3b8`, 0.5px)
 - Dimension selector dropdown in toolbar to change what the map shows
 - Persona selector dropdown: "Young professional", "Family", "Tourist", "Business owner"
   - Each preset adjusts dimension weights for composite score
@@ -406,6 +409,7 @@ type DataMetadata = {
   - Browser back/forward navigates between selections
   - Invalid `?arr` values (out of 1-20 range) are ignored gracefully
   - Dynamic OG metadata: visiting `/?arr=9` sets OG title/image to that arrondissement
+- Map legend: responsive width (w-36 mobile, w-44 desktop), rounded-full gradient bar, 0/50/100 ticks, selected score marker indicator
 - Hover arrondissement: tooltip with name + current score (rendered via DOM refs to avoid React re-renders/flicker)
 
 ### `/{locale}/leaderboard` -- Ranking Table
@@ -486,7 +490,8 @@ Weight sliders for user customization are a future addition. v1 ships with prese
 **Detail page (both):**
 
 - Vertical scroll, section per dimension
-- Mini-map at top (not interactive, just shows location)
+- Mini-map at top (not interactive, just shows location; includes Seine river line at 1.5px)
+- Missing dimension data shown with dashed-border placeholder (BarChart3 icon + "no data" text)
 
 ## Social Sharing / OG Images
 
@@ -522,19 +527,28 @@ app/
   [locale]/
     layout.tsx              # i18n provider, nav, fonts
     page.tsx                # map view (home)
+    loading.tsx             # map skeleton
+    error.tsx               # root error boundary
     leaderboard/
       page.tsx              # ranking table
+      loading.tsx           # leaderboard skeleton (persona selector + 10 table rows)
+      error.tsx             # leaderboard error boundary (back to map)
     paris/
       [number]/
         page.tsx            # arrondissement detail
+        loading.tsx         # detail skeleton (map + radar + dimension cards)
+        error.tsx           # detail error boundary (back to leaderboard)
   api/
     og/
       [number]/
         route.tsx           # dynamic OG image generation (outside [locale])
 components/
+  error-card.tsx            # shared error boundary UI (retry + back link)
   map/
     paris-map.tsx           # MapLibre + arrondissement polygons + inline tooltip
     map-panel.tsx           # side panel / bottom sheet on click
+    map-colors.ts           # shared choropleth color stops + expressions
+    map-legend.tsx          # color gradient legend with score marker
   leaderboard/
     leaderboard-table.tsx   # sortable table
     leaderboard-card.tsx    # mobile card variant
@@ -557,6 +571,7 @@ lib/
 data/
   arrondissements.json      # pre-computed dimension data (committed)
   arrondissements.geojson   # boundary polygons (committed)
+  seine.geojson             # simplified Seine LineString through Paris (committed)
   metadata.json             # provenance + quality checks (committed)
   raw/                      # cached source payloads/snapshots (gitignored)
 scripts/
@@ -678,8 +693,8 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 ### Phase 6: UI Polish
 
 1. Recharts mini-charts on detail pages
-2. Map styling refinements
-3. Loading/empty/error states
+2. [x] Map styling: shared choropleth color module, warmer teal-navy palette, `#fafafa` background, IDF context fill, Seine river layer, zoom-interpolated labels, softer borders, selection glow, legend polish (responsive width, rounded bar, middle tick, selected score marker)
+3. [x] Loading/empty/error states: per-route error boundaries with shared ErrorCard, refined loading skeletons, dashed-border empty dimension placeholder with icon
 
 ### Future
 
