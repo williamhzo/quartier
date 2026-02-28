@@ -759,7 +759,8 @@
         "score_greenSpace": 9.7,
         "score_noise": 92.72,
         "score_amenities": 50.64,
-        "score_culture": 2.6
+        "score_culture": 5.06,
+        "score_sports": 0
       }
     },
     {
@@ -1144,7 +1145,8 @@
         "score_greenSpace": 0.82,
         "score_noise": 64.49,
         "score_amenities": 74.83,
-        "score_culture": 11.43
+        "score_culture": 9.99,
+        "score_sports": 28.83
       }
     },
     {
@@ -1329,7 +1331,8 @@
         "score_greenSpace": 0,
         "score_noise": 64.49,
         "score_amenities": 59.98,
-        "score_culture": 42.98
+        "score_culture": 39.81,
+        "score_sports": 49.66
       }
     },
     {
@@ -2454,7 +2457,8 @@
         "score_greenSpace": 7.36,
         "score_noise": 0,
         "score_amenities": 75.75,
-        "score_culture": 32.71
+        "score_culture": 37.21,
+        "score_sports": 8.91
       }
     },
     {
@@ -3667,7 +3671,8 @@
         "score_greenSpace": 5.92,
         "score_noise": 75.39,
         "score_amenities": 27.57,
-        "score_culture": 3.91
+        "score_culture": 5.2,
+        "score_sports": 81.61
       }
     },
     {
@@ -4528,7 +4533,8 @@
         "score_greenSpace": 0.74,
         "score_noise": 83.94,
         "score_amenities": 78.13,
-        "score_culture": 11
+        "score_culture": 13.27,
+        "score_sports": 100
       }
     },
     {
@@ -5285,7 +5291,8 @@
         "score_greenSpace": 6.17,
         "score_noise": 85.11,
         "score_amenities": 47.85,
-        "score_culture": 14.62
+        "score_culture": 15.46,
+        "score_sports": 70.5
       }
     },
     {
@@ -5670,7 +5677,8 @@
         "score_greenSpace": 0.98,
         "score_noise": 58.37,
         "score_amenities": 100,
-        "score_culture": 100
+        "score_culture": 100,
+        "score_sports": 66.68
       }
     },
     {
@@ -6867,7 +6875,8 @@
         "score_greenSpace": 4.08,
         "score_noise": 88.36,
         "score_amenities": 44.64,
-        "score_culture": 4.2
+        "score_culture": 4.79,
+        "score_sports": 62.82
       }
     },
     {
@@ -7288,7 +7297,8 @@
         "score_greenSpace": 1.91,
         "score_noise": 64.49,
         "score_amenities": 26.27,
-        "score_culture": 7.09
+        "score_culture": 13.41,
+        "score_sports": 15.35
       }
     },
     {
@@ -7825,7 +7835,8 @@
         "score_greenSpace": 3.34,
         "score_noise": 64.49,
         "score_amenities": 63.34,
-        "score_culture": 8.1
+        "score_culture": 6.84,
+        "score_sports": 68.23
       }
     },
     {
@@ -8346,7 +8357,8 @@
         "score_greenSpace": 2.16,
         "score_noise": 62.09,
         "score_amenities": 90.6,
-        "score_culture": 67.58
+        "score_culture": 68.4,
+        "score_sports": 60.56
       }
     },
     {
@@ -12767,7 +12779,8 @@
         "score_greenSpace": 100,
         "score_noise": 95,
         "score_amenities": 0,
-        "score_culture": 1.74
+        "score_culture": 1.78,
+        "score_sports": 31.38
       }
     },
     {
@@ -13984,7 +13997,8 @@
         "score_greenSpace": 3.4,
         "score_noise": 77.72,
         "score_amenities": 59.52,
-        "score_culture": 9.41
+        "score_culture": 10.4,
+        "score_sports": 59.39
       }
     },
     {
@@ -14457,7 +14471,8 @@
         "score_greenSpace": 0.22,
         "score_noise": 47.63,
         "score_amenities": 83.41,
-        "score_culture": 32.42
+        "score_culture": 35.98,
+        "score_sports": 65.37
       }
     },
     {
@@ -15406,7 +15421,8 @@
         "score_greenSpace": 0.74,
         "score_noise": 28.39,
         "score_amenities": 44.06,
-        "score_culture": 14.18
+        "score_culture": 17.24,
+        "score_sports": 42.59
       }
     },
     {
@@ -16359,7 +16375,8 @@
         "score_greenSpace": 3.93,
         "score_noise": 63.42,
         "score_amenities": 26.58,
-        "score_culture": 3.91
+        "score_culture": 5.2,
+        "score_sports": 44.75
       }
     },
     {
@@ -18328,7 +18345,8 @@
         "score_greenSpace": 72.78,
         "score_noise": 75.49,
         "score_amenities": 15.85,
-        "score_culture": 0
+        "score_culture": 0,
+        "score_sports": 54.19
       }
     },
     {
@@ -19841,7 +19859,8 @@
         "score_greenSpace": 4.75,
         "score_noise": 97.13,
         "score_amenities": 32.11,
-        "score_culture": 9.84
+        "score_culture": 10.4,
+        "score_sports": 42.87
       }
     },
     {
@@ -20986,7 +21005,8 @@
         "score_greenSpace": 2.78,
         "score_noise": 100,
         "score_amenities": 52.9,
-        "score_culture": 9.26
+        "score_culture": 9.85,
+        "score_sports": 73.05
       }
     }
   ]
