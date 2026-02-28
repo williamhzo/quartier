@@ -27,9 +27,14 @@ const INITIAL_ZOOM = 11.5;
 type Props = {
   arrondissements: Arrondissement[];
   boundaries: FeatureCollection<Geometry>;
+  contextBoundaries: FeatureCollection<Geometry>;
 };
 
-export function ParisMap({ arrondissements, boundaries }: Props) {
+export function ParisMap({
+  arrondissements,
+  boundaries,
+  contextBoundaries,
+}: Props) {
   const t = useTranslations();
   const mapRef = useRef<MapRef>(null);
   const hoveredIdRef = useRef<number | null>(null);
@@ -295,6 +300,17 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
         onClick={onClick}
         cursor="grab"
       >
+        <Source id="idf-context" type="geojson" data={contextBoundaries}>
+          <Layer
+            id="idf-context-outline"
+            type="line"
+            paint={{
+              "line-color": "#cbd5e1",
+              "line-width": 0.5,
+              "line-opacity": 0.3,
+            }}
+          />
+        </Source>
         <Source
           id="arrondissements"
           type="geojson"

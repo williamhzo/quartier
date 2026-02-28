@@ -3,7 +3,7 @@ import type { SearchParams } from "nuqs/server";
 import { searchParamsCache } from "@/lib/search-params";
 import { ARRONDISSEMENT_NAMES } from "@/lib/arrondissements";
 import { loadArrondissements } from "@/lib/data";
-import { loadBoundaries } from "@/lib/geo";
+import { loadBoundaries, loadContextBoundaries } from "@/lib/geo";
 import { ParisMap } from "@/components/map/paris-map";
 
 type Props = {
@@ -42,10 +42,17 @@ export default async function MapPage({ params, searchParams }: Props) {
   setRequestLocale(locale);
   await searchParamsCache.parse(searchParams);
 
-  const [arrondissements, boundaries] = await Promise.all([
+  const [arrondissements, boundaries, contextBoundaries] = await Promise.all([
     loadArrondissements(),
     loadBoundaries(),
+    loadContextBoundaries(),
   ]);
 
-  return <ParisMap arrondissements={arrondissements} boundaries={boundaries} />;
+  return (
+    <ParisMap
+      arrondissements={arrondissements}
+      boundaries={boundaries}
+      contextBoundaries={contextBoundaries}
+    />
+  );
 }
