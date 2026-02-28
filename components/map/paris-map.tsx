@@ -217,7 +217,7 @@ export function ParisMap({
         ["boolean", ["feature-state", "hover"], false],
         0.9,
         selectedNumber != null
-          ? ["case", ["==", ["get", "number"], selectedNumber], 0.85, 0.6]
+          ? ["case", ["==", ["get", "number"], selectedNumber], 0.85, 0.5]
           : 0.7,
       ] as maplibregl.ExpressionSpecification,
     [selectedNumber],
@@ -229,7 +229,7 @@ export function ParisMap({
         "case",
         ["==", ["get", "number"], selectedNumber ?? -1],
         "#1e293b",
-        "#64748b",
+        "#94a3b8",
       ] as maplibregl.ExpressionSpecification,
     [selectedNumber],
   );
@@ -242,7 +242,18 @@ export function ParisMap({
         2.5,
         ["boolean", ["feature-state", "hover"], false],
         1.5,
-        0.8,
+        0.5,
+      ] as maplibregl.ExpressionSpecification,
+    [selectedNumber],
+  );
+
+  const glowOpacity = useMemo(
+    () =>
+      [
+        "case",
+        ["==", ["get", "number"], selectedNumber ?? -1],
+        0.15,
+        0,
       ] as maplibregl.ExpressionSpecification,
     [selectedNumber],
   );
@@ -314,6 +325,16 @@ export function ParisMap({
             }}
           />
           <Layer
+            id="arrondissements-glow"
+            type="line"
+            paint={{
+              "line-color": "#1e293b",
+              "line-width": 5,
+              "line-opacity": glowOpacity as unknown as number,
+              "line-blur": 3,
+            }}
+          />
+          <Layer
             id="arrondissements-outline"
             type="line"
             paint={{
@@ -326,7 +347,15 @@ export function ParisMap({
             type="symbol"
             layout={{
               "text-field": ["get", "label"],
-              "text-size": 12,
+              "text-size": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                11,
+                11,
+                13,
+                14,
+              ],
               "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
               "text-allow-overlap": true,
             }}
