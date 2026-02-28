@@ -28,19 +28,24 @@ const chartConfig = {
 
 export function SubtypeChart({ items, maxItems = 8, compact }: Props) {
   const t = useTranslations("detail");
+  const charLimit = compact ? 28 : 32;
 
   const data = Object.entries(items)
     .filter(([, v]) => v > 0)
     .sort(([, a], [, b]) => b - a)
     .slice(0, maxItems)
     .map(([name, value]) => ({
-      name: truncate(name, compact ? 22 : 25),
+      name: truncate(name, charLimit),
+      fullName: name,
       value,
     }));
 
   if (data.length === 0) return null;
 
-  const height = compact ? Math.max(120, data.length * 28) : Math.max(160, data.length * 36);
+  const fullNameMap = new Map(data.map((d) => [d.name, d.fullName]));
+  const height = compact
+    ? Math.max(120, data.length * 28)
+    : Math.max(160, data.length * 36);
 
   return (
     <div className="space-y-2">
@@ -57,8 +62,14 @@ export function SubtypeChart({ items, maxItems = 8, compact }: Props) {
           <YAxis
             type="category"
             dataKey="name"
-            width={compact ? 120 : 160}
-            tick={{ fontSize: compact ? 10 : 11 }}
+            width={compact ? 150 : 180}
+            tick={(props) => (
+              <TickWithTitle
+                {...props}
+                compact={compact}
+                fullNameMap={fullNameMap}
+              />
+            )}
           />
           <ChartTooltip
             content={
@@ -76,5 +87,35 @@ export function SubtypeChart({ items, maxItems = 8, compact }: Props) {
         </BarChart>
       </ChartContainer>
     </div>
+  );
+}
+
+function TickWithTitle({
+  x,
+  y,
+  payload,
+  compact,
+  fullNameMap,
+}: {
+  x: number;
+  y: number;
+  payload: { value: string };
+  compact?: boolean;
+  fullNameMap: Map<string, string>;
+}) {
+  const fullName = fullNameMap.get(payload.value) ?? payload.value;
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor="end"
+      dominantBaseline="central"
+      fontSize={compact ? 10 : 11}
+      fill="currentColor"
+      className="text-muted-foreground"
+    >
+      <title>{fullName}</title>
+      {payload.value}
+    </text>
   );
 }
