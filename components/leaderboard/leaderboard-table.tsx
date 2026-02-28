@@ -77,7 +77,10 @@ export function LeaderboardTable({ data }: Props) {
               <TableHead className="bg-background sticky left-0 z-10 w-12 border-b text-center">
                 {t("leaderboard.rank")}
               </TableHead>
-              <TableHead className="bg-background sticky left-12 z-10 border-r border-b">
+              <TableHead
+                className="bg-background sticky left-12 z-10 border-r border-b"
+                aria-sort={sortKey === "number" ? (sortAsc ? "ascending" : "descending") : "none"}
+              >
                 <SortButton
                   active={sortKey === "number"}
                   asc={sortAsc}
@@ -91,6 +94,7 @@ export function LeaderboardTable({ data }: Props) {
                   "text-right",
                   sortKey === "composite" && colHighlight,
                 )}
+                aria-sort={sortKey === "composite" ? (sortAsc ? "ascending" : "descending") : "none"}
               >
                 <SortButton
                   active={sortKey === "composite"}
@@ -107,6 +111,7 @@ export function LeaderboardTable({ data }: Props) {
                     "text-right",
                     sortKey === key && colHighlight,
                   )}
+                  aria-sort={sortKey === key ? (sortAsc ? "ascending" : "descending") : "none"}
                 >
                   <SortButton
                     active={sortKey === key}
@@ -164,7 +169,7 @@ export function LeaderboardTable({ data }: Props) {
                     <TableCell
                       key={key}
                       className={cn(
-                        "text-right tabular-nums",
+                        "text-right font-mono tabular-nums",
                         sortKey === key
                           ? cn(colHighlight, "text-foreground")
                           : "text-muted-foreground",
@@ -193,7 +198,7 @@ function RankBadge({ rank }: { rank: number }) {
     return (
       <span
         className={cn(
-          "inline-flex size-6 items-center justify-center rounded-full text-xs font-semibold",
+          "inline-flex size-6 items-center justify-center rounded-full font-mono text-xs font-semibold",
           styles[rank - 1],
         )}
       >
@@ -201,7 +206,7 @@ function RankBadge({ rank }: { rank: number }) {
       </span>
     );
   }
-  return <span className="text-muted-foreground">{rank}</span>;
+  return <span className="font-mono text-muted-foreground">{rank}</span>;
 }
 
 function SortButton({
@@ -220,7 +225,7 @@ function SortButton({
     <button
       onClick={onClick}
       className={cn(
-        "inline-flex items-center gap-1",
+        "-mx-1.5 -my-0.5 inline-flex cursor-pointer items-center gap-1 rounded-md px-1.5 py-0.5 hover:bg-muted/50",
         active
           ? "text-foreground font-semibold"
           : "text-muted-foreground hover:text-foreground/70",
