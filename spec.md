@@ -156,6 +156,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
   - normalized scores for enabled dimensions
 - `scripts/data-refresh.ts` + `scripts/sources/sirene.ts` currently produce cached nightlife snapshots only (not yet merged into `arrondissements.json`)
 - Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, noise `20/20`, amenities `20/20`, nightlife/greenSpace `0/20`
+- Latest drift validation (`bun run data:build --offline` on 2026-02-28): no row-count or metric drift warnings; only SSMSI field-quality warning remains
 
 ### Manual refresh commands
 
@@ -546,7 +547,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 1. [x] Noise parser
 2. [x] BPE amenities parser
-3. Validate drift/coverage against prior snapshot
+3. [x] Validate drift/coverage against prior snapshot
 4. Commit refreshed snapshot
 
 ### Phase 1D: High-risk Dimensions
