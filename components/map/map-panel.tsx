@@ -42,7 +42,7 @@ export function MapPanel({ arrondissement, allArrondissements, composite, rank, 
       {/* Mobile: bottom sheet */}
       <div className="bg-background motion-safe:animate-in motion-safe:slide-in-from-bottom-full absolute right-0 bottom-0 left-0 z-20 max-h-[85vh] overflow-y-auto overscroll-contain rounded-t-xl border-t pb-[env(safe-area-inset-bottom)] shadow-lg md:hidden">
         <div className="sticky top-0 z-10 flex justify-center pt-3 pb-1">
-          <div className="bg-muted-foreground/30 h-1 w-10 rounded-full" />
+          <div className="bg-muted-foreground/30 h-1.5 w-12 rounded-full" />
         </div>
         <PanelContent
           label={label}
@@ -78,11 +78,11 @@ function PanelContent({
   const t = useTranslations();
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-start justify-between">
+    <div className="p-5">
+      <div className="mb-6 flex items-start justify-between">
         <div>
           <h2 className="text-headline text-balance text-xl">{label}</h2>
-          <p className="text-muted-foreground text-sm tabular-nums">
+          <p className="text-muted-foreground font-mono text-sm tabular-nums">
             {t("detail.rank")}: {rank} {t("detail.outOf")}
           </p>
         </div>
@@ -94,14 +94,14 @@ function PanelContent({
         </div>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-6">
         <ScoreBar
           label={t("dimensions.composite")}
           score={Math.round(composite)}
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-6">
         <h3 className="text-muted-foreground mb-2 text-sm font-medium">
           {t("detail.scoreOverview")}
         </h3>
@@ -112,7 +112,7 @@ function PanelContent({
         />
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {[...DIMENSION_KEYS]
           .sort((a, b) => {
             const aNull = arrondissement.scores[a] == null ? 1 : 0;
