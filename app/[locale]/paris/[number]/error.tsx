@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { ErrorCard } from "@/components/error-card";
 
 type Props = {
@@ -8,10 +9,14 @@ type Props = {
   reset: () => void;
 };
 
-export default function ErrorPage({ error, reset }: Props) {
+export default function DetailError({ error, reset }: Props) {
   useEffect(() => {
     console.error(error);
   }, [error]);
 
-  return <ErrorCard reset={reset} />;
+  const t = useTranslations("nav");
+
+  return (
+    <ErrorCard reset={reset} backHref="/leaderboard" backLabel={t("leaderboard")} />
+  );
 }

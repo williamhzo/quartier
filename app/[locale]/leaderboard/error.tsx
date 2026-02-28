@@ -8,10 +8,10 @@ type Props = {
   reset: () => void;
 };
 
-export default function ErrorPage({ error, reset }: Props) {
+export default function LeaderboardError({ error, reset }: Props) {
   useEffect(() => {
     console.error(error);
   }, [error]);
 
-  return <ErrorCard reset={reset} />;
+  return <ErrorCard reset={reset} backHref="/" />;
 }

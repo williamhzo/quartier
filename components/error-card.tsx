@@ -1,0 +1,32 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
+
+type Props = {
+  reset: () => void;
+  backHref?: string;
+  backLabel?: string;
+};
+
+export function ErrorCard({ reset, backHref = "/", backLabel }: Props) {
+  const t = useTranslations("error");
+
+  return (
+    <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+      <h1 className="text-balance text-2xl font-semibold">{t("title")}</h1>
+      <p className="text-muted-foreground mt-2 max-w-md text-pretty text-sm">
+        {t("description")}
+      </p>
+      <div className="mt-6 flex gap-3">
+        <Button variant="outline" onClick={reset}>
+          {t("retry")}
+        </Button>
+        <Button asChild>
+          <Link href={backHref}>{backLabel ?? t("backToMap")}</Link>
+        </Button>
+      </div>
+    </div>
+  );
+}
