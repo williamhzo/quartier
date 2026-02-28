@@ -78,6 +78,7 @@ export async function GET() {
           "Green Space",
           "Noise",
           "Amenities",
+          "Culture",
         ].map((label) => (
           <div
             key={label}

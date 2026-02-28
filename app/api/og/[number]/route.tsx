@@ -16,6 +16,7 @@ const DIMENSION_LABELS: Record<DimensionKey, string> = {
   greenSpace: "Green Space",
   noise: "Noise",
   amenities: "Amenities",
+  culture: "Culture",
 };
 
 const size = { width: 1200, height: 630 };

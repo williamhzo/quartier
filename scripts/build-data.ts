@@ -730,17 +730,85 @@ async function applyNightlifeDimension(
   };
 }
 
+const EXPECTED_CULTURE_BPE_CODEBOOK = {
+  cinemas: ["F303"],
+} as const;
+
+function assertPinnedCultureCodebook(): void {
+  const configuredCodebook = DATA_CONFIG.sources.bpe.cultureCodebook?.byType;
+  if (!configuredCodebook) {
+    throw new Error("missing bpe cultureCodebook config");
+  }
+
+  const configuredTypes = Object.keys(configuredCodebook).sort();
+  const expectedTypes = Object.keys(EXPECTED_CULTURE_BPE_CODEBOOK).sort();
+
+  if (configuredTypes.join(",") !== expectedTypes.join(",")) {
+    throw new Error(
+      `bpe culture codebook drift: expected types [${expectedTypes.join(", ")}], got [${configuredTypes.join(", ")}]`,
+    );
+  }
+
+  const configuredCinemas = [...(configuredCodebook.cinemas ?? [])].sort();
+  const expectedCinemas = [...EXPECTED_CULTURE_BPE_CODEBOOK.cinemas].sort();
+  if (configuredCinemas.join(",") !== expectedCinemas.join(",")) {
+    throw new Error(
+      `bpe culture codebook drift for "cinemas": expected [${expectedCinemas.join(", ")}], got [${configuredCinemas.join(", ")}]`,
+    );
+  }
+
+  const amenitiesCinemaCodes = [...DATA_CONFIG.sources.bpe.equipmentCodes.cinemas]
+    .sort();
+  if (amenitiesCinemaCodes.join(",") !== expectedCinemas.join(",")) {
+    throw new Error(
+      `bpe culture codebook drift: amenities cinema codes must match pinned culture codes [${expectedCinemas.join(", ")}]`,
+    );
+  }
+}
+
+function toCultureMetric(
+  cinemas: number,
+  areaKm2: number,
+  population: number,
+): CultureMetric | null {
+  if (
+    !Number.isFinite(cinemas) ||
+    cinemas < 0 ||
+    !Number.isFinite(areaKm2) ||
+    areaKm2 <= 0 ||
+    !Number.isFinite(population) ||
+    population <= 0
+  ) {
+    return null;
+  }
+
+  return {
+    cultural_buildings_total: round(cinemas, 2),
+    cultural_buildings_per_km2: round(cinemas / areaKm2, 2),
+    cultural_buildings_per_10k_residents: round((cinemas / population) * 10_000, 2),
+    by_type: {
+      cinemas: round(cinemas, 2),
+    },
+  };
+}
+
 async function applyAmenitiesDimension(
   rows: ArrondissementRow[],
   mode: "network-first" | "cache-only",
 ): Promise<BuildSourceContributions> {
-  if (!DATA_CONFIG.enabledDimensions.includes("amenities")) {
+  const amenitiesEnabled = DATA_CONFIG.enabledDimensions.includes("amenities");
+  const cultureEnabled = DATA_CONFIG.enabledDimensions.includes("culture");
+  if (!amenitiesEnabled && !cultureEnabled) {
     return {
       sourceRowCounts: {},
       sourceChecksums: {},
       sourceUrls: {},
       warnings: [],
     };
+  }
+
+  if (cultureEnabled) {
+    assertPinnedCultureCodebook();
   }
 
   const amenities = await buildAmenitiesFromBpe({
@@ -753,7 +821,17 @@ async function applyAmenitiesDimension(
   for (const [code, metric] of amenities.byCommune) {
     const row = rowByCode.get(code);
     if (!row) continue;
-    row.dimensions.amenities = metric;
+
+    if (amenitiesEnabled) {
+      row.dimensions.amenities = metric;
+    }
+    if (cultureEnabled) {
+      row.dimensions.culture = toCultureMetric(
+        metric.cinemas,
+        row.area_km2,
+        row.population,
+      );
+    }
   }
 
   return {
@@ -824,6 +902,9 @@ function getRawMetricForDimension(
     }
 
     return total / row.area_km2;
+  }
+  if (dimension === "culture") {
+    return row.dimensions.culture?.cultural_buildings_per_km2 ?? null;
   }
 
   return null;
@@ -1029,6 +1110,7 @@ function enrichBoundaries(
           score_greenSpace: row.scores.greenSpace,
           score_noise: row.scores.noise,
           score_amenities: row.scores.amenities,
+          score_culture: row.scores.culture,
         },
       };
     }),
