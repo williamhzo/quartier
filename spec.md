@@ -637,7 +637,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 ### Phase 1F: Sports Facilities Dimension (Data ES)
 
-1. [ ] Add `sports` dimension key across types, scoring, persona weights, and i18n labels
+1. [x] Add `sports` dimension key across types, scoring, persona weights, and i18n labels
 2. [ ] Implement Data ES parser in `scripts/sources/sports.ts` (OpenDataSoft v2.1 API, filter `dep_code=75`, aggregate by `new_code` + `equip_type_famille`)
 3. [ ] Pin equipment-family-to-bucket mapping (fitness, tennis, swimming, multisport, combat, athletics, team_sports)
 4. [ ] Integrate into build pipeline (`build-data.ts`), add to `enabledDimensions`

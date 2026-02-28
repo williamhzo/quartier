@@ -11,6 +11,7 @@ export const PERSONA_WEIGHTS: Record<PersonaKey, PersonaWeights> = {
     noise: 5,
     amenities: 0,
     culture: 10,
+    sports: 10,
   },
   family: {
     housing: 25,
@@ -22,6 +23,7 @@ export const PERSONA_WEIGHTS: Record<PersonaKey, PersonaWeights> = {
     noise: 15,
     amenities: 15,
     culture: 10,
+    sports: 10,
   },
   tourist: {
     housing: 5,
@@ -33,6 +35,7 @@ export const PERSONA_WEIGHTS: Record<PersonaKey, PersonaWeights> = {
     noise: 5,
     amenities: 5,
     culture: 20,
+    sports: 5,
   },
   business: {
     housing: 15,
@@ -44,6 +47,7 @@ export const PERSONA_WEIGHTS: Record<PersonaKey, PersonaWeights> = {
     noise: 5,
     amenities: 10,
     culture: 10,
+    sports: 5,
   },
 };
 
@@ -57,4 +61,5 @@ export const EQUAL_WEIGHTS: PersonaWeights = {
   noise: 1,
   amenities: 1,
   culture: 1,
+  sports: 1,
 };

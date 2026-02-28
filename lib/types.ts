@@ -7,7 +7,8 @@ export type DimensionKey =
   | "greenSpace"
   | "noise"
   | "amenities"
-  | "culture";
+  | "culture"
+  | "sports";
 
 export type HousingData = {
   median_price_m2: number;
@@ -69,6 +70,21 @@ export type CultureData = {
   };
 };
 
+export type SportsData = {
+  facilities_total: number;
+  facilities_per_km2: number;
+  facilities_per_10k_residents: number;
+  by_type: {
+    fitness: number;
+    tennis: number;
+    swimming: number;
+    multisport: number;
+    combat: number;
+    athletics: number;
+    team_sports: number;
+  };
+};
+
 export type Dimensions = {
   housing: HousingData | null;
   income: IncomeData | null;
@@ -79,6 +95,7 @@ export type Dimensions = {
   noise: NoiseData | null;
   amenities: AmenitiesData | null;
   culture: CultureData | null;
+  sports: SportsData | null;
 };
 
 export type Arrondissement = {

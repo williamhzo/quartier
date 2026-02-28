@@ -17,6 +17,7 @@ const DIMENSION_LABELS: Record<DimensionKey, string> = {
   noise: "Noise",
   amenities: "Amenities",
   culture: "Culture",
+  sports: "Sports",
 };
 
 const size = { width: 1200, height: 630 };

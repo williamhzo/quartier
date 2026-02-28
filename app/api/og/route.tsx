@@ -79,6 +79,7 @@ export async function GET() {
           "Noise",
           "Amenities",
           "Culture",
+          "Sports",
         ].map((label) => (
           <div
             key={label}

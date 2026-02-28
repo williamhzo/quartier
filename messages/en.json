@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "quartier - Compare Paris Arrondissements",
-    "description": "Compare all 20 Paris arrondissements across housing, income, safety, transport, nightlife, green space, noise, amenities, and culture."
+    "description": "Compare all 20 Paris arrondissements across housing, income, safety, transport, nightlife, green space, noise, amenities, culture, and sports."
   },
   "nav": {
     "map": "map",
@@ -25,6 +25,7 @@
     "noise": "Noise",
     "amenities": "Amenities",
     "culture": "Culture",
+    "sports": "Sports",
     "composite": "Composite score"
   },
   "personas": {
@@ -108,6 +109,18 @@
       "archives": "Archives",
       "museums": "Museums",
       "cinemas": "Cinemas"
+    },
+    "sports": {
+      "total": "Facilities",
+      "perKm2": "Per km²",
+      "per10k": "Per 10k residents",
+      "fitness": "Fitness rooms",
+      "tennis": "Tennis courts",
+      "swimming": "Swimming pools",
+      "multisport": "Multisport",
+      "combat": "Combat sports",
+      "athletics": "Athletics",
+      "teamSports": "Team sports"
     }
   },
   "localeSwitcher": {

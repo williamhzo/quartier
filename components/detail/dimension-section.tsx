@@ -155,6 +155,19 @@ function getRawValueRows(
         [t("culture.archives"), String(data.by_type?.archives ?? "-")],
         [t("culture.museums"), String(data.by_type?.museums ?? "-")],
       ];
+    case "sports":
+      return [
+        [t("sports.total"), String(data.facilities_total ?? "-")],
+        [t("sports.perKm2"), data.facilities_per_km2?.toFixed(1) ?? "-"],
+        [t("sports.per10k"), data.facilities_per_10k_residents?.toFixed(1) ?? "-"],
+        [t("sports.fitness"), String(data.by_type?.fitness ?? "-")],
+        [t("sports.tennis"), String(data.by_type?.tennis ?? "-")],
+        [t("sports.swimming"), String(data.by_type?.swimming ?? "-")],
+        [t("sports.multisport"), String(data.by_type?.multisport ?? "-")],
+        [t("sports.combat"), String(data.by_type?.combat ?? "-")],
+        [t("sports.athletics"), String(data.by_type?.athletics ?? "-")],
+        [t("sports.teamSports"), String(data.by_type?.team_sports ?? "-")],
+      ];
     default:
       return [];
   }

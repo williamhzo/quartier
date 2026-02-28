@@ -12,6 +12,7 @@ const DEFAULT_DIMENSIONS: Arrondissement["dimensions"] = {
   noise: null,
   amenities: null,
   culture: null,
+  sports: null,
 };
 
 const DEFAULT_SCORES: Arrondissement["scores"] = {
@@ -24,6 +25,7 @@ const DEFAULT_SCORES: Arrondissement["scores"] = {
   noise: null,
   amenities: null,
   culture: null,
+  sports: null,
 };
 
 type LoadedArrondissement = Omit<Arrondissement, "dimensions" | "scores"> & {
