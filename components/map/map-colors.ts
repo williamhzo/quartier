@@ -1,12 +1,12 @@
 import type maplibregl from "maplibre-gl";
 
 export const CHOROPLETH_STOPS = [
-  { value: 0, color: "#f0f4f8" },
-  { value: 20, color: "#b8d4e3" },
-  { value: 40, color: "#5ba3b5" },
-  { value: 60, color: "#2b7a8e" },
-  { value: 80, color: "#1a5566" },
-  { value: 100, color: "#0c3547" },
+  { value: 0, color: "#eff6ff" },
+  { value: 20, color: "#bfdbfe" },
+  { value: 40, color: "#60a5fa" },
+  { value: 60, color: "#2563eb" },
+  { value: 80, color: "#1e40af" },
+  { value: 100, color: "#172554" },
 ] as const;
 
 export const choroplethFillColor: maplibregl.ExpressionSpecification = [
