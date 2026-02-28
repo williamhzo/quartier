@@ -117,7 +117,7 @@ export default async function DetailPage({ params }: Props) {
         </span>
         <ShareButton number={arrondissement.number} />
       </div>
-      <div className="mt-6">
+      <div className="mt-8">
         <MiniMap
           boundaries={boundaries}
           seine={seine}
@@ -125,8 +125,8 @@ export default async function DetailPage({ params }: Props) {
           center={center}
         />
       </div>
-      <div className="mt-6">
-        <h2 className="text-muted-foreground mb-2 text-sm font-medium">
+      <div className="mt-12">
+        <h2 className="text-muted-foreground mb-3 text-xs font-medium uppercase tracking-widest">
           {t("detail.scoreOverview")}
         </h2>
         <ScoreOverview
@@ -135,7 +135,7 @@ export default async function DetailPage({ params }: Props) {
           scores={arrondissement.scores}
         />
       </div>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      <div className="mt-14 space-y-0">
         {[...DIMENSION_KEYS]
           .sort((a, b) => {
             const aNull = arrondissement.scores[a] == null ? 1 : 0;
@@ -154,6 +154,7 @@ export default async function DetailPage({ params }: Props) {
                 rank={entry?.rank}
                 total={dimRanks.size}
                 median={dimMedian}
+                variant="section"
               />
             );
           })}

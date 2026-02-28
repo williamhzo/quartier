@@ -15,6 +15,7 @@ type Props = {
   total?: number;
   median?: number | null;
   compact?: boolean;
+  variant?: "card" | "section";
 };
 
 export function DimensionSection({
@@ -24,42 +25,64 @@ export function DimensionSection({
   total,
   median,
   compact,
+  variant = "card",
 }: Props) {
   const t = useTranslations();
   const score = arrondissement.scores[dimensionKey];
   const dim = arrondissement.dimensions[dimensionKey];
   const subtypeItems = getSubtypeItems(dimensionKey, dim, t);
 
+  const header = (
+    <div className="flex items-center justify-between">
+      {variant === "section" ? (
+        <h3 className="text-headline text-lg">
+          {t(`dimensions.${dimensionKey}`)}
+        </h3>
+      ) : (
+        <CardTitle className="text-base">
+          {t(`dimensions.${dimensionKey}`)}
+        </CardTitle>
+      )}
+      {rank != null && total != null && (
+        <span className="text-muted-foreground text-xs tabular-nums">
+          {t("detail.dimensionRank", { rank, total })}
+        </span>
+      )}
+    </div>
+  );
+
+  const content = (
+    <div className="space-y-4">
+      <ScoreBar score={score} label={t("detail.scores")} median={median} />
+      {dim ? (
+        <>
+          <RawValues dimensionKey={dimensionKey} data={dim} />
+          {subtypeItems && (
+            <SubtypeChart items={subtypeItems} compact={compact} />
+          )}
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center rounded-md border border-dashed py-6">
+          <BarChart3 className="text-muted-foreground/50 mb-2 size-6" />
+          <p className="text-muted-foreground text-sm">{t("common.noData")}</p>
+        </div>
+      )}
+    </div>
+  );
+
+  if (variant === "section") {
+    return (
+      <section className={cn("border-t border-border/40 pt-6", !dim && "opacity-60")}>
+        {header}
+        <div className="mt-4">{content}</div>
+      </section>
+    );
+  }
+
   return (
     <Card className={cn(!dim && "opacity-60")}>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-base">
-            {t(`dimensions.${dimensionKey}`)}
-          </CardTitle>
-          {rank != null && total != null && (
-            <span className="text-muted-foreground text-xs tabular-nums">
-              {t("detail.dimensionRank", { rank, total })}
-            </span>
-          )}
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <ScoreBar score={score} label={t("detail.scores")} median={median} />
-        {dim ? (
-          <>
-            <RawValues dimensionKey={dimensionKey} data={dim} />
-            {subtypeItems && (
-              <SubtypeChart items={subtypeItems} compact={compact} />
-            )}
-          </>
-        ) : (
-          <div className="flex flex-col items-center justify-center rounded-md border border-dashed py-6">
-            <BarChart3 className="text-muted-foreground/50 mb-2 size-6" />
-            <p className="text-muted-foreground text-sm">{t("common.noData")}</p>
-          </div>
-        )}
-      </CardContent>
+      <CardHeader className="pb-3">{header}</CardHeader>
+      <CardContent>{content}</CardContent>
     </Card>
   );
 }
