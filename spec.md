@@ -4,7 +4,7 @@ quartier.sh
 
 ## Overview
 
-Interactive tool for comparing Paris's 20 arrondissements across 9 target data dimensions (8 currently live + 1 planned): housing prices, income, safety, transport, nightlife, green space, noise, amenities, and culture. Map-first, mobile-first, bilingual (FR/EN).
+Interactive tool for comparing Paris's 20 arrondissements across 9 data dimensions: housing prices, income, safety, transport, nightlife, green space, noise, amenities, and culture. Map-first, mobile-first, bilingual (FR/EN).
 
 **Target users:** Parisians exploring their city, people moving to/within Paris, tourists choosing where to stay, business owners scouting locations.
 
@@ -54,7 +54,7 @@ All data is pre-computed per arrondissement and shipped as static JSON.
 | 6   | Green space           | opendata.paris.fr                       | GeoJSON polygons         | m2 of green space per resident                           | **Spatial: polygon intersection.** Parks can span arrondissements. Clip with turf.js `intersect()`, compute area with `turf.area()`.                                                                                                                                                              |
 | 7   | Noise                 | Bruitparif / data.gouv.fr               | CSV                      | % residents exposed above Lden thresholds                | Straightforward. Already per arrondissement.                                                                                                                                                                                                                                                      |
 | 8   | Amenities             | BPE (INSEE)                             | CSV                      | Pharmacies, doctors, schools, gyms, cinemas per km2      | Filter by commune codes 75101-75120. Count equipment by type code.                                                                                                                                                                                                                                |
-| 9   | Culture               | BPE (INSEE)                             | CSV                      | Cultural buildings per km2 (+ per 10k residents helper)  | Reuse BPE arrondissement aggregation (`com_arm_code`, `equipment_code`) with a validated cultural code list (libraries, museums, theaters, conservatories, cultural centers, cinemas). Hard-fail if code mapping drifts from the pinned codebook.                                              |
+| 9   | Culture               | BPE (INSEE)                             | CSV                      | Cultural buildings per km2 (+ per 10k residents helper)  | Reuse BPE arrondissement aggregation (`com_arm_code`, `equipment_code`) with pinned culture codebook v1 (`cinemas`: `F303`). Hard-fail if configured mapping drifts from pinned codebook.                                                                                                     |
 
 ### Culture Dimension Feasibility (2026-02-28)
 
