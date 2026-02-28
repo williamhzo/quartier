@@ -758,7 +758,8 @@
         "score_nightlife": null,
         "score_greenSpace": 9.7,
         "score_noise": 92.72,
-        "score_amenities": 50.64
+        "score_amenities": 50.64,
+        "score_culture": 2.6
       }
     },
     {
@@ -1142,7 +1143,8 @@
         "score_nightlife": null,
         "score_greenSpace": 0.82,
         "score_noise": 64.49,
-        "score_amenities": 74.83
+        "score_amenities": 74.83,
+        "score_culture": 11.43
       }
     },
     {
@@ -1326,7 +1328,8 @@
         "score_nightlife": null,
         "score_greenSpace": 0,
         "score_noise": 64.49,
-        "score_amenities": 59.98
+        "score_amenities": 59.98,
+        "score_culture": 42.98
       }
     },
     {
@@ -2450,7 +2453,8 @@
         "score_nightlife": null,
         "score_greenSpace": 7.36,
         "score_noise": 0,
-        "score_amenities": 75.75
+        "score_amenities": 75.75,
+        "score_culture": 32.71
       }
     },
     {
@@ -3662,7 +3666,8 @@
         "score_nightlife": null,
         "score_greenSpace": 5.92,
         "score_noise": 75.39,
-        "score_amenities": 27.57
+        "score_amenities": 27.57,
+        "score_culture": 3.91
       }
     },
     {
@@ -4522,7 +4527,8 @@
         "score_nightlife": null,
         "score_greenSpace": 0.74,
         "score_noise": 83.94,
-        "score_amenities": 78.13
+        "score_amenities": 78.13,
+        "score_culture": 11
       }
     },
     {
@@ -5278,7 +5284,8 @@
         "score_nightlife": null,
         "score_greenSpace": 6.17,
         "score_noise": 85.11,
-        "score_amenities": 47.85
+        "score_amenities": 47.85,
+        "score_culture": 14.62
       }
     },
     {
@@ -5662,7 +5669,8 @@
         "score_nightlife": null,
         "score_greenSpace": 0.98,
         "score_noise": 58.37,
-        "score_amenities": 100
+        "score_amenities": 100,
+        "score_culture": 100
       }
     },
     {
@@ -6858,7 +6866,8 @@
         "score_nightlife": null,
         "score_greenSpace": 4.08,
         "score_noise": 88.36,
-        "score_amenities": 44.64
+        "score_amenities": 44.64,
+        "score_culture": 4.2
       }
     },
     {
@@ -7278,7 +7287,8 @@
         "score_nightlife": null,
         "score_greenSpace": 1.91,
         "score_noise": 64.49,
-        "score_amenities": 26.27
+        "score_amenities": 26.27,
+        "score_culture": 7.09
       }
     },
     {
@@ -7814,7 +7824,8 @@
         "score_nightlife": null,
         "score_greenSpace": 3.34,
         "score_noise": 64.49,
-        "score_amenities": 63.34
+        "score_amenities": 63.34,
+        "score_culture": 8.1
       }
     },
     {
@@ -8334,7 +8345,8 @@
         "score_nightlife": null,
         "score_greenSpace": 2.16,
         "score_noise": 62.09,
-        "score_amenities": 90.6
+        "score_amenities": 90.6,
+        "score_culture": 67.58
       }
     },
     {
@@ -12754,7 +12766,8 @@
         "score_nightlife": null,
         "score_greenSpace": 100,
         "score_noise": 95,
-        "score_amenities": 0
+        "score_amenities": 0,
+        "score_culture": 1.74
       }
     },
     {
@@ -13970,7 +13983,8 @@
         "score_nightlife": null,
         "score_greenSpace": 3.4,
         "score_noise": 77.72,
-        "score_amenities": 59.52
+        "score_amenities": 59.52,
+        "score_culture": 9.41
       }
     },
     {
@@ -14442,7 +14456,8 @@
         "score_nightlife": null,
         "score_greenSpace": 0.22,
         "score_noise": 47.63,
-        "score_amenities": 83.41
+        "score_amenities": 83.41,
+        "score_culture": 32.42
       }
     },
     {
@@ -15390,7 +15405,8 @@
         "score_nightlife": null,
         "score_greenSpace": 0.74,
         "score_noise": 28.39,
-        "score_amenities": 44.06
+        "score_amenities": 44.06,
+        "score_culture": 14.18
       }
     },
     {
@@ -16342,7 +16358,8 @@
         "score_nightlife": null,
         "score_greenSpace": 3.93,
         "score_noise": 63.42,
-        "score_amenities": 26.58
+        "score_amenities": 26.58,
+        "score_culture": 3.91
       }
     },
     {
@@ -18310,7 +18327,8 @@
         "score_nightlife": null,
         "score_greenSpace": 72.78,
         "score_noise": 75.49,
-        "score_amenities": 15.85
+        "score_amenities": 15.85,
+        "score_culture": 0
       }
     },
     {
@@ -19822,7 +19840,8 @@
         "score_nightlife": null,
         "score_greenSpace": 4.75,
         "score_noise": 97.13,
-        "score_amenities": 32.11
+        "score_amenities": 32.11,
+        "score_culture": 9.84
       }
     },
     {
@@ -20966,7 +20985,8 @@
         "score_nightlife": null,
         "score_greenSpace": 2.78,
         "score_noise": 100,
-        "score_amenities": 52.9
+        "score_amenities": 52.9,
+        "score_culture": 9.26
       }
     }
   ]

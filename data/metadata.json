@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-28T00:39:59.835Z",
+  "generated_at": "2026-02-28T01:29:32.847Z",
   "enabled_dimensions": [
     "housing",
     "income",
@@ -7,7 +7,8 @@
     "transport",
     "greenSpace",
     "noise",
-    "amenities"
+    "amenities",
+    "culture"
   ],
   "source_vintages": {
     "boundaries": "opendata-paris-arrondissements-snapshot-2026-02-27",
@@ -79,7 +80,8 @@
       "nightlife": 0,
       "greenSpace": 20,
       "noise": 20,
-      "amenities": 20
+      "amenities": 20,
+      "culture": 20
     }
   }
 }

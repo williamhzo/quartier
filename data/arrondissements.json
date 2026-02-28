@@ -64,6 +64,14 @@
         "schools": 10,
         "gyms": 6,
         "cinemas": 1
+      },
+      "culture": {
+        "cultural_buildings_total": 1,
+        "cultural_buildings_per_km2": 0.55,
+        "cultural_buildings_per_10k_residents": 0.67,
+        "by_type": {
+          "cinemas": 1
+        }
       }
     },
     "scores": {
@@ -74,7 +82,8 @@
       "nightlife": null,
       "greenSpace": 1.91,
       "noise": 64.49,
-      "amenities": 26.27
+      "amenities": 26.27,
+      "culture": 7.09
     }
   },
   {
@@ -139,6 +148,14 @@
         "schools": 15,
         "gyms": 7,
         "cinemas": 3
+      },
+      "culture": {
+        "cultural_buildings_total": 3,
+        "cultural_buildings_per_km2": 3.03,
+        "cultural_buildings_per_10k_residents": 1.55,
+        "by_type": {
+          "cinemas": 3
+        }
       }
     },
     "scores": {
@@ -149,7 +166,8 @@
       "nightlife": null,
       "greenSpace": 0,
       "noise": 64.49,
-      "amenities": 59.98
+      "amenities": 59.98,
+      "culture": 42.98
     }
   },
   {
@@ -213,6 +231,14 @@
         "schools": 23,
         "gyms": 9,
         "cinemas": 1
+      },
+      "culture": {
+        "cultural_buildings_total": 1,
+        "cultural_buildings_per_km2": 0.85,
+        "cultural_buildings_per_10k_residents": 0.33,
+        "by_type": {
+          "cinemas": 1
+        }
       }
     },
     "scores": {
@@ -223,7 +249,8 @@
       "nightlife": null,
       "greenSpace": 0.82,
       "noise": 64.49,
-      "amenities": 74.83
+      "amenities": 74.83,
+      "culture": 11.43
     }
   },
   {
@@ -288,6 +315,14 @@
         "schools": 27,
         "gyms": 5,
         "cinemas": 1
+      },
+      "culture": {
+        "cultural_buildings_total": 1,
+        "cultural_buildings_per_km2": 0.62,
+        "cultural_buildings_per_10k_residents": 0.41,
+        "by_type": {
+          "cinemas": 1
+        }
       }
     },
     "scores": {
@@ -298,7 +333,8 @@
       "nightlife": null,
       "greenSpace": 3.34,
       "noise": 64.49,
-      "amenities": 63.34
+      "amenities": 63.34,
+      "culture": 8.1
     }
   },
   {
@@ -362,6 +398,14 @@
         "schools": 43,
         "gyms": 19,
         "cinemas": 12
+      },
+      "culture": {
+        "cultural_buildings_total": 12,
+        "cultural_buildings_per_km2": 4.73,
+        "cultural_buildings_per_10k_residents": 2.65,
+        "by_type": {
+          "cinemas": 12
+        }
       }
     },
     "scores": {
@@ -372,7 +416,8 @@
       "nightlife": null,
       "greenSpace": 2.16,
       "noise": 62.09,
-      "amenities": 90.6
+      "amenities": 90.6,
+      "culture": 67.58
     }
   },
   {
@@ -435,6 +480,14 @@
         "schools": 35,
         "gyms": 11,
         "cinemas": 15
+      },
+      "culture": {
+        "cultural_buildings_total": 15,
+        "cultural_buildings_per_km2": 6.97,
+        "cultural_buildings_per_10k_residents": 4.86,
+        "by_type": {
+          "cinemas": 15
+        }
       }
     },
     "scores": {
@@ -445,7 +498,8 @@
       "nightlife": null,
       "greenSpace": 0.98,
       "noise": 58.37,
-      "amenities": 100
+      "amenities": 100,
+      "culture": 100
     }
   },
   {
@@ -509,6 +563,14 @@
         "schools": 43,
         "gyms": 14,
         "cinemas": 1
+      },
+      "culture": {
+        "cultural_buildings_total": 1,
+        "cultural_buildings_per_km2": 0.24,
+        "cultural_buildings_per_10k_residents": 0.22,
+        "by_type": {
+          "cinemas": 1
+        }
       }
     },
     "scores": {
@@ -519,7 +581,8 @@
       "nightlife": null,
       "greenSpace": 9.7,
       "noise": 92.72,
-      "amenities": 50.64
+      "amenities": 50.64,
+      "culture": 2.6
     }
   },
   {
@@ -587,6 +650,14 @@
         "schools": 29,
         "gyms": 13,
         "cinemas": 9
+      },
+      "culture": {
+        "cultural_buildings_total": 9,
+        "cultural_buildings_per_km2": 2.32,
+        "cultural_buildings_per_10k_residents": 2.46,
+        "by_type": {
+          "cinemas": 9
+        }
       }
     },
     "scores": {
@@ -597,7 +668,8 @@
       "nightlife": null,
       "greenSpace": 7.36,
       "noise": 0,
-      "amenities": 75.75
+      "amenities": 75.75,
+      "culture": 32.71
     }
   },
   {
@@ -666,6 +738,14 @@
         "schools": 42,
         "gyms": 10,
         "cinemas": 5
+      },
+      "culture": {
+        "cultural_buildings_total": 5,
+        "cultural_buildings_per_km2": 2.3,
+        "cultural_buildings_per_10k_residents": 0.91,
+        "by_type": {
+          "cinemas": 5
+        }
       }
     },
     "scores": {
@@ -676,7 +756,8 @@
       "nightlife": null,
       "greenSpace": 0.22,
       "noise": 47.63,
-      "amenities": 83.41
+      "amenities": 83.41,
+      "culture": 32.42
     }
   },
   {
@@ -746,6 +827,14 @@
         "schools": 51,
         "gyms": 17,
         "cinemas": 3
+      },
+      "culture": {
+        "cultural_buildings_total": 3,
+        "cultural_buildings_per_km2": 1.04,
+        "cultural_buildings_per_10k_residents": 0.36,
+        "by_type": {
+          "cinemas": 3
+        }
       }
     },
     "scores": {
@@ -756,7 +845,8 @@
       "nightlife": null,
       "greenSpace": 0.74,
       "noise": 28.39,
-      "amenities": 44.06
+      "amenities": 44.06,
+      "culture": 14.18
     }
   },
   {
@@ -822,6 +912,14 @@
         "schools": 76,
         "gyms": 25,
         "cinemas": 3
+      },
+      "culture": {
+        "cultural_buildings_total": 3,
+        "cultural_buildings_per_km2": 0.82,
+        "cultural_buildings_per_10k_residents": 0.22,
+        "by_type": {
+          "cinemas": 3
+        }
       }
     },
     "scores": {
@@ -832,7 +930,8 @@
       "nightlife": null,
       "greenSpace": 0.74,
       "noise": 83.94,
-      "amenities": 78.13
+      "amenities": 78.13,
+      "culture": 11
     }
   },
   {
@@ -900,6 +999,14 @@
         "schools": 77,
         "gyms": 38,
         "cinemas": 3
+      },
+      "culture": {
+        "cultural_buildings_total": 3,
+        "cultural_buildings_per_km2": 0.18,
+        "cultural_buildings_per_10k_residents": 0.23,
+        "by_type": {
+          "cinemas": 3
+        }
       }
     },
     "scores": {
@@ -910,7 +1017,8 @@
       "nightlife": null,
       "greenSpace": 100,
       "noise": 95,
-      "amenities": 0
+      "amenities": 0,
+      "culture": 1.74
     }
   },
   {
@@ -976,6 +1084,14 @@
         "schools": 112,
         "gyms": 39,
         "cinemas": 5
+      },
+      "culture": {
+        "cultural_buildings_total": 5,
+        "cultural_buildings_per_km2": 0.7,
+        "cultural_buildings_per_10k_residents": 0.3,
+        "by_type": {
+          "cinemas": 5
+        }
       }
     },
     "scores": {
@@ -986,7 +1102,8 @@
       "nightlife": null,
       "greenSpace": 2.78,
       "noise": 100,
-      "amenities": 52.9
+      "amenities": 52.9,
+      "culture": 9.26
     }
   },
   {
@@ -1050,6 +1167,14 @@
         "schools": 60,
         "gyms": 26,
         "cinemas": 6
+      },
+      "culture": {
+        "cultural_buildings_total": 6,
+        "cultural_buildings_per_km2": 1.07,
+        "cultural_buildings_per_10k_residents": 0.51,
+        "by_type": {
+          "cinemas": 6
+        }
       }
     },
     "scores": {
@@ -1060,7 +1185,8 @@
       "nightlife": null,
       "greenSpace": 6.17,
       "noise": 85.11,
-      "amenities": 47.85
+      "amenities": 47.85,
+      "culture": 14.62
     }
   },
   {
@@ -1126,6 +1252,14 @@
         "schools": 106,
         "gyms": 41,
         "cinemas": 3
+      },
+      "culture": {
+        "cultural_buildings_total": 3,
+        "cultural_buildings_per_km2": 0.35,
+        "cultural_buildings_per_10k_residents": 0.14,
+        "by_type": {
+          "cinemas": 3
+        }
       }
     },
     "scores": {
@@ -1136,7 +1270,8 @@
       "nightlife": null,
       "greenSpace": 4.08,
       "noise": 88.36,
-      "amenities": 44.64
+      "amenities": 44.64,
+      "culture": 4.2
     }
   },
   {
@@ -1202,6 +1337,14 @@
         "schools": 85,
         "gyms": 23,
         "cinemas": 1
+      },
+      "culture": {
+        "cultural_buildings_total": 1,
+        "cultural_buildings_per_km2": 0.06,
+        "cultural_buildings_per_10k_residents": 0.06,
+        "by_type": {
+          "cinemas": 1
+        }
       }
     },
     "scores": {
@@ -1212,7 +1355,8 @@
       "nightlife": null,
       "greenSpace": 72.78,
       "noise": 75.49,
-      "amenities": 15.85
+      "amenities": 15.85,
+      "culture": 0
     }
   },
   {
@@ -1280,6 +1424,14 @@
         "schools": 78,
         "gyms": 21,
         "cinemas": 4
+      },
+      "culture": {
+        "cultural_buildings_total": 4,
+        "cultural_buildings_per_km2": 0.71,
+        "cultural_buildings_per_10k_residents": 0.26,
+        "by_type": {
+          "cinemas": 4
+        }
       }
     },
     "scores": {
@@ -1290,7 +1442,8 @@
       "nightlife": null,
       "greenSpace": 3.4,
       "noise": 77.72,
-      "amenities": 59.52
+      "amenities": 59.52,
+      "culture": 9.41
     }
   },
   {
@@ -1354,6 +1507,14 @@
         "schools": 99,
         "gyms": 24,
         "cinemas": 2
+      },
+      "culture": {
+        "cultural_buildings_total": 2,
+        "cultural_buildings_per_km2": 0.33,
+        "cultural_buildings_per_10k_residents": 0.13,
+        "by_type": {
+          "cinemas": 2
+        }
       }
     },
     "scores": {
@@ -1364,7 +1525,8 @@
       "nightlife": null,
       "greenSpace": 3.93,
       "noise": 63.42,
-      "amenities": 26.58
+      "amenities": 26.58,
+      "culture": 3.91
     }
   },
   {
@@ -1430,6 +1592,14 @@
         "schools": 120,
         "gyms": 27,
         "cinemas": 5
+      },
+      "culture": {
+        "cultural_buildings_total": 5,
+        "cultural_buildings_per_km2": 0.74,
+        "cultural_buildings_per_10k_residents": 0.3,
+        "by_type": {
+          "cinemas": 5
+        }
       }
     },
     "scores": {
@@ -1440,7 +1610,8 @@
       "nightlife": null,
       "greenSpace": 4.75,
       "noise": 97.13,
-      "amenities": 32.11
+      "amenities": 32.11,
+      "culture": 9.84
     }
   },
   {
@@ -1506,6 +1677,14 @@
         "schools": 111,
         "gyms": 30,
         "cinemas": 2
+      },
+      "culture": {
+        "cultural_buildings_total": 2,
+        "cultural_buildings_per_km2": 0.33,
+        "cultural_buildings_per_10k_residents": 0.11,
+        "by_type": {
+          "cinemas": 2
+        }
       }
     },
     "scores": {
@@ -1516,7 +1695,8 @@
       "nightlife": null,
       "greenSpace": 5.92,
       "noise": 75.39,
-      "amenities": 27.57
+      "amenities": 27.57,
+      "culture": 3.91
     }
   }
 ]
