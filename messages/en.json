@@ -103,10 +103,10 @@
       "perKm2": "Per km²",
       "per10k": "Per 10k residents",
       "libraries": "Libraries",
+      "heritage": "Heritage venues",
+      "livePerformanceVenues": "Live performance venues",
+      "archives": "Archives",
       "museums": "Museums",
-      "theaters": "Theaters",
-      "conservatories": "Conservatories",
-      "performanceVenues": "Performance venues",
       "cinemas": "Cinemas"
     }
   },

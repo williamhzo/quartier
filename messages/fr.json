@@ -103,10 +103,10 @@
       "perKm2": "Par km²",
       "per10k": "Pour 10 000 hab.",
       "libraries": "Bibliothèques",
+      "heritage": "Lieux patrimoniaux",
+      "livePerformanceVenues": "Salles de spectacle vivant",
+      "archives": "Archives",
       "museums": "Musées",
-      "theaters": "Théâtres",
-      "conservatories": "Conservatoires",
-      "performanceVenues": "Salles de spectacle",
       "cinemas": "Cinémas"
     }
   },
