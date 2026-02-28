@@ -266,11 +266,9 @@ export function ParisMap({
 
   return (
     <div className="relative h-[calc(100dvh-3.5rem)]">
-      <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-        <div className="w-40">
-          <DimensionSelect value={dimension} onChange={setDimension} />
-        </div>
+      <div className="absolute top-3 left-3 right-3 z-10 space-y-2">
         <PersonaSelector value={persona} onChange={setPersona} />
+        <DimensionSelect value={dimension} onChange={setDimension} />
       </div>
 
       <Map
