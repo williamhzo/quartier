@@ -1,7 +1,20 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { SlidersHorizontal } from "lucide-react";
+import {
+  SlidersHorizontal,
+  Home,
+  Wallet,
+  Shield,
+  TrainFront,
+  Moon,
+  TreePine,
+  Volume2,
+  Store,
+  Palette,
+  Dumbbell,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Popover,
@@ -12,6 +25,20 @@ import type { DimensionKey } from "@/lib/types";
 import { DIMENSION_KEYS } from "@/lib/arrondissements";
 
 type DimensionValue = DimensionKey | "composite";
+
+const DIMENSION_ICONS: Record<DimensionValue, LucideIcon> = {
+  composite: SlidersHorizontal,
+  housing: Home,
+  income: Wallet,
+  safety: Shield,
+  transport: TrainFront,
+  nightlife: Moon,
+  greenSpace: TreePine,
+  noise: Volume2,
+  amenities: Store,
+  culture: Palette,
+  sports: Dumbbell,
+};
 
 const ALL_VALUES: DimensionValue[] = ["composite", ...DIMENSION_KEYS];
 
@@ -32,7 +59,10 @@ export function DimensionSelect({ value, onChange }: Props) {
           "data-[state=open]:bg-foreground data-[state=open]:text-background data-[state=open]:border-transparent",
         )}
       >
-        <SlidersHorizontal className="size-3" />
+        {(() => {
+          const Icon = DIMENSION_ICONS[value];
+          return <Icon className="size-3" />;
+        })()}
         {t(value)}
       </PopoverTrigger>
       <PopoverContent align="start" sideOffset={4} className="w-auto">
@@ -40,6 +70,7 @@ export function DimensionSelect({ value, onChange }: Props) {
           {ALL_VALUES.map((key) => (
             <Chip
               key={key}
+              icon={DIMENSION_ICONS[key]}
               label={t(key)}
               active={key === value}
               onClick={() => onChange(key)}
@@ -52,10 +83,12 @@ export function DimensionSelect({ value, onChange }: Props) {
 }
 
 function Chip({
+  icon: Icon,
   label,
   active,
   onClick,
 }: {
+  icon: LucideIcon;
   label: string;
   active: boolean;
   onClick: () => void;
@@ -64,12 +97,13 @@ function Chip({
     <button
       onClick={onClick}
       className={cn(
-        "rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors",
+        "flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors",
         active
           ? "bg-foreground text-background border-transparent"
           : "bg-background/80 text-muted-foreground hover:text-foreground hover:bg-muted border-border/60 backdrop-blur-sm",
       )}
     >
+      <Icon className="size-3" />
       {label}
     </button>
   );
