@@ -111,7 +111,13 @@
       },
       "transport": {
         "stations_per_km2": 9.0803,
-        "metro_lines": ["METRO 3", "METRO 4", "METRO 7", "METRO 8", "METRO 9"]
+        "metro_lines": [
+          "METRO 3",
+          "METRO 4",
+          "METRO 7",
+          "METRO 8",
+          "METRO 9"
+        ]
       },
       "nightlife": null,
       "greenSpace": null,
@@ -175,7 +181,13 @@
       },
       "transport": {
         "stations_per_km2": 7.6865,
-        "metro_lines": ["METRO 11", "METRO 3", "METRO 4", "METRO 8", "METRO 9"]
+        "metro_lines": [
+          "METRO 11",
+          "METRO 3",
+          "METRO 4",
+          "METRO 8",
+          "METRO 9"
+        ]
       },
       "nightlife": null,
       "greenSpace": null,
@@ -240,7 +252,13 @@
       },
       "transport": {
         "stations_per_km2": 6.2477,
-        "metro_lines": ["METRO 1", "METRO 11", "METRO 4", "METRO 5", "METRO 7"]
+        "metro_lines": [
+          "METRO 1",
+          "METRO 11",
+          "METRO 4",
+          "METRO 5",
+          "METRO 7"
+        ]
       },
       "nightlife": null,
       "greenSpace": null,
@@ -305,7 +323,12 @@
       },
       "transport": {
         "stations_per_km2": 3.938,
-        "metro_lines": ["METRO 10", "METRO 7", "RER B", "RER C"]
+        "metro_lines": [
+          "METRO 10",
+          "METRO 7",
+          "RER B",
+          "RER C"
+        ]
       },
       "nightlife": null,
       "greenSpace": null,
@@ -369,7 +392,12 @@
       },
       "transport": {
         "stations_per_km2": 6.5023,
-        "metro_lines": ["METRO 10", "METRO 12", "METRO 4", "RER B"]
+        "metro_lines": [
+          "METRO 10",
+          "METRO 12",
+          "METRO 4",
+          "RER B"
+        ]
       },
       "nightlife": null,
       "greenSpace": null,
@@ -433,7 +461,13 @@
       },
       "transport": {
         "stations_per_km2": 3.9119,
-        "metro_lines": ["METRO 10", "METRO 12", "METRO 13", "METRO 8", "RER C"]
+        "metro_lines": [
+          "METRO 10",
+          "METRO 12",
+          "METRO 13",
+          "METRO 8",
+          "RER C"
+        ]
       },
       "nightlife": null,
       "greenSpace": null,
@@ -941,7 +975,12 @@
       },
       "transport": {
         "stations_per_km2": 2.6715,
-        "metro_lines": ["METRO 13", "METRO 4", "METRO 6", "RER B"]
+        "metro_lines": [
+          "METRO 13",
+          "METRO 4",
+          "METRO 6",
+          "RER B"
+        ]
       },
       "nightlife": null,
       "greenSpace": null,
@@ -1224,7 +1263,12 @@
       },
       "transport": {
         "stations_per_km2": 2.3349,
-        "metro_lines": ["METRO 12", "METRO 13", "METRO 2", "METRO 4"]
+        "metro_lines": [
+          "METRO 12",
+          "METRO 13",
+          "METRO 2",
+          "METRO 4"
+        ]
       },
       "nightlife": null,
       "greenSpace": null,
