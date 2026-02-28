@@ -79,7 +79,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ## Data Pipeline
 
-**Primary build-time script** (`scripts/build-data.ts`), run manually (primary) or in CI (optional). Output is committed to the repo.  
+**Primary build-time script** (`scripts/build-data.ts`), run manually (primary) or in CI (optional). Output is committed to the repo.
 **Supplemental refresh script** (`scripts/data-refresh.ts`) is used for SIRENE snapshot pulls and cache refreshes.
 
 ### Operating model (v1)
@@ -128,8 +128,9 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    f. Green space (planned):
       - Intersect park polygons with arrondissement polygons
       - Sum clipped area and compute m2/resident
-   g. Noise (planned):
-      - Parse arrondissement-level exposure fields
+   g. Noise (implemented in `build-data.ts`, enabled when `noise` is in `enabledDimensions`):
+      - Parse Ville de Paris road-noise exposure fields and compute `% residents above thresholds`
+      - Source reports `Paris Centre` (1er-4e) as one aggregate; parser maps that rate to 75101..75104
    h. BPE (planned):
       - Filter 75101..75120 and aggregate selected amenity categories
 5. Run data-quality gates (fail/warn policy)
@@ -140,18 +141,19 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    - `data/metadata.json` (provenance + quality report)
 ```
 
-### Current implementation snapshot (as of 2026-02-27)
+### Current implementation snapshot (as of 2026-02-28)
 
-- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`
+- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `noise`
 - `scripts/build-data.ts` currently emits production artifacts for:
   - base fields (code/number/name/population/area)
   - housing (DVF)
   - income (Filosofi)
   - safety (SSMSI parser enabled)
   - transport (IDFM parser enabled)
+  - noise (Ville de Paris road-noise parser enabled)
   - normalized scores for enabled dimensions
 - `scripts/data-refresh.ts` + `scripts/sources/sirene.ts` currently produce cached nightlife snapshots only (not yet merged into `arrondissements.json`)
-- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, nightlife/greenSpace/noise/amenities `0/20`
+- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, noise `20/20`, nightlife/greenSpace/amenities `0/20`
 
 ### Manual refresh commands
 
@@ -495,11 +497,12 @@ scripts/
     filosofi.ts             # INSEE dossier-complet CSV-in-ZIP parsing for income + shared population
     crime.ts                # SSMSI communal crime parsing for safety metrics
     transport.ts            # IDFM station parsing + arrondissement assignment
+    noise.ts                # Ville de Paris road-noise exposure parsing
     sirene.ts               # INSEE API SIRENE queries for nightlife/dining
     sirene-query.ts         # canonical SIRENE search query builder
     sirene-naf.ts           # NAF bucket definitions for nightlife
     validate-sirene-naf.ts  # NAF mapping validation
-    # planned: green-space.ts, noise.ts, bpe.ts
+    # planned: green-space.ts, bpe.ts
 messages/
   fr.json                   # French UI strings
   en.json                   # English UI strings
@@ -538,7 +541,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 ### Phase 1C: Medium-risk Dimensions
 
-1. Noise parser
+1. [x] Noise parser
 2. BPE amenities parser
 3. Validate drift/coverage against prior snapshot
 4. Commit refreshed snapshot
@@ -574,7 +577,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 1. [x] Dynamic OG image generation per arrondissement (next/og + Geist font)
 2. [x] Meta tags per page (OG + Twitter Card via generateMetadata)
-3. [ ] Deploy to Vercel at quartier.sh
+3. [x] Deploy to Vercel at quartier.sh
 
 ### Phase 6: UI Polish
 
