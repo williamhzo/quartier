@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "quartier - Comparez les arrondissements de Paris",
-    "description": "Comparez les 20 arrondissements de Paris : logement, revenus, sécurité, transports, vie nocturne, espaces verts, bruit et équipements."
+    "description": "Comparez les 20 arrondissements de Paris : logement, revenus, sécurité, transports, vie nocturne, espaces verts, bruit, équipements et culture."
   },
   "nav": {
     "map": "carte",
