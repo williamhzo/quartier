@@ -8,14 +8,15 @@ export default function LeaderboardLoading() {
         <Skeleton className="mt-2 h-5 w-96" />
       </div>
       <div className="space-y-4">
-        <Skeleton className="h-9 w-48" />
+        <div className="flex gap-2">
+          <Skeleton className="h-9 w-40 rounded-md" />
+          <Skeleton className="h-9 w-40 rounded-md" />
+        </div>
         <div className="overflow-hidden rounded-lg border">
-          <div className="space-y-0">
-            <Skeleton className="h-10 w-full rounded-none" />
-            {Array.from({ length: 20 }).map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full rounded-none border-t" />
-            ))}
-          </div>
+          <Skeleton className="h-10 w-full rounded-none" />
+          {Array.from({ length: 10 }).map((_, i) => (
+            <Skeleton key={i} className="h-12 w-full rounded-none border-t" />
+          ))}
         </div>
       </div>
     </div>
