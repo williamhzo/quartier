@@ -113,21 +113,28 @@ function PanelContent({
       </div>
 
       <div className="space-y-3">
-        {DIMENSION_KEYS.map((key) => {
-          const dimRanks = rankByDimension(allArrondissements, key as DimensionKey);
-          const dimMedian = dimensionMedian(allArrondissements, key as DimensionKey);
-          const entry = dimRanks.get(arrondissement.number);
-          return (
-            <DimensionSection
-              key={key}
-              dimensionKey={key as DimensionKey}
-              arrondissement={arrondissement}
-              rank={entry?.rank}
-              total={dimRanks.size}
-              median={dimMedian}
-            />
-          );
-        })}
+        {[...DIMENSION_KEYS]
+          .sort((a, b) => {
+            const aNull = arrondissement.scores[a] == null ? 1 : 0;
+            const bNull = arrondissement.scores[b] == null ? 1 : 0;
+            return aNull - bNull;
+          })
+          .map((key) => {
+            const dimRanks = rankByDimension(allArrondissements, key as DimensionKey);
+            const dimMedian = dimensionMedian(allArrondissements, key as DimensionKey);
+            const entry = dimRanks.get(arrondissement.number);
+            return (
+              <DimensionSection
+                key={key}
+                dimensionKey={key as DimensionKey}
+                arrondissement={arrondissement}
+                rank={entry?.rank}
+                total={dimRanks.size}
+                median={dimMedian}
+                compact
+              />
+            );
+          })}
       </div>
 
       <div className="mt-4 border-t pt-4">

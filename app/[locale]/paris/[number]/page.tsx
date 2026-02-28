@@ -136,21 +136,27 @@ export default async function DetailPage({ params }: Props) {
         />
       </div>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {DIMENSION_KEYS.map((key) => {
-          const dimRanks = rankByDimension(data, key);
-          const dimMedian = dimensionMedian(data, key);
-          const entry = dimRanks.get(arrondissement.number);
-          return (
-            <DimensionSection
-              key={key}
-              dimensionKey={key}
-              arrondissement={arrondissement}
-              rank={entry?.rank}
-              total={dimRanks.size}
-              median={dimMedian}
-            />
-          );
-        })}
+        {[...DIMENSION_KEYS]
+          .sort((a, b) => {
+            const aNull = arrondissement.scores[a] == null ? 1 : 0;
+            const bNull = arrondissement.scores[b] == null ? 1 : 0;
+            return aNull - bNull;
+          })
+          .map((key) => {
+            const dimRanks = rankByDimension(data, key);
+            const dimMedian = dimensionMedian(data, key);
+            const entry = dimRanks.get(arrondissement.number);
+            return (
+              <DimensionSection
+                key={key}
+                dimensionKey={key}
+                arrondissement={arrondissement}
+                rank={entry?.rank}
+                total={dimRanks.size}
+                median={dimMedian}
+              />
+            );
+          })}
       </div>
     </div>
   );
