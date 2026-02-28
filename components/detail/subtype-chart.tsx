@@ -42,7 +42,6 @@ export function SubtypeChart({ items, maxItems = 8, compact }: Props) {
 
   if (data.length === 0) return null;
 
-  const fullNameMap = new Map(data.map((d) => [d.name, d.fullName]));
   const height = compact
     ? Math.max(120, data.length * 28)
     : Math.max(160, data.length * 36);
@@ -63,18 +62,15 @@ export function SubtypeChart({ items, maxItems = 8, compact }: Props) {
             type="category"
             dataKey="name"
             width={compact ? 150 : 180}
-            tick={(props) => (
-              <TickWithTitle
-                {...props}
-                compact={compact}
-                fullNameMap={fullNameMap}
-              />
-            )}
+            tick={{ fontSize: compact ? 10 : 11 }}
           />
           <ChartTooltip
             content={
               <ChartTooltipContent
-                hideLabel
+                labelFormatter={(_label, payload) => {
+                  const entry = payload?.[0]?.payload;
+                  return entry?.fullName ?? _label;
+                }}
                 formatter={(value) => Number(value).toLocaleString("fr-FR")}
               />
             }
@@ -87,35 +83,5 @@ export function SubtypeChart({ items, maxItems = 8, compact }: Props) {
         </BarChart>
       </ChartContainer>
     </div>
-  );
-}
-
-function TickWithTitle({
-  x,
-  y,
-  payload,
-  compact,
-  fullNameMap,
-}: {
-  x: number;
-  y: number;
-  payload: { value: string };
-  compact?: boolean;
-  fullNameMap: Map<string, string>;
-}) {
-  const fullName = fullNameMap.get(payload.value) ?? payload.value;
-  return (
-    <text
-      x={x}
-      y={y}
-      textAnchor="end"
-      dominantBaseline="central"
-      fontSize={compact ? 10 : 11}
-      fill="currentColor"
-      className="text-muted-foreground"
-    >
-      <title>{fullName}</title>
-      {payload.value}
-    </text>
   );
 }
