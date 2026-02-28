@@ -131,8 +131,9 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
    g. Noise (implemented in `build-data.ts`, enabled when `noise` is in `enabledDimensions`):
       - Parse Ville de Paris road-noise exposure fields and compute `% residents above thresholds`
       - Source reports `Paris Centre` (1er-4e) as one aggregate; parser maps that rate to 75101..75104
-   h. BPE (planned):
-      - Filter 75101..75120 and aggregate selected amenity categories
+   h. BPE (implemented in `build-data.ts`, enabled when `amenities` is in `enabledDimensions`):
+      - Query aggregated BPE records by arrondissement (`com_arm_code`) and equipment code
+      - Aggregate counts for pharmacies, doctors, schools, gyms, and cinemas
 5. Run data-quality gates (fail/warn policy)
 6. Normalize enabled dimensions to 0-100 and invert where needed
 7. Emit:
@@ -143,7 +144,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ### Current implementation snapshot (as of 2026-02-28)
 
-- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `noise`
+- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `noise`, `amenities`
 - `scripts/build-data.ts` currently emits production artifacts for:
   - base fields (code/number/name/population/area)
   - housing (DVF)
@@ -151,9 +152,10 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
   - safety (SSMSI parser enabled)
   - transport (IDFM parser enabled)
   - noise (Ville de Paris road-noise parser enabled)
+  - amenities (BPE parser enabled)
   - normalized scores for enabled dimensions
 - `scripts/data-refresh.ts` + `scripts/sources/sirene.ts` currently produce cached nightlife snapshots only (not yet merged into `arrondissements.json`)
-- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, noise `20/20`, nightlife/greenSpace/amenities `0/20`
+- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, noise `20/20`, amenities `20/20`, nightlife/greenSpace `0/20`
 
 ### Manual refresh commands
 
@@ -498,11 +500,12 @@ scripts/
     crime.ts                # SSMSI communal crime parsing for safety metrics
     transport.ts            # IDFM station parsing + arrondissement assignment
     noise.ts                # Ville de Paris road-noise exposure parsing
+    amenities.ts            # BPE arrondissement amenities aggregation
     sirene.ts               # INSEE API SIRENE queries for nightlife/dining
     sirene-query.ts         # canonical SIRENE search query builder
     sirene-naf.ts           # NAF bucket definitions for nightlife
     validate-sirene-naf.ts  # NAF mapping validation
-    # planned: green-space.ts, bpe.ts
+    # planned: green-space.ts
 messages/
   fr.json                   # French UI strings
   en.json                   # English UI strings
@@ -542,7 +545,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 ### Phase 1C: Medium-risk Dimensions
 
 1. [x] Noise parser
-2. BPE amenities parser
+2. [x] BPE amenities parser
 3. Validate drift/coverage against prior snapshot
 4. Commit refreshed snapshot
 
@@ -606,6 +609,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 - SIRENE: https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/
 - SIRENE API: https://api.insee.fr/entreprises/sirene/V3.11
 - BPE amenities: https://www.data.gouv.fr/fr/datasets/base-permanente-des-equipements-1/
+- BPE parser source (current implementation): https://public.opendatasoft.com/explore/dataset/buildingref-france-bpe-all-millesime/
 - Green spaces: https://opendata.paris.fr/explore/dataset/espaces_verts/
 - Noise: https://www.data.gouv.fr/fr/datasets/bruit-routier-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journee-complete/
 - Arrondissement boundaries: https://opendata.paris.fr/explore/dataset/arrondissements/
