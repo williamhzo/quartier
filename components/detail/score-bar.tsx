@@ -3,10 +3,11 @@ import { cn } from "@/lib/utils";
 type Props = {
   score: number | null;
   label: string;
+  median?: number | null;
   className?: string;
 };
 
-export function ScoreBar({ score, label, className }: Props) {
+export function ScoreBar({ score, label, median, className }: Props) {
   const isNull = score == null;
   const rounded = isNull ? 0 : Math.round(score);
 
@@ -23,7 +24,7 @@ export function ScoreBar({ score, label, className }: Props) {
           {isNull ? "-" : rounded}
         </span>
       </div>
-      <div className="bg-secondary h-2 overflow-hidden rounded-full">
+      <div className="bg-secondary relative h-2 overflow-hidden rounded-full">
         <div
           className={cn(
             "h-full rounded-full transition-[width]",
@@ -31,6 +32,12 @@ export function ScoreBar({ score, label, className }: Props) {
           )}
           style={{ width: isNull ? "100%" : `${rounded}%` }}
         />
+        {median != null && (
+          <div
+            className="absolute top-0 h-full w-0.5 bg-foreground/25"
+            style={{ left: `${Math.round(median)}%` }}
+          />
+        )}
       </div>
     </div>
   );

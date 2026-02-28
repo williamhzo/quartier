@@ -8,6 +8,7 @@ import { ScoreBar } from "@/components/detail/score-bar";
 import { ScoreOverview } from "@/components/detail/score-overview";
 import { DimensionSection } from "@/components/detail/dimension-section";
 import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
+import { rankByDimension, dimensionMedian } from "@/lib/scoring";
 import { Link } from "@/i18n/navigation";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
 
@@ -112,13 +113,21 @@ function PanelContent({
       </div>
 
       <div className="space-y-3">
-        {DIMENSION_KEYS.map((key) => (
-          <DimensionSection
-            key={key}
-            dimensionKey={key as DimensionKey}
-            arrondissement={arrondissement}
-          />
-        ))}
+        {DIMENSION_KEYS.map((key) => {
+          const dimRanks = rankByDimension(allArrondissements, key as DimensionKey);
+          const dimMedian = dimensionMedian(allArrondissements, key as DimensionKey);
+          const entry = dimRanks.get(arrondissement.number);
+          return (
+            <DimensionSection
+              key={key}
+              dimensionKey={key as DimensionKey}
+              arrondissement={arrondissement}
+              rank={entry?.rank}
+              total={dimRanks.size}
+              median={dimMedian}
+            />
+          );
+        })}
       </div>
 
       <div className="mt-4 border-t pt-4">

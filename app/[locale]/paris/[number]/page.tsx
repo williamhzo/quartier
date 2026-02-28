@@ -4,7 +4,12 @@ import { loadArrondissements } from "@/lib/data";
 import { loadBoundaries, loadSeine } from "@/lib/geo";
 import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
 import { EQUAL_WEIGHTS } from "@/lib/personas";
-import { computeComposite, rankByComposite } from "@/lib/scoring";
+import {
+  computeComposite,
+  rankByComposite,
+  rankByDimension,
+  dimensionMedian,
+} from "@/lib/scoring";
 import { Badge } from "@/components/ui/badge";
 import { DimensionSection } from "@/components/detail/dimension-section";
 import { MiniMap } from "@/components/detail/mini-map";
@@ -131,13 +136,21 @@ export default async function DetailPage({ params }: Props) {
         />
       </div>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {DIMENSION_KEYS.map((key) => (
-          <DimensionSection
-            key={key}
-            dimensionKey={key}
-            arrondissement={arrondissement}
-          />
-        ))}
+        {DIMENSION_KEYS.map((key) => {
+          const dimRanks = rankByDimension(data, key);
+          const dimMedian = dimensionMedian(data, key);
+          const entry = dimRanks.get(arrondissement.number);
+          return (
+            <DimensionSection
+              key={key}
+              dimensionKey={key}
+              arrondissement={arrondissement}
+              rank={entry?.rank}
+              total={dimRanks.size}
+              median={dimMedian}
+            />
+          );
+        })}
       </div>
     </div>
   );

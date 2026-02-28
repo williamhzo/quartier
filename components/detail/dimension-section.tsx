@@ -11,9 +11,18 @@ import type { Arrondissement, DimensionKey } from "@/lib/types";
 type Props = {
   dimensionKey: DimensionKey;
   arrondissement: Arrondissement;
+  rank?: number;
+  total?: number;
+  median?: number | null;
 };
 
-export function DimensionSection({ dimensionKey, arrondissement }: Props) {
+export function DimensionSection({
+  dimensionKey,
+  arrondissement,
+  rank,
+  total,
+  median,
+}: Props) {
   const t = useTranslations();
   const score = arrondissement.scores[dimensionKey];
   const dim = arrondissement.dimensions[dimensionKey];
@@ -21,12 +30,19 @@ export function DimensionSection({ dimensionKey, arrondissement }: Props) {
   return (
     <Card className={cn(!dim && "opacity-60")}>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base">
-          {t(`dimensions.${dimensionKey}`)}
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-base">
+            {t(`dimensions.${dimensionKey}`)}
+          </CardTitle>
+          {rank != null && total != null && (
+            <span className="text-muted-foreground text-xs tabular-nums">
+              {t("detail.dimensionRank", { rank, total })}
+            </span>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <ScoreBar score={score} label={t("detail.scores")} />
+        <ScoreBar score={score} label={t("detail.scores")} median={median} />
         {dim ? (
           <>
             <RawValues dimensionKey={dimensionKey} data={dim} />
