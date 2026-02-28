@@ -5,7 +5,7 @@ import { BarChart3 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ScoreBar } from "./score-bar";
-import { CrimeChart } from "./crime-chart";
+import { SubtypeChart } from "./subtype-chart";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
 
 type Props = {
@@ -14,6 +14,7 @@ type Props = {
   rank?: number;
   total?: number;
   median?: number | null;
+  compact?: boolean;
 };
 
 export function DimensionSection({
@@ -22,10 +23,12 @@ export function DimensionSection({
   rank,
   total,
   median,
+  compact,
 }: Props) {
   const t = useTranslations();
   const score = arrondissement.scores[dimensionKey];
   const dim = arrondissement.dimensions[dimensionKey];
+  const subtypeItems = getSubtypeItems(dimensionKey, dim, t);
 
   return (
     <Card className={cn(!dim && "opacity-60")}>
@@ -46,15 +49,9 @@ export function DimensionSection({
         {dim ? (
           <>
             <RawValues dimensionKey={dimensionKey} data={dim} />
-            {dimensionKey === "safety" &&
-              "categories" in dim &&
-              dim.categories && (
-                <CrimeChart
-                  categories={
-                    (dim as { categories: Record<string, number> }).categories
-                  }
-                />
-              )}
+            {subtypeItems && (
+              <SubtypeChart items={subtypeItems} compact={compact} />
+            )}
           </>
         ) : (
           <div className="flex flex-col items-center justify-center rounded-md border border-dashed py-6">
@@ -65,6 +62,51 @@ export function DimensionSection({
       </CardContent>
     </Card>
   );
+}
+
+function getSubtypeItems(
+  key: DimensionKey,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dim: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  t: any,
+): Record<string, number> | null {
+  if (!dim) return null;
+  switch (key) {
+    case "safety":
+      return dim.categories ?? null;
+    case "culture":
+      if (!dim.by_type) return null;
+      return {
+        [t("detail.culture.cinemas")]: dim.by_type.cinemas,
+        [t("detail.culture.libraries")]: dim.by_type.libraries,
+        [t("detail.culture.heritage")]: dim.by_type.heritage,
+        [t("detail.culture.livePerformanceVenues")]: dim.by_type.livePerformanceVenues,
+        [t("detail.culture.archives")]: dim.by_type.archives,
+        [t("detail.culture.museums")]: dim.by_type.museums,
+      };
+    case "amenities":
+      return {
+        [t("detail.amenities.pharmacies")]: dim.pharmacies,
+        [t("detail.amenities.doctors")]: dim.doctors,
+        [t("detail.amenities.schools")]: dim.schools,
+        [t("detail.amenities.gyms")]: dim.gyms,
+        [t("detail.amenities.cinemas")]: dim.cinemas,
+      };
+    case "sports":
+      if (!dim.by_type) return null;
+      return {
+        [t("detail.sports.fitness")]: dim.by_type.fitness,
+        [t("detail.sports.tennis")]: dim.by_type.tennis,
+        [t("detail.sports.swimming")]: dim.by_type.swimming,
+        [t("detail.sports.multisport")]: dim.by_type.multisport,
+        [t("detail.sports.combat")]: dim.by_type.combat,
+        [t("detail.sports.athletics")]: dim.by_type.athletics,
+        [t("detail.sports.teamSports")]: dim.by_type.team_sports,
+      };
+    default:
+      return null;
+  }
 }
 
 function RawValues({

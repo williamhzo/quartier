@@ -10,7 +10,9 @@ import {
 } from "@/components/ui/chart";
 
 type Props = {
-  categories: Record<string, number>;
+  items: Record<string, number>;
+  maxItems?: number;
+  compact?: boolean;
 };
 
 function truncate(str: string, max: number) {
@@ -19,48 +21,50 @@ function truncate(str: string, max: number) {
 
 const chartConfig = {
   value: {
-    label: "Cases",
+    label: "Count",
     color: "var(--color-muted-foreground)",
   },
 } satisfies ChartConfig;
 
-export function CrimeChart({ categories }: Props) {
+export function SubtypeChart({ items, maxItems = 8, compact }: Props) {
   const t = useTranslations("detail");
 
-  const data = Object.entries(categories)
+  const data = Object.entries(items)
+    .filter(([, v]) => v > 0)
     .sort(([, a], [, b]) => b - a)
-    .slice(0, 8)
+    .slice(0, maxItems)
     .map(([name, value]) => ({
-      name: truncate(name, 25),
+      name: truncate(name, compact ? 18 : 25),
       value,
     }));
 
   if (data.length === 0) return null;
 
+  const height = compact ? Math.max(120, data.length * 24) : Math.max(160, data.length * 36);
+
   return (
     <div className="space-y-2">
       <h3 className="text-muted-foreground text-sm font-medium">
-        {t("crimeBreakdown")}
+        {t("breakdown")}
       </h3>
       <ChartContainer
         config={chartConfig}
-        className="aspect-auto h-[300px] w-full"
+        className="w-full"
+        style={{ height }}
       >
         <BarChart data={data} layout="vertical" margin={{ left: 8 }}>
           <XAxis type="number" />
           <YAxis
             type="category"
             dataKey="name"
-            width={160}
-            tick={{ fontSize: 11 }}
+            width={compact ? 100 : 160}
+            tick={{ fontSize: compact ? 10 : 11 }}
           />
           <ChartTooltip
             content={
               <ChartTooltipContent
                 hideLabel
-                formatter={(value) =>
-                  `${Number(value).toLocaleString("fr-FR")} ${t("cases")}`
-                }
+                formatter={(value) => Number(value).toLocaleString("fr-FR")}
               />
             }
           />
