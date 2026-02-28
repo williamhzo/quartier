@@ -32,12 +32,12 @@ Open [localhost:3000](http://localhost:3000). That's it.
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
-| `bun dev` | Dev server |
-| `bun run build` | Production build |
-| `bun run lint` | ESLint |
-| `bun run format` | Prettier |
+| Command              | What it does                      |
+| -------------------- | --------------------------------- |
+| `bun dev`            | Dev server                        |
+| `bun run build`      | Production build                  |
+| `bun run lint`       | ESLint                            |
+| `bun run format`     | Prettier                          |
 | `bun run data:build` | Rebuild data from source datasets |
 
 ## Fork it
@@ -77,6 +77,8 @@ Contributions welcome. Bug reports, new data dimensions, UI improvements, transl
 5. Open a PR
 
 If you're adding a new data dimension, open an issue first so we can discuss the data source and schema before you write a parser.
+
+See ya!
 
 ## License
 
