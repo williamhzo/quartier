@@ -12,12 +12,13 @@ export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "leaderboard" });
 
-  const languages = Object.fromEntries(
+  const languages: Record<string, string> = Object.fromEntries(
     routing.locales.map((l) => [l, `https://quartier.sh/${l}/leaderboard`]),
   );
+  languages["x-default"] = `https://quartier.sh/${routing.defaultLocale}/leaderboard`;
 
   return {
-    title: `${t("title")} - quartier`,
+    title: t("title"),
     description: t("description"),
     alternates: {
       canonical: `https://quartier.sh/${locale}/leaderboard`,

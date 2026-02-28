@@ -17,15 +17,16 @@ export async function generateMetadata({ params, searchParams }: Props) {
   const { arr } = await searchParamsCache.parse(searchParams);
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  const languages = Object.fromEntries(
+  const languages: Record<string, string> = Object.fromEntries(
     routing.locales.map((l) => [l, `https://quartier.sh/${l}`]),
   );
+  languages["x-default"] = `https://quartier.sh/${routing.defaultLocale}`;
 
   if (arr != null && arr >= 1 && arr <= 20) {
     const name = arrondissementName(arr, locale);
     const title = `${name} - quartier`;
     return {
-      title,
+      title: { absolute: title },
       alternates: { canonical: `https://quartier.sh/${locale}`, languages },
       openGraph: {
         title,
