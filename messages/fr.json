@@ -110,6 +110,7 @@
     "perKm2": "par km²",
     "na": "N/A",
     "noData": "Données pas encore disponibles",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "close": "Fermer"
   }
 }
