@@ -176,7 +176,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 ### Current implementation snapshot (as of 2026-02-28)
 
-- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `greenSpace`, `noise`, `amenities`, `culture`
+- `DATA_CONFIG.enabledDimensions`: `housing`, `income`, `safety`, `transport`, `greenSpace`, `noise`, `amenities`, `culture`, `sports`
 - `scripts/build-data.ts` currently emits production artifacts for:
   - base fields (code/number/name/population/area)
   - housing (DVF)
@@ -188,15 +188,17 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
   - noise (Ville de Paris road-noise parser enabled)
   - amenities (BPE parser enabled)
   - culture (BPE cultural-building parser enabled; pinned codebook v2 with six cultural categories)
-  - sports (Data ES parser integrated; populated only when `sports` is enabled in config)
+  - sports (Data ES parser integrated and enabled in current snapshot)
   - normalized scores for enabled dimensions
 - `scripts/data-refresh.ts` supports:
   - SIRENE nightlife snapshot refresh (`--dimensions=nightlife`)
   - BPE amenities/culture cache refresh (`--dimensions=amenities` or `--dimensions=culture`)
-- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, culture `20/20`, nightlife `0/20`, sports `0/20` (nightlife/sports remain disabled in `enabledDimensions`)
+- Data scripts now emit structured logs (`[data:build]` / `[data:refresh]`) including run mode, source/cache context, per-step progress, and full warning lines.
+- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, culture `20/20`, sports `20/20`, nightlife `0/20` (nightlife remains disabled in `enabledDimensions`)
 - Latest stability validation (2026-02-28):
   - `bun run data:build --offline`: completed with 6 warnings (`SSMSI nombre`, 2 non-polygon green-space features skipped, and 4 zero-count culture buckets in cached BPE payload)
-  - `bun run data:build` requires network access for enabled dimensions whose caches are missing/stale (including nightlife/sports when enabled); in restricted environments this can fail before refresh
+  - Sports Data ES aggregation now maps all grouped rows in the current cache (`sports_rows_matched: 270`, `sports_rows_unmapped_family: 0`)
+  - `bun run data:build` requires network access for enabled dimensions whose caches are missing/stale (including nightlife when enabled); in restricted environments this can fail before refresh
   - Offline preflight now verifies query-specific SIRENE cache readiness per arrondissement when `nightlife` is enabled (first page required for all 20 communes)
 
 ### Manual refresh commands
@@ -586,7 +588,7 @@ data/
 scripts/
   data-config.ts            # pinned source vintages + enabled dimensions
   build-data.ts             # orchestrator: download, parse, aggregate, output JSON
-  data-refresh.ts           # refresh utility for SIRENE nightlife snapshots
+  data-refresh.ts           # refresh utility for SIRENE nightlife + BPE cache snapshots
   dry-run-sirene-queries.ts # inspect generated SIRENE query URLs
   validate-sirene-naf.ts    # validate configured NAF bucket mapping
   sources/
@@ -670,8 +672,8 @@ Built on shadcn/ui (radix-nova preset) with editorial design refinements applied
 1. [x] Add `sports` dimension key across types, scoring, persona weights, and i18n labels
 2. [x] Implement Data ES parser in `scripts/sources/sports.ts` (OpenDataSoft v2.1 API, filter `dep_code=75`, aggregate by `new_code` + `equip_type_famille`)
 3. [x] Pin equipment-family-to-bucket mapping (fitness, tennis, swimming, multisport, combat, athletics, team_sports)
-4. [ ] Integrate into build pipeline (`build-data.ts`), add to `enabledDimensions` (parser wiring complete; `sports` still disabled in `enabledDimensions` pending snapshot validation)
-5. [ ] Regenerate snapshots and validate coverage/drift gates
+4. [x] Integrate into build pipeline (`build-data.ts`), add to `enabledDimensions`
+5. [x] Regenerate snapshots and validate coverage/drift gates
 
 ### Phase 1G: Post-Culture Follow-ups
 
