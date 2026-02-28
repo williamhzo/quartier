@@ -68,7 +68,7 @@ export default async function DetailPage({ params }: Props) {
           <ArrowLeft className="size-4" />
           {t("detail.backToMap")}
         </Link>
-        <h1 className="mt-4 text-2xl font-semibold">
+        <h1 className="mt-4 text-balance text-2xl font-semibold">
           {formatArrondissement(Number(number))}
         </h1>
         <p className="text-muted-foreground mt-2">{t("common.na")}</p>
@@ -100,7 +100,7 @@ export default async function DetailPage({ params }: Props) {
         {t("detail.backToMap")}
       </Link>
       <div className="mt-4 flex items-center gap-4">
-        <h1 className="text-2xl font-semibold">
+        <h1 className="text-balance text-2xl font-semibold">
           {formatArrondissement(arrondissement.number)}
         </h1>
         <Badge variant="secondary" className="text-base">

@@ -19,8 +19,8 @@ export default function ErrorPage({ error, reset }: Props) {
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
-      <p className="text-muted-foreground mt-2 max-w-md text-sm">
+      <h1 className="text-balance text-2xl font-semibold">{t("title")}</h1>
+      <p className="text-muted-foreground mt-2 max-w-md text-pretty text-sm">
         {t("description")}
       </p>
       <div className="mt-6 flex gap-3">

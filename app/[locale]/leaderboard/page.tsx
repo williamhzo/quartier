@@ -26,8 +26,8 @@ function LeaderboardPageContent({
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold">{t("title")}</h1>
-        <p className="text-muted-foreground mt-1">{t("description")}</p>
+        <h1 className="text-balance text-2xl font-semibold">{t("title")}</h1>
+        <p className="text-muted-foreground mt-1 text-pretty">{t("description")}</p>
       </div>
       <LeaderboardTable data={data} />
     </div>

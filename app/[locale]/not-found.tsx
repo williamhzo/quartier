@@ -8,8 +8,8 @@ export default function NotFoundPage() {
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
       <p className="text-muted-foreground text-sm font-medium">404</p>
-      <h1 className="mt-2 text-2xl font-semibold">{t("title")}</h1>
-      <p className="text-muted-foreground mt-2 max-w-md text-sm">
+      <h1 className="mt-2 text-balance text-2xl font-semibold">{t("title")}</h1>
+      <p className="text-muted-foreground mt-2 max-w-md text-pretty text-sm">
         {t("description")}
       </p>
       <div className="mt-6 flex gap-3">
