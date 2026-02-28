@@ -32,7 +32,7 @@ export function ShareButton({
       variant="ghost"
       size={size}
       onClick={handleCopy}
-      title={copied ? t("copied") : t("share")}
+      aria-label={copied ? t("copied") : t("share")}
     >
       {copied ? <Check className="size-4" /> : <LinkIcon className="size-4" />}
     </Button>

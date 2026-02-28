@@ -23,7 +23,7 @@ export function LocaleSwitcher() {
           ) : (
             <button
               onClick={() => switchLocale(l)}
-              className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+              className="text-muted-foreground hover:text-foreground cursor-pointer px-1 py-1 transition-colors"
             >
               {l}
             </button>
