@@ -73,11 +73,11 @@ export function LeaderboardTable({ data }: Props) {
       <div className="overflow-clip rounded-lg border">
         <Table>
           <TableHeader>
-            <TableRow className="bg-muted hover:bg-muted">
-              <TableHead className="bg-muted sticky left-0 z-10 w-12 text-center">
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="bg-background sticky left-0 z-10 w-12 border-b text-center">
                 {t("leaderboard.rank")}
               </TableHead>
-              <TableHead className="bg-muted sticky left-12 z-10 border-r">
+              <TableHead className="bg-background sticky left-12 z-10 border-r border-b">
                 <SortButton
                   active={sortKey === "number"}
                   asc={sortAsc}
@@ -137,12 +137,12 @@ export function LeaderboardTable({ data }: Props) {
                 </TableCell>
               </TableRow>
             ) : (
-              sorted.map((a) => (
-                <TableRow key={a.code}>
-                  <TableCell className="bg-background sticky left-0 z-10 text-center font-mono text-xs">
+              sorted.map((a, i) => (
+                <TableRow key={a.code} className={cn(i % 2 === 1 && "bg-muted/30")}>
+                  <TableCell className={cn("sticky left-0 z-10 text-center font-mono text-xs", i % 2 === 1 ? "bg-muted/30" : "bg-background")}>
                     <RankBadge rank={a.rank} />
                   </TableCell>
-                  <TableCell className="bg-background sticky left-12 z-10 border-r font-medium">
+                  <TableCell className={cn("sticky left-12 z-10 border-r font-medium", i % 2 === 1 ? "bg-muted/30" : "bg-background")}>
                     <Link
                       href={`/paris/${a.number}`}
                       className="hover:text-primary transition-colors hover:underline"
@@ -156,7 +156,7 @@ export function LeaderboardTable({ data }: Props) {
                       sortKey === "composite" && colHighlight,
                     )}
                   >
-                    <Badge variant={a.rank <= 3 ? "default" : "secondary"}>
+                    <Badge variant={a.rank <= 3 ? "default" : "secondary"} className="font-mono">
                       {Math.round(a.composite)}
                     </Badge>
                   </TableCell>
