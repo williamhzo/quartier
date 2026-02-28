@@ -34,13 +34,13 @@ export function SubtypeChart({ items, maxItems = 8, compact }: Props) {
     .sort(([, a], [, b]) => b - a)
     .slice(0, maxItems)
     .map(([name, value]) => ({
-      name: truncate(name, compact ? 18 : 25),
+      name: truncate(name, compact ? 22 : 25),
       value,
     }));
 
   if (data.length === 0) return null;
 
-  const height = compact ? Math.max(120, data.length * 24) : Math.max(160, data.length * 36);
+  const height = compact ? Math.max(120, data.length * 28) : Math.max(160, data.length * 36);
 
   return (
     <div className="space-y-2">
@@ -57,7 +57,7 @@ export function SubtypeChart({ items, maxItems = 8, compact }: Props) {
           <YAxis
             type="category"
             dataKey="name"
-            width={compact ? 100 : 160}
+            width={compact ? 120 : 160}
             tick={{ fontSize: compact ? 10 : 11 }}
           />
           <ChartTooltip
