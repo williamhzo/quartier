@@ -110,8 +110,32 @@ export default async function DetailPage({ params }: Props) {
     ? { longitude: geomXY.lon, latitude: geomXY.lat }
     : { longitude: 2.3488, latitude: 48.8566 };
 
+  const label = formatArrondissement(arrondissement.number, locale);
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "quartier",
+        item: `https://quartier.sh/${locale}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: label,
+        item: `https://quartier.sh/${locale}/paris/${arrondissement.number}`,
+      },
+    ],
+  };
+
   return (
     <div className="mx-auto max-w-4xl px-4 pt-12 pb-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Link
         href="/"
         className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm transition-colors"
