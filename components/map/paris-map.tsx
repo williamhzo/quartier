@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Map, {
   Layer,
   Source,
@@ -122,6 +128,13 @@ export function ParisMap({
         : null,
     [ranked, selectedNumber],
   );
+
+  const lastArrondissementRef = useRef(selectedArrondissement);
+  if (selectedArrondissement) {
+    lastArrondissementRef.current = selectedArrondissement;
+  }
+  const displayArrondissement =
+    selectedArrondissement ?? lastArrondissementRef.current ?? ranked[0];
 
   const updateTooltip = useCallback(
     (num: number | null, x: number, y: number) => {
@@ -403,15 +416,14 @@ export function ParisMap({
         }
       />
 
-      {selectedArrondissement && (
-        <MapPanel
-          arrondissement={selectedArrondissement}
-          allArrondissements={arrondissements}
-          composite={selectedArrondissement.composite}
-          rank={selectedArrondissement.rank}
-          onClose={closePanel}
-        />
-      )}
+      <MapPanel
+        arrondissement={displayArrondissement}
+        allArrondissements={arrondissements}
+        composite={displayArrondissement.composite}
+        rank={displayArrondissement.rank}
+        open={selectedArrondissement != null}
+        onClose={closePanel}
+      />
     </div>
   );
 }

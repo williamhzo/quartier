@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Info } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LocaleSwitcher } from "./locale-switcher";
 import { AboutDialog } from "./about-dialog";
@@ -15,13 +16,13 @@ export function Nav() {
   ];
 
   return (
-    <nav className="flex h-14 items-center justify-between border-b border-border/40 px-4">
-      <div className="flex items-center gap-6">
+    <nav className="flex h-14 items-center justify-between border-b border-border/40 px-3 md:px-4">
+      <div className="flex items-center gap-3 md:gap-6">
         <Link href="/" className="flex items-baseline gap-0.5 text-lg font-semibold tracking-[-0.04em]">
           {t("title")}
           <span className="text-muted-foreground font-mono text-sm">.sh</span>
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -37,7 +38,8 @@ export function Nav() {
           ))}
           <AboutDialog>
             <button className="text-muted-foreground hover:text-foreground cursor-pointer text-sm tracking-wide transition-colors">
-              {t("about")}
+              <Info className="size-4 md:hidden" />
+              <span className="hidden md:inline">{t("about")}</span>
             </button>
           </AboutDialog>
         </div>

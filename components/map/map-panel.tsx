@@ -3,6 +3,11 @@
 import { useTranslations, useLocale } from "next-intl";
 import { ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { ShareButton } from "@/components/share-button";
 import { ArrondissementLabel } from "@/components/arrondissement-label";
 import { ScoreBar } from "@/components/detail/score-bar";
@@ -12,46 +17,62 @@ import { DIMENSION_KEYS } from "@/lib/arrondissements";
 import { rankByDimension, dimensionMedian } from "@/lib/scoring";
 import { Link } from "@/i18n/navigation";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 type Props = {
   arrondissement: Arrondissement & { composite: number; rank: number };
   allArrondissements: Arrondissement[];
   composite: number;
   rank: number;
+  open: boolean;
   onClose: () => void;
 };
 
-export function MapPanel({ arrondissement, allArrondissements, composite, rank, onClose }: Props) {
+export function MapPanel({ arrondissement, allArrondissements, composite, rank, open, onClose }: Props) {
   const num = arrondissement.number;
 
   return (
     <>
       {/* Desktop: side panel */}
-      <div className="bg-background motion-safe:animate-in motion-safe:slide-in-from-right-full absolute top-0 right-0 z-20 hidden h-full overflow-y-auto border-l shadow-lg md:block md:w-[40vw] md:max-w-lg">
-        <PanelContent
-          num={num}
-          composite={composite}
-          rank={rank}
-          arrondissement={arrondissement}
-          allArrondissements={allArrondissements}
-          onClose={onClose}
-        />
-      </div>
-
-      {/* Mobile: bottom sheet */}
-      <div className="bg-background motion-safe:animate-in motion-safe:slide-in-from-bottom-full absolute right-0 bottom-0 left-0 z-20 max-h-[85vh] overflow-y-auto overscroll-contain rounded-t-xl border-t pb-[env(safe-area-inset-bottom)] shadow-lg md:hidden">
-        <div className="sticky top-0 z-10 flex justify-center pt-3 pb-1">
-          <div className="bg-muted-foreground/30 h-1.5 w-12 rounded-full" />
+      {open && (
+        <div className="bg-background motion-safe:animate-in motion-safe:slide-in-from-right-full absolute top-0 right-0 z-20 hidden h-full overflow-y-auto border-l shadow-lg md:block md:w-[40vw] md:max-w-lg">
+          <PanelContent
+            num={num}
+            composite={composite}
+            rank={rank}
+            arrondissement={arrondissement}
+            allArrondissements={allArrondissements}
+            onClose={onClose}
+          />
         </div>
-        <PanelContent
-          num={num}
-          composite={composite}
-          rank={rank}
-          arrondissement={arrondissement}
-          allArrondissements={allArrondissements}
-          onClose={onClose}
-        />
-      </div>
+      )}
+
+      {/* Mobile: vaul drawer with swipe-to-dismiss */}
+      <Drawer
+        open={open}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) onClose();
+        }}
+        modal={false}
+      >
+        <DrawerContent className="max-h-[85vh] pb-[env(safe-area-inset-bottom)] md:hidden">
+          <VisuallyHidden>
+            <DrawerTitle>
+              <ArrondissementLabel number={num} locale="fr" />
+            </DrawerTitle>
+          </VisuallyHidden>
+          <div className="overflow-y-auto overscroll-contain">
+            <PanelContent
+              num={num}
+              composite={composite}
+              rank={rank}
+              arrondissement={arrondissement}
+              allArrondissements={allArrondissements}
+              onClose={onClose}
+            />
+          </div>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }
