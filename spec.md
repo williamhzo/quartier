@@ -4,7 +4,7 @@ quartier.sh
 
 ## Overview
 
-Interactive tool for comparing Paris's 20 arrondissements across 9 data dimensions: housing prices, income, safety, transport, nightlife, green space, noise, amenities, and culture. Map-first, mobile-first, bilingual (FR/EN).
+Interactive tool for comparing Paris's 20 arrondissements across 10 data dimensions: housing prices, income, safety, transport, nightlife, green space, noise, amenities, culture, and sports facilities. Map-first, mobile-first, bilingual (FR/EN).
 
 **Target users:** Parisians exploring their city, people moving to/within Paris, tourists choosing where to stay, business owners scouting locations.
 
@@ -54,7 +54,8 @@ All data is pre-computed per arrondissement and shipped as static JSON.
 | 6   | Green space           | opendata.paris.fr                       | GeoJSON polygons         | m2 of green space per resident                           | **Spatial: polygon intersection.** Parks can span arrondissements. Clip with turf.js `intersect()`, compute area with `turf.area()`.                                                                                                                                                              |
 | 7   | Noise                 | Bruitparif / data.gouv.fr               | CSV                      | % residents exposed above Lden thresholds                | Straightforward. Already per arrondissement.                                                                                                                                                                                                                                                      |
 | 8   | Amenities             | BPE (INSEE)                             | CSV                      | Pharmacies, doctors, schools, gyms, cinemas per km2      | Filter by commune codes 75101-75120. Count equipment by type code.                                                                                                                                                                                                                                |
-| 9   | Culture               | BPE (INSEE)                             | CSV                      | Cultural buildings per km2 (+ per 10k residents helper)  | Reuse BPE arrondissement aggregation (`com_arm_code`, `equipment_code`) with pinned culture codebook v1 (`cinemas`: `F303`). Hard-fail if configured mapping drifts from pinned codebook.                                                                                                     |
+| 9   | Culture               | BPE (INSEE)                             | CSV                      | Cultural buildings per km2 (+ per 10k residents helper)  | Reuse BPE arrondissement aggregation (`com_arm_code`, `equipment_code`) with pinned culture codebook v2 (`cinemas` `F303`, `libraries` `F305`, `heritage` `F307`, `livePerformanceVenues` `F312`, `archives` `F314`, `museums` `F315`). Hard-fail if configured mapping drifts from pinned codebook. |
+| 10  | Sports facilities     | Data ES (Ministry of Sports)            | JSON via OpenDataSoft API | Facilities per km2, facilities per 10k residents, breakdown by type | Query OpenDataSoft v2.1 API filtered by `dep_code=75`. Join on `new_code` (commune code 75101..75120). Aggregate `equip_type_famille` counts per arrondissement. No auth required. ~3,350 equipment records for Paris. |
 
 ### Culture Dimension Feasibility (2026-02-28)
 
@@ -62,8 +63,17 @@ All data is pre-computed per arrondissement and shipped as static JSON.
 - **Dataset evidence:** cached BPE response currently has `431` grouped rows for Paris (`20` arrondissements) with full cinema signal (`F303` present for `20/20` arrondissements, counts `1..15`).
 - **Operational risk:** low to medium. Main risk is codebook correctness (mapping the right BPE equipment codes to "cultural buildings"), not data transport or performance.
 - **Data caveat:** BPE vintage is currently pinned to 2016, so this dimension will be geographically useful but not real-time.
+- **Current caveat (post-v2 codebook):** cached BPE payload currently lacks non-cinema cultural categories, so build emits explicit warnings for zero-count buckets until the BPE cache is refreshed online.
 
-**Score direction:** All dimensions are scored so that higher = better for the resident. Housing uses affordability (cheap = high score). Safety uses inverse crime rate (low crime = high score). Noise uses inverse exposure (low noise = high score). Culture uses higher cultural-building availability = higher score. Persona weights control importance, not direction.
+### Sports Facilities Dimension Feasibility (2026-02-28)
+
+- **Doable with current pipeline architecture.** The Data ES API uses OpenDataSoft v2.1, the same API pattern already used for IDFM transport data. No auth required, no rate limiting concerns for a single Paris query.
+- **Dataset evidence:** API returns ~3,350 equipment records for `dep_code=75`, covering all 20 arrondissements (range: 25 in 3e to 467 in 16e). The `new_code` field produces commune codes `75101`-`75120`, mapping 1:1 to existing `PARIS_ARRONDISSEMENT_COMMUNES`.
+- **Equipment families (26 types for Paris):** fitness rooms (587), tennis courts (426), specialized halls (390), multisport halls (329), multisport courts/city-stades (205), team sport fields (168+102), combat/martial arts (147), swimming pools (117), athletics (116), climbing walls (42), boules (64), skateparks (12), and others.
+- **Operational risk:** low. Straightforward count aggregation by commune code and equipment family. No spatial processing needed (unlike green space). No auth needed (unlike SIRENE).
+- **Data quality:** dataset is updated daily by the Ministry of Sports. Much fresher than BPE (pinned 2016).
+
+**Score direction:** All dimensions are scored so that higher = better for the resident. Housing uses affordability (cheap = high score). Safety uses inverse crime rate (low crime = high score). Noise uses inverse exposure (low noise = high score). Culture uses higher cultural-building availability = higher score. Sports uses higher facility density = higher score. Persona weights control importance, not direction.
 
 ### v1 Dimension Rollout Order
 
@@ -74,6 +84,7 @@ Dimensions are implemented and shipped sequentially, not all-at-once.
 3. Culture (BPE cultural-building aggregation)
 4. Green space (polygon intersection)
 5. Nightlife (SIRENE API; highest operational risk)
+6. Sports facilities (Data ES API; low risk, no auth)
 
 At any intermediate milestone, missing dimensions are represented as `null` in data and excluded from composite scoring.
 
@@ -81,10 +92,10 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 
 | #   | Dimension       | Source                | Metric                                                              | Notes                                                                                                                      |
 | --- | --------------- | --------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| 10  | Air quality     | Airparif station data | Avg NO2/PM2.5                                                       | Only ~15-20 stations in Paris. Would need spatial interpolation (IDW or nearest-neighbor) per arrondissement. Non-trivial. |
-| 11  | Velib density   | Velib GBFS            | Stations per km2, avg bike availability                             | Real-time GBFS API, no auth. Snapshot at build time. Point-in-polygon for station counts.                                  |
-| 12  | Political color | Election results      | Raw vote % per party from latest presidential + municipal elections | Commune-level election data on data.gouv.fr. Paris arrondissements have their own results.                                 |
-| 13  | Walkability     | Derived               | Composite of transport + amenity + green space density              | Meta-dimension computed from other scores. No new data source needed.                                                      |
+| 11  | Air quality     | Airparif station data | Avg NO2/PM2.5                                                       | Only ~15-20 stations in Paris. Would need spatial interpolation (IDW or nearest-neighbor) per arrondissement. Non-trivial. |
+| 12  | Velib density   | Velib GBFS            | Stations per km2, avg bike availability                             | Real-time GBFS API, no auth. Snapshot at build time. Point-in-polygon for station counts.                                  |
+| 13  | Political color | Election results      | Raw vote % per party from latest presidential + municipal elections | Commune-level election data on data.gouv.fr. Paris arrondissements have their own results.                                 |
+| 14  | Walkability     | Derived               | Composite of transport + amenity + green space density              | Meta-dimension computed from other scores. No new data source needed.                                                      |
 
 ## Data Pipeline
 
@@ -146,9 +157,15 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
       - Query aggregated BPE records by arrondissement (`com_arm_code`) and equipment code
       - Aggregate counts for pharmacies, doctors, schools, gyms, and cinemas
    i. BPE culture (implemented in `build-data.ts`, enabled when `culture` is in `enabledDimensions`):
-      - Reuse BPE aggregation and derive culture from pinned codebook v1 (`cinemas` = `F303`)
+      - Reuse BPE aggregation and derive culture from pinned codebook v2 (cinemas/libraries/heritage/live-performance/archives/museums)
       - Emit `cultural_buildings_total`, `cultural_buildings_per_km2`, `cultural_buildings_per_10k_residents`, and `by_type`
-      - Hard-fail if configured culture mapping drifts from pinned codebook (`bpe-culture-v1`)
+      - Hard-fail if configured culture mapping drifts from pinned codebook (`bpe-culture-v2`)
+   j. Data ES sports (planned for `build-data.ts`, enabled when `sports` is in `enabledDimensions`):
+      - Query OpenDataSoft v2.1 API filtered by `dep_code=75`
+      - Join on `new_code` (commune code) to arrondissements
+      - Aggregate equipment counts by `equip_type_famille` per arrondissement
+      - Map equipment families to pinned bucket mapping (fitness, tennis, swimming, multisport, combat, athletics, team_sports)
+      - Emit `facilities_total`, `facilities_per_km2`, `facilities_per_10k_residents`, and `by_type`
 5. Run data-quality gates (fail/warn policy)
 6. Normalize enabled dimensions to 0-100 and invert where needed
 7. Emit:
@@ -170,13 +187,13 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
   - greenSpace (polygon intersection parser integrated; populated only when `greenSpace` is enabled in config)
   - noise (Ville de Paris road-noise parser enabled)
   - amenities (BPE parser enabled)
-  - culture (BPE cultural-building parser enabled; pinned codebook v1 uses `F303`)
+  - culture (BPE cultural-building parser enabled; pinned codebook v2 with six cultural categories)
   - normalized scores for enabled dimensions
 - `scripts/data-refresh.ts` pre-warms/rebuilds cached SIRENE nightlife snapshots used by the build path
 - Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, culture `20/20`, nightlife `0/20` (nightlife remains disabled in `enabledDimensions`)
 - Latest stability validation (2026-02-28):
-  - `bun run data:build`: completed in ~16.7s with 2 warnings (`SSMSI nombre` + 2 non-polygon green-space features skipped)
-  - `bun run data:build --offline`: completed in ~16.3s with the same 2 warnings
+  - `bun run data:build --offline`: completed in ~16.3s with 7 warnings (`SSMSI nombre`, 2 non-polygon green-space features skipped, and 5 zero-count culture buckets in cached BPE payload)
+  - `bun run data:build` requires network access to refresh BPE payload when query markers are missing/stale; in restricted environments this can fail before refresh
   - Offline preflight now verifies query-specific SIRENE cache readiness per arrondissement when `nightlife` is enabled (first page required for all 20 communes)
 
 ### Manual refresh commands
@@ -272,7 +289,8 @@ type DimensionKey =
   | "greenSpace"
   | "noise"
   | "amenities"
-  | "culture";
+  | "culture"
+  | "sports";
 
 type Arrondissement = {
   code: string; // "75109"
@@ -325,6 +343,25 @@ type Arrondissement = {
       cultural_buildings_per_10k_residents: number;
       by_type: {
         cinemas: number;
+        libraries: number;
+        heritage: number;
+        livePerformanceVenues: number;
+        archives: number;
+        museums: number;
+      };
+    } | null;
+    sports: {
+      facilities_total: number;
+      facilities_per_km2: number;
+      facilities_per_10k_residents: number;
+      by_type: {
+        fitness: number;       // Salles de remise en forme
+        tennis: number;        // Courts de tennis
+        swimming: number;      // Bassins de natation
+        multisport: number;    // Salles + Plateaux multisports
+        combat: number;        // Salles de combat
+        athletics: number;     // Equipements d'athletisme
+        team_sports: number;   // Grands + Petits terrains de sports collectifs
       };
     } | null;
   };
@@ -413,6 +450,7 @@ Each persona defines default weights (0-100) per dimension. Weights are normaliz
 | Noise                 | 5         | 15     | 5       | 5        |
 | Amenities             | 0         | 15     | 5       | 10       |
 | Culture               | 10        | 10     | 20      | 10       |
+| Sports facilities     | 10        | 10     | 5       | 5        |
 
 Weight sliders for user customization are a future addition. v1 ships with preset-only selection via dropdown.
 
@@ -539,6 +577,7 @@ scripts/
     sirene-query.ts         # canonical SIRENE search query builder
     sirene-naf.ts           # NAF bucket definitions for nightlife
     validate-sirene-naf.ts  # NAF mapping validation
+    sports.ts               # Data ES sports facilities aggregation by arrondissement (planned)
 messages/
   fr.json                   # French UI strings
   en.json                   # English UI strings
@@ -591,10 +630,24 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 ### Phase 1E: Culture Dimension (BPE)
 
-1. [x] Freeze cultural equipment-code mapping against pinned BPE codebook (`bpe-culture-v1`: `cinemas` = `F303`)
+1. [x] Freeze cultural equipment-code mapping against pinned BPE codebook (`bpe-culture-v2`: `F303`, `F305`, `F307`, `F312`, `F314`, `F315`)
 2. [x] Add culture aggregation in build pipeline (`total`, `per_km2`, `per_10k_residents`, `by_type`)
 3. [x] Add `culture` dimension key across types, scoring, persona weights, and i18n labels
 4. [x] Regenerate snapshots and validate coverage/drift gates
+
+### Phase 1F: Sports Facilities Dimension (Data ES)
+
+1. [ ] Add `sports` dimension key across types, scoring, persona weights, and i18n labels
+2. [ ] Implement Data ES parser in `scripts/sources/sports.ts` (OpenDataSoft v2.1 API, filter `dep_code=75`, aggregate by `new_code` + `equip_type_famille`)
+3. [ ] Pin equipment-family-to-bucket mapping (fitness, tennis, swimming, multisport, combat, athletics, team_sports)
+4. [ ] Integrate into build pipeline (`build-data.ts`), add to `enabledDimensions`
+5. [ ] Regenerate snapshots and validate coverage/drift gates
+
+### Phase 1G: Post-Culture Follow-ups
+
+1. [ ] Refresh BPE cache online so non-cinema culture buckets populate in committed snapshots
+2. [ ] Enable nightlife in `enabledDimensions` after SIRENE cache/token validation
+3. [ ] Remove build-time dependency on Google Fonts network fetch (self-host local font files for app UI)
 
 ### Phase 2: Core Functionality
 
@@ -631,7 +684,7 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 ### Future
 
 1. Weight sliders (adjustable beyond persona presets)
-2. Stretch dimensions (air quality, Velib, political data, walkability)
+2. Stretch dimensions (air quality, Velib, political data, walkability, sports facility utilization rates)
 3. Compare view (side-by-side 2-4 arrondissements)
 4. Expand to all French communes (same architecture, more data)
 5. IRIS-level drill-down within arrondissements
@@ -649,9 +702,13 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 - SIRENE API: https://api.insee.fr/entreprises/sirene/V3.11
 - BPE amenities: https://www.data.gouv.fr/fr/datasets/base-permanente-des-equipements-1/
 - BPE parser source (current implementation): https://public.opendatasoft.com/explore/dataset/buildingref-france-bpe-all-millesime/
+- BPE equipment code list (authoritative): https://www.insee.fr/fr/statistiques/fichier/3232691/correspondance_sous_domaine_fonction_type_equipement_2023.htm
 - Green spaces: https://opendata.paris.fr/explore/dataset/espaces_verts/
 - Noise: https://www.data.gouv.fr/fr/datasets/bruit-routier-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journee-complete/
 - Arrondissement boundaries: https://opendata.paris.fr/explore/dataset/arrondissements/
+- Data ES (sports facilities): https://equipements.sports.gouv.fr/explore/assets/data-es/
+- Data ES API: https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records
+- Data ES on data.gouv.fr: https://www.data.gouv.fr/datasets/recensement-des-equipements-sportifs-espaces-et-sites-de-pratiques
 - Airparif: https://data-airparif-asso.opendata.arcgis.com/
 - Velib: https://www.velib-metropole.fr/donnees-open-data-gbfs-du-service-velib-metropole
 - Election results: https://www.data.gouv.fr/fr/datasets/elections-presidentielles-1965-2022-2eme-tour/
