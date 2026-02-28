@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import type { DimensionKey } from "@/lib/types";
 import { DIMENSION_KEYS } from "@/lib/arrondissements";
 
@@ -18,39 +22,32 @@ type Props = {
 
 export function DimensionSelect({ value, onChange }: Props) {
   const t = useTranslations("dimensions");
-  const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <button
-        onClick={() => setOpen(!open)}
+    <Popover>
+      <PopoverTrigger
         className={cn(
           "flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium backdrop-blur-sm transition-colors",
-          open
-            ? "bg-foreground text-background border-transparent"
-            : "bg-background/80 text-muted-foreground border-border/60",
+          "bg-background/80 text-muted-foreground border-border/60",
+          "data-[state=open]:bg-foreground data-[state=open]:text-background data-[state=open]:border-transparent",
         )}
       >
         <SlidersHorizontal className="size-3" />
         {t(value)}
-      </button>
-
-      {open && (
+      </PopoverTrigger>
+      <PopoverContent align="start" sideOffset={4} className="w-auto">
         <div className="flex flex-col items-start gap-1">
           {ALL_VALUES.map((key) => (
             <Chip
               key={key}
               label={t(key)}
               active={key === value}
-              onClick={() => {
-                onChange(key);
-                setOpen(false);
-              }}
+              onClick={() => onChange(key)}
             />
           ))}
         </div>
-      )}
-    </>
+      </PopoverContent>
+    </Popover>
   );
 }
 
