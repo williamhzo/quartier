@@ -100,7 +100,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 ## Data Pipeline
 
 **Primary build-time script** (`scripts/build-data.ts`), run manually (primary) or in CI (optional). Output is committed to the repo.
-**Supplemental refresh script** (`scripts/data-refresh.ts`) is used for SIRENE snapshot pulls and cache refreshes.
+**Supplemental refresh script** (`scripts/data-refresh.ts`) is used for SIRENE snapshot pulls and BPE cache refreshes.
 
 ### Operating model (v1)
 
@@ -160,7 +160,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
       - Reuse BPE aggregation and derive culture from pinned codebook v2 (cinemas/libraries/heritage/live-performance/archives/museums)
       - Emit `cultural_buildings_total`, `cultural_buildings_per_km2`, `cultural_buildings_per_10k_residents`, and `by_type`
       - Hard-fail if configured culture mapping drifts from pinned codebook (`bpe-culture-v2`)
-   j. Data ES sports (planned for `build-data.ts`, enabled when `sports` is in `enabledDimensions`):
+   j. Data ES sports (implemented in `build-data.ts`, populated when `sports` is in `enabledDimensions`):
       - Query OpenDataSoft v2.1 API filtered by `dep_code=75`
       - Join on `new_code` (commune code) to arrondissements
       - Aggregate equipment counts by `equip_type_famille` per arrondissement
@@ -188,12 +188,15 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
   - noise (Ville de Paris road-noise parser enabled)
   - amenities (BPE parser enabled)
   - culture (BPE cultural-building parser enabled; pinned codebook v2 with six cultural categories)
+  - sports (Data ES parser integrated; populated only when `sports` is enabled in config)
   - normalized scores for enabled dimensions
-- `scripts/data-refresh.ts` pre-warms/rebuilds cached SIRENE nightlife snapshots used by the build path
-- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, culture `20/20`, nightlife `0/20` (nightlife remains disabled in `enabledDimensions`)
+- `scripts/data-refresh.ts` supports:
+  - SIRENE nightlife snapshot refresh (`--dimensions=nightlife`)
+  - BPE amenities/culture cache refresh (`--dimensions=amenities` or `--dimensions=culture`)
+- Current coverage in `data/metadata.json`: housing `20/20`, income `20/20`, safety `20/20`, transport `20/20`, greenSpace `20/20`, noise `20/20`, amenities `20/20`, culture `20/20`, nightlife `0/20`, sports `0/20` (nightlife/sports remain disabled in `enabledDimensions`)
 - Latest stability validation (2026-02-28):
-  - `bun run data:build --offline`: completed in ~16.3s with 7 warnings (`SSMSI nombre`, 2 non-polygon green-space features skipped, and 5 zero-count culture buckets in cached BPE payload)
-  - `bun run data:build` requires network access to refresh BPE payload when query markers are missing/stale; in restricted environments this can fail before refresh
+  - `bun run data:build --offline`: completed with 6 warnings (`SSMSI nombre`, 2 non-polygon green-space features skipped, and 4 zero-count culture buckets in cached BPE payload)
+  - `bun run data:build` requires network access for enabled dimensions whose caches are missing/stale (including nightlife/sports when enabled); in restricted environments this can fail before refresh
   - Offline preflight now verifies query-specific SIRENE cache readiness per arrondissement when `nightlife` is enabled (first page required for all 20 communes)
 
 ### Manual refresh commands
@@ -202,6 +205,8 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 - `bun run data:build --offline` -- same build, but fail if cached INSEE dossier-complet archive or enabled-dimension raw snapshots are missing
 - `bun run data:refresh --dimensions=nightlife --all` -- refresh SIRENE nightlife raw snapshots for all arrondissements
 - `bun run data:refresh --dimensions=nightlife --offline --all` -- rebuild nightlife raw snapshots from cache only
+- `bun run data:refresh --dimensions=amenities` -- refresh BPE amenities/culture raw snapshot (online), and write query marker file used by offline drift checks
+- `bun run data:refresh --dimensions=amenities --offline` -- validate/reuse cached BPE payload offline and emit culture bucket totals + legacy-cache warnings
 - Offline guard: if `nightlife` is enabled, `data:build --offline` hard-fails when query-specific SIRENE cache `page-00000` is missing for any arrondissement (`75101`..`75120`)
 
 ### Dependencies for build script
@@ -402,7 +407,7 @@ type DataMetadata = {
   - Each preset adjusts dimension weights for composite score
 - Click arrondissement: wider drawer slides in (desktop: 384-448px) / taller bottom sheet slides up (mobile: 85vh)
   - URL updates to `?arr=N` via nuqs (`useQueryState` with `history: 'push'`)
-  - Shows composite score bar + all 9 dimension cards with scores and raw values
+  - Shows composite score bar, dot-strip score overview, and dimension cards with scores, raw values, rank badges, median markers, and subtype charts
   - "View full details" link at bottom navigates to `/paris/{number}` detail page
   - Escape key or close button dismisses the drawer and removes `?arr` from URL
   - Direct visit to `/?arr=9` hydrates from URL and opens drawer immediately
@@ -427,11 +432,15 @@ type DataMetadata = {
 
 - Shareable URL per arrondissement (e.g., `/en/paris/9`)
 - Small map showing the arrondissement highlighted
-- All dimensions displayed as sections with:
-  - Score (0-100) with visual bar/indicator
+- Dot-strip score overview: horizontal distribution rows for each dimension with data, showing all 20 arrondissements as small dots, the current one as a larger primary dot, a dashed median line, and per-dimension rank badge
+- Article-style dimension sections (border-t separators, no card chrome) with:
+  - Score bar with median tick marker
+  - Per-dimension rank badge in header (e.g. "#3 of 20")
   - Raw values
-  - Recharts mini-charts where relevant (phase 6: DVF price trend, crime evolution)
-- Composite score with breakdown of how each dimension contributes
+  - Generic subtype bar chart for dimensions with subcategories (safety categories, culture by_type, amenities counts, sports by_type)
+- Null dimensions (nightlife, sports) sorted to the end, not interleaved
+- Display typography: tight-tracked hero heading (text-display, 4xl/5xl)
+- Composite score badge + rank on a separate line below heading
 - Dynamic OG image via @vercel/og
 
 ### `/{locale}/compare` -- Side-by-Side (future)
@@ -592,7 +601,7 @@ scripts/
     sirene-query.ts         # canonical SIRENE search query builder
     sirene-naf.ts           # NAF bucket definitions for nightlife
     validate-sirene-naf.ts  # NAF mapping validation
-    sports.ts               # Data ES sports facilities aggregation by arrondissement (planned)
+    sports.ts               # Data ES sports facilities aggregation by arrondissement
 messages/
   fr.json                   # French UI strings
   en.json                   # English UI strings
@@ -607,7 +616,13 @@ messages/
 
 ## Design Approach
 
-Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until all functionality works. The warm editorial aesthetic (typography, color palette, spacing, personality) is a final polish pass, not a building concern.
+Built on shadcn/ui (radix-nova preset) with editorial design refinements applied:
+
+- **Typography:** `.text-display` (600 weight, -0.04em tracking, 0.95 line-height) for page heroes; `.text-headline` (600 weight, -0.02em, 1.1 line-height) for section heads. Nav brand uses tight tracking with `.sh` suffix in mono.
+- **Color:** Blue primary accent (France). Teal-navy palette reserved for map choropleth only. Warm background tint (`oklch(0.988 0.002 90)`) replaces pure white.
+- **Layout:** Detail page dimensions render as borderless article sections (border-t separators, no card chrome). Map panel keeps card wrappers. Cards use soft `border-border/50` instead of ring.
+- **Data viz:** Dot-strip score overview replaces radar chart (shows all 20 arrondissements per dimension as positioned dots with median line and rank). Generic subtype bar chart used for safety, culture, amenities, sports breakdowns.
+- **Leaderboard:** Transparent header with bottom border, alternating row tint (`bg-muted/30`), mono-spaced score badges.
 
 ## Phasing
 
@@ -653,14 +668,14 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 ### Phase 1F: Sports Facilities Dimension (Data ES)
 
 1. [x] Add `sports` dimension key across types, scoring, persona weights, and i18n labels
-2. [ ] Implement Data ES parser in `scripts/sources/sports.ts` (OpenDataSoft v2.1 API, filter `dep_code=75`, aggregate by `new_code` + `equip_type_famille`)
-3. [ ] Pin equipment-family-to-bucket mapping (fitness, tennis, swimming, multisport, combat, athletics, team_sports)
-4. [ ] Integrate into build pipeline (`build-data.ts`), add to `enabledDimensions`
+2. [x] Implement Data ES parser in `scripts/sources/sports.ts` (OpenDataSoft v2.1 API, filter `dep_code=75`, aggregate by `new_code` + `equip_type_famille`)
+3. [x] Pin equipment-family-to-bucket mapping (fitness, tennis, swimming, multisport, combat, athletics, team_sports)
+4. [ ] Integrate into build pipeline (`build-data.ts`), add to `enabledDimensions` (parser wiring complete; `sports` still disabled in `enabledDimensions` pending snapshot validation)
 5. [ ] Regenerate snapshots and validate coverage/drift gates
 
 ### Phase 1G: Post-Culture Follow-ups
 
-1. [ ] Refresh BPE cache online so non-cinema culture buckets populate in committed snapshots
+1. [ ] Refresh BPE cache online so non-cinema culture buckets populate in committed snapshots (refresh tooling + explicit legacy-cache warnings are implemented; online refresh still pending)
 2. [ ] Enable nightlife in `enabledDimensions` after SIRENE cache/token validation
 3. [ ] Remove build-time dependency on Google Fonts network fetch (self-host local font files for app UI)
 
@@ -695,6 +710,8 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 1. Recharts mini-charts on detail pages
 2. [x] Map styling: shared choropleth color module, warmer teal-navy palette, `#fafafa` background, IDF context fill, Seine river layer, zoom-interpolated labels, softer borders, selection glow, legend polish (responsive width, rounded bar, middle tick, selected score marker)
 3. [x] Loading/empty/error states: per-route error boundaries with shared ErrorCard, refined loading skeletons, dashed-border empty dimension placeholder with icon
+4. [x] Editorial design pass: warm background, display/headline typography, nav brand with `.sh`, softer card borders, leaderboard row tinting + mono scores
+5. [x] Data viz rethink: dot-strip score overview (replaces radar chart), per-dimension rank badges + median markers on score bars, generic subtype bar chart (replaces crime-only chart), null dimensions sorted to end
 
 ### Future
 
