@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { BarChart3 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ScoreBar } from "./score-bar";
@@ -40,7 +41,10 @@ export function DimensionSection({ dimensionKey, arrondissement }: Props) {
               )}
           </>
         ) : (
-          <p className="text-muted-foreground text-sm">{t("common.noData")}</p>
+          <div className="flex flex-col items-center justify-center rounded-md border border-dashed py-6">
+            <BarChart3 className="text-muted-foreground/50 mb-2 size-6" />
+            <p className="text-muted-foreground text-sm">{t("common.noData")}</p>
+          </div>
         )}
       </CardContent>
     </Card>
