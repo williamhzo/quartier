@@ -54,6 +54,7 @@ export function LeaderboardTable({ data }: Props) {
   }, [ranked, sortKey, sortAsc]);
 
   function toggleSort(key: SortKey) {
+    const nextAsc = sortKey === key ? !sortAsc : false;
     if (sortKey === key) {
       setSortAsc(!sortAsc);
     } else {

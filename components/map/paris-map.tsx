@@ -42,15 +42,19 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
   );
   const tooltipRef = useRef<HTMLDivElement>(null);
 
+  const closePanel = useCallback(() => {
+    setSelectedNumber(null);
+  }, [selectedNumber, setSelectedNumber]);
+
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape" && selectedNumber != null) {
-        setSelectedNumber(null);
+        closePanel();
       }
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [selectedNumber, setSelectedNumber]);
+  }, [selectedNumber, closePanel]);
 
   const weights = PERSONA_WEIGHTS[persona];
   const ranked = useMemo(
@@ -187,11 +191,14 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
       if (e.features && e.features.length > 0) {
         const num = e.features[0].properties?.number;
         setSelectedNumber(num ?? null);
+        if (num != null) {
+          const a = ranked.find((r) => r.number === num);
+        }
       } else {
         setSelectedNumber(null);
       }
     },
-    [setSelectedNumber],
+    [setSelectedNumber, ranked, persona, dimension],
   );
 
   const fillColor: maplibregl.ExpressionSpecification = [
@@ -343,7 +350,7 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
           arrondissement={selectedArrondissement}
           composite={selectedArrondissement.composite}
           rank={selectedArrondissement.rank}
-          onClose={() => setSelectedNumber(null)}
+          onClose={closePanel}
         />
       )}
     </div>

@@ -24,12 +24,7 @@ export function MiniMap({ boundaries, highlightNumber, center }: Props) {
   );
 
   const fillOpacity: maplibregl.ExpressionSpecification = useMemo(
-    () => [
-      "case",
-      ["==", ["get", "number"], highlightNumber],
-      0.7,
-      0.5,
-    ],
+    () => ["case", ["==", ["get", "number"], highlightNumber], 0.7, 0.5],
     [highlightNumber],
   );
 
@@ -44,12 +39,7 @@ export function MiniMap({ boundaries, highlightNumber, center }: Props) {
   );
 
   const lineWidth: maplibregl.ExpressionSpecification = useMemo(
-    () => [
-      "case",
-      ["==", ["get", "number"], highlightNumber],
-      2,
-      0.5,
-    ],
+    () => ["case", ["==", ["get", "number"], highlightNumber], 2, 0.5],
     [highlightNumber],
   );
 
