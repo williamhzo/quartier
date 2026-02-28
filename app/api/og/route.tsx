@@ -88,9 +88,7 @@ export async function GET() {
               padding: "8px 16px",
             }}
           >
-            <span
-              style={{ fontSize: 15, fontWeight: 400, color: "#737373" }}
-            >
+            <span style={{ fontSize: 15, fontWeight: 400, color: "#737373" }}>
               {label}
             </span>
           </div>

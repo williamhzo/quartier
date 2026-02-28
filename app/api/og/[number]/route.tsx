@@ -186,14 +186,10 @@ export async function GET(
                 padding: "10px 18px",
               }}
             >
-              <span
-                style={{ fontSize: 15, fontWeight: 400, color: "#737373" }}
-              >
+              <span style={{ fontSize: 15, fontWeight: 400, color: "#737373" }}>
                 {d.label}
               </span>
-              <span
-                style={{ fontSize: 18, fontWeight: 600, color: "#262626" }}
-              >
+              <span style={{ fontSize: 18, fontWeight: 600, color: "#262626" }}>
                 {Math.round(d.score)}
               </span>
             </div>

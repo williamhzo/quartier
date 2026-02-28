@@ -47,7 +47,5 @@ export default async function MapPage({ params, searchParams }: Props) {
     loadBoundaries(),
   ]);
 
-  return (
-    <ParisMap arrondissements={arrondissements} boundaries={boundaries} />
-  );
+  return <ParisMap arrondissements={arrondissements} boundaries={boundaries} />;
 }
