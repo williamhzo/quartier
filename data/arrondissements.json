@@ -49,7 +49,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 26743.32,
+        "m2_per_resident": 1.79,
+        "park_count": 16
+      },
       "noise": {
         "pct_above_lden_threshold": 14.1,
         "pct_above_night_threshold": 7.34
@@ -68,7 +72,7 @@
       "safety": 0,
       "transport": 74.1,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 1.91,
       "noise": 64.49,
       "amenities": 26.27
     }
@@ -120,7 +124,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 4928.12,
+        "m2_per_resident": 0.25,
+        "park_count": 25
+      },
       "noise": {
         "pct_above_lden_threshold": 14.1,
         "pct_above_night_threshold": 7.34
@@ -139,7 +147,7 @@
       "safety": 70.71,
       "transport": 83.62,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 0,
       "noise": 64.49,
       "amenities": 59.98
     }
@@ -190,7 +198,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 27586.77,
+        "m2_per_resident": 0.91,
+        "park_count": 41
+      },
       "noise": {
         "pct_above_lden_threshold": 14.1,
         "pct_above_night_threshold": 7.34
@@ -209,7 +221,7 @@
       "safety": 85.86,
       "transport": 68.18,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 0.82,
       "noise": 64.49,
       "amenities": 74.83
     }
@@ -261,7 +273,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 71009.9,
+        "m2_per_resident": 2.94,
+        "park_count": 64
+      },
       "noise": {
         "pct_above_lden_threshold": 14.1,
         "pct_above_night_threshold": 7.34
@@ -280,7 +296,7 @@
       "safety": 76.05,
       "transport": 52.24,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 3.34,
       "noise": 64.49,
       "amenities": 63.34
     }
@@ -331,7 +347,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 90209.12,
+        "m2_per_resident": 1.99,
+        "park_count": 98
+      },
       "noise": {
         "pct_above_lden_threshold": 14.55,
         "pct_above_night_threshold": 5.11
@@ -350,7 +370,7 @@
       "safety": 91.3,
       "transport": 26.65,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 2.16,
       "noise": 62.09,
       "amenities": 90.6
     }
@@ -400,7 +420,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 31963.93,
+        "m2_per_resident": 1.04,
+        "park_count": 41
+      },
       "noise": {
         "pct_above_lden_threshold": 15.25,
         "pct_above_night_threshold": 4.2
@@ -419,7 +443,7 @@
       "safety": 85.32,
       "transport": 55.06,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 0.98,
       "noise": 58.37,
       "amenities": 100
     }
@@ -470,7 +494,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 365404.85,
+        "m2_per_resident": 8.07,
+        "park_count": 53
+      },
       "noise": {
         "pct_above_lden_threshold": 8.79,
         "pct_above_night_threshold": 1.35
@@ -489,7 +517,7 @@
       "safety": 87.94,
       "transport": 26.36,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 9.7,
       "noise": 92.72,
       "amenities": 50.64
     }
@@ -544,7 +572,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 226474.31,
+        "m2_per_resident": 6.18,
+        "park_count": 49
+      },
       "noise": {
         "pct_above_lden_threshold": 26.23,
         "pct_above_night_threshold": 13.66
@@ -563,7 +595,7 @@
       "safety": 45.14,
       "transport": 57.26,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 7.36,
       "noise": 0,
       "amenities": 75.75
     }
@@ -619,7 +651,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 23571.63,
+        "m2_per_resident": 0.43,
+        "park_count": 69
+      },
       "noise": {
         "pct_above_lden_threshold": 17.27,
         "pct_above_night_threshold": 5.02
@@ -638,7 +674,7 @@
       "safety": 73.42,
       "transport": 100,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 0.22,
       "noise": 47.63,
       "amenities": 83.41
     }
@@ -695,7 +731,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 70517.73,
+        "m2_per_resident": 0.85,
+        "park_count": 108
+      },
       "noise": {
         "pct_above_lden_threshold": 20.89,
         "pct_above_night_threshold": 12.93
@@ -714,7 +754,7 @@
       "safety": 72.1,
       "transport": 71.14,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 0.74,
       "noise": 28.39,
       "amenities": 44.06
     }
@@ -767,7 +807,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 113651,
+        "m2_per_resident": 0.85,
+        "park_count": 133
+      },
       "noise": {
         "pct_above_lden_threshold": 10.44,
         "pct_above_night_threshold": 4.35
@@ -786,7 +830,7 @@
       "safety": 95.54,
       "transport": 40.45,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 0.74,
       "noise": 83.94,
       "amenities": 78.13
     }
@@ -841,7 +885,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 10413344.58,
+        "m2_per_resident": 80.84,
+        "park_count": 200
+      },
       "noise": {
         "pct_above_lden_threshold": 8.36,
         "pct_above_night_threshold": 2.64
@@ -860,7 +908,7 @@
       "safety": 87.56,
       "transport": 0,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 100,
       "noise": 95,
       "amenities": 0
     }
@@ -913,7 +961,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 412895.09,
+        "m2_per_resident": 2.49,
+        "park_count": 246
+      },
       "noise": {
         "pct_above_lden_threshold": 7.42,
         "pct_above_night_threshold": 2.03
@@ -932,7 +984,7 @@
       "safety": 94.45,
       "transport": 18.66,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 2.78,
       "noise": 100,
       "amenities": 52.9
     }
@@ -983,7 +1035,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 614659.91,
+        "m2_per_resident": 5.22,
+        "park_count": 182
+      },
       "noise": {
         "pct_above_lden_threshold": 10.22,
         "pct_above_night_threshold": 4.56
@@ -1002,7 +1058,7 @@
       "safety": 95.97,
       "transport": 12.62,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 6.17,
       "noise": 85.11,
       "amenities": 47.85
     }
@@ -1055,7 +1111,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 745874.46,
+        "m2_per_resident": 3.54,
+        "park_count": 184
+      },
       "noise": {
         "pct_above_lden_threshold": 9.61,
         "pct_above_night_threshold": 1.57
@@ -1074,7 +1134,7 @@
       "safety": 96.24,
       "transport": 19.54,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 4.08,
       "noise": 88.36,
       "amenities": 44.64
     }
@@ -1127,7 +1187,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 9129502.74,
+        "m2_per_resident": 58.9,
+        "park_count": 177
+      },
       "noise": {
         "pct_above_lden_threshold": 12.03,
         "pct_above_night_threshold": 2.98
@@ -1146,7 +1210,7 @@
       "safety": 95.54,
       "transport": 1.97,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 72.78,
       "noise": 75.49,
       "amenities": 15.85
     }
@@ -1201,7 +1265,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 458891.68,
+        "m2_per_resident": 2.99,
+        "park_count": 164
+      },
       "noise": {
         "pct_above_lden_threshold": 11.61,
         "pct_above_night_threshold": 4.59
@@ -1220,7 +1288,7 @@
       "safety": 96.24,
       "transport": 14.29,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 3.4,
       "noise": 77.72,
       "amenities": 59.52
     }
@@ -1271,7 +1339,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 541231.86,
+        "m2_per_resident": 3.42,
+        "park_count": 218
+      },
       "noise": {
         "pct_above_lden_threshold": 14.3,
         "pct_above_night_threshold": 6.93
@@ -1290,7 +1362,7 @@
       "safety": 86.19,
       "transport": 8.89,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 3.93,
       "noise": 63.42,
       "amenities": 26.58
     }
@@ -1343,7 +1415,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 686249.31,
+        "m2_per_resident": 4.08,
+        "park_count": 234
+      },
       "noise": {
         "pct_above_lden_threshold": 7.96,
         "pct_above_night_threshold": 2.34
@@ -1362,7 +1438,7 @@
       "safety": 92.84,
       "transport": 17.27,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 4.75,
       "noise": 97.13,
       "amenities": 32.11
     }
@@ -1415,7 +1491,11 @@
         ]
       },
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": {
+        "total_area_m2": 910920.7,
+        "m2_per_resident": 5.02,
+        "park_count": 231
+      },
       "noise": {
         "pct_above_lden_threshold": 12.05,
         "pct_above_night_threshold": 5.24
@@ -1434,7 +1514,7 @@
       "safety": 100,
       "transport": 16.35,
       "nightlife": null,
-      "greenSpace": null,
+      "greenSpace": 5.92,
       "noise": 75.39,
       "amenities": 27.57
     }

@@ -756,7 +756,7 @@
         "score_safety": 87.94,
         "score_transport": 26.36,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 9.7,
         "score_noise": 92.72,
         "score_amenities": 50.64
       }
@@ -1140,7 +1140,7 @@
         "score_safety": 85.86,
         "score_transport": 68.18,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 0.82,
         "score_noise": 64.49,
         "score_amenities": 74.83
       }
@@ -1324,7 +1324,7 @@
         "score_safety": 70.71,
         "score_transport": 83.62,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 0,
         "score_noise": 64.49,
         "score_amenities": 59.98
       }
@@ -2448,7 +2448,7 @@
         "score_safety": 45.14,
         "score_transport": 57.26,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 7.36,
         "score_noise": 0,
         "score_amenities": 75.75
       }
@@ -3660,7 +3660,7 @@
         "score_safety": 100,
         "score_transport": 16.35,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 5.92,
         "score_noise": 75.39,
         "score_amenities": 27.57
       }
@@ -4520,7 +4520,7 @@
         "score_safety": 95.54,
         "score_transport": 40.45,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 0.74,
         "score_noise": 83.94,
         "score_amenities": 78.13
       }
@@ -5276,7 +5276,7 @@
         "score_safety": 95.97,
         "score_transport": 12.62,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 6.17,
         "score_noise": 85.11,
         "score_amenities": 47.85
       }
@@ -5660,7 +5660,7 @@
         "score_safety": 85.32,
         "score_transport": 55.06,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 0.98,
         "score_noise": 58.37,
         "score_amenities": 100
       }
@@ -6856,7 +6856,7 @@
         "score_safety": 96.24,
         "score_transport": 19.54,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 4.08,
         "score_noise": 88.36,
         "score_amenities": 44.64
       }
@@ -7276,7 +7276,7 @@
         "score_safety": 0,
         "score_transport": 74.1,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 1.91,
         "score_noise": 64.49,
         "score_amenities": 26.27
       }
@@ -7812,7 +7812,7 @@
         "score_safety": 76.05,
         "score_transport": 52.24,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 3.34,
         "score_noise": 64.49,
         "score_amenities": 63.34
       }
@@ -8332,7 +8332,7 @@
         "score_safety": 91.3,
         "score_transport": 26.65,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 2.16,
         "score_noise": 62.09,
         "score_amenities": 90.6
       }
@@ -12752,7 +12752,7 @@
         "score_safety": 87.56,
         "score_transport": 0,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 100,
         "score_noise": 95,
         "score_amenities": 0
       }
@@ -13968,7 +13968,7 @@
         "score_safety": 96.24,
         "score_transport": 14.29,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 3.4,
         "score_noise": 77.72,
         "score_amenities": 59.52
       }
@@ -14440,7 +14440,7 @@
         "score_safety": 73.42,
         "score_transport": 100,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 0.22,
         "score_noise": 47.63,
         "score_amenities": 83.41
       }
@@ -15388,7 +15388,7 @@
         "score_safety": 72.1,
         "score_transport": 71.14,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 0.74,
         "score_noise": 28.39,
         "score_amenities": 44.06
       }
@@ -16340,7 +16340,7 @@
         "score_safety": 86.19,
         "score_transport": 8.89,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 3.93,
         "score_noise": 63.42,
         "score_amenities": 26.58
       }
@@ -18308,7 +18308,7 @@
         "score_safety": 95.54,
         "score_transport": 1.97,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 72.78,
         "score_noise": 75.49,
         "score_amenities": 15.85
       }
@@ -19820,7 +19820,7 @@
         "score_safety": 92.84,
         "score_transport": 17.27,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 4.75,
         "score_noise": 97.13,
         "score_amenities": 32.11
       }
@@ -20964,7 +20964,7 @@
         "score_safety": 94.45,
         "score_transport": 18.66,
         "score_nightlife": null,
-        "score_greenSpace": null,
+        "score_greenSpace": 2.78,
         "score_noise": 100,
         "score_amenities": 52.9
       }

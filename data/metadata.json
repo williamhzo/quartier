@@ -1,10 +1,11 @@
 {
-  "generated_at": "2026-02-28T00:22:37.447Z",
+  "generated_at": "2026-02-28T00:39:59.835Z",
   "enabled_dimensions": [
     "housing",
     "income",
     "safety",
     "transport",
+    "greenSpace",
     "noise",
     "amenities"
   ],
@@ -15,6 +16,7 @@
     "dvf_prior": "geo-dvf-2023-departement-75",
     "safety": "ssmsi-communal-2024-geographie2025-produit-2025-06-04",
     "transport": "idfm-emplacement-des-gares-idf-export-2026-02-27",
+    "greenSpace": "opendata-paris-espaces-verts-export-2026-02-28",
     "noise": "ville-paris-bruit-routier-cnossos-2022",
     "bpe": "buildingref-france-bpe-all-millesime-2016",
     "sirene": "V3.11"
@@ -26,6 +28,7 @@
     "dvf_prior": "https://files.data.gouv.fr/geo-dvf/latest/csv/2023/departements/75.csv.gz",
     "safety": "https://static.data.gouv.fr/resources/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/20250710-144817/donnee-data.gouv-2024-geographie2025-produit-le2025-06-04.csv.gz",
     "transport": "https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/emplacement-des-gares-idf/exports/geojson?where=mode%20in%20(%22METRO%22,%22RER%22)&limit=-1",
+    "greenSpace": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/espaces_verts/exports/geojson?limit=-1",
     "noise": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/bruit-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journ/exports/csv",
     "bpe": "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/buildingref-france-bpe-all-millesime/records?select=com_arm_code%2Cequipment_code%2Csum%28ctvalue%29+as+count&group_by=com_arm_code%2Cequipment_code&where=year%3Ddate%272016-01-01%27+and+com_arm_code+in+%28%2275101%22%2C%2275102%22%2C%2275103%22%2C%2275104%22%2C%2275105%22%2C%2275106%22%2C%2275107%22%2C%2275108%22%2C%2275109%22%2C%2275110%22%2C%2275111%22%2C%2275112%22%2C%2275113%22%2C%2275114%22%2C%2275115%22%2C%2275116%22%2C%2275117%22%2C%2275118%22%2C%2275119%22%2C%2275120%22%29+and+equipment_code+in+%28%22D301%22%2C%22D201%22%2C%22D202%22%2C%22D203%22%2C%22D204%22%2C%22D205%22%2C%22D206%22%2C%22D207%22%2C%22D208%22%2C%22D209%22%2C%22D210%22%2C%22D211%22%2C%22D212%22%2C%22D213%22%2C%22C101%22%2C%22C102%22%2C%22C104%22%2C%22C105%22%2C%22C201%22%2C%22C301%22%2C%22C302%22%2C%22C303%22%2C%22F120%22%2C%22F121%22%2C%22F303%22%29&limit=2000",
     "sirene": "https://api.insee.fr/entreprises/sirene/V3.11/siret"
@@ -41,18 +44,23 @@
     "transport_rows_total": 657,
     "transport_rows_mode_filtered": 657,
     "transport_rows_assigned": 362,
+    "green_space_features_total": 2524,
+    "green_space_features_polygonal": 2522,
+    "green_space_intersections_attempted": 3975,
+    "green_space_intersections_successful": 2533,
     "noise_rows_scanned": 2,
     "noise_rows_matched": 1,
     "bpe_rows_total": 431,
     "bpe_rows_matched": 431
   },
   "source_checksums": {
-    "boundaries": "4dd10d36eb280ba24a15cc0d5676dae6f624ab1c1ccad45972407dc89c24d574",
+    "boundaries": "641bdfaad925b8e813cba1e84e9dee52a2c8490e03ac236bb045c4d143893cf0",
     "filosofi": "845dc47c4643271542c56819011802850f6a382f336d240dcc1e1ccde44603f2",
     "dvf_current": "fef7fb65c52137888ef8c1aa0098660011532f20a1f2e5f34b803691abffb300",
     "dvf_prior": "c62481e00be2cf2c135618c0a16ea5bb0422edda3f9d8607dadad7daf5959fb7",
     "safety": "24c0ae955facf0bdac66053c9a197587c61c888ff6ecc2703360ded23ae0f283",
     "transport": "10ad2b16f97ed5645a6c2ca5ec6188ad08bb5386cc0c919bfe826e03f6504855",
+    "green_space": "08af96f92424b6e22aa3b581e406429cd1d1fe9281bfb5293dee0067cdc17c1c",
     "noise": "65093ad11459f0fa08c2c43ac03e37ab6ac6729a7fe8329b4fdf6f251db8b17c",
     "bpe": "4ec8f212ecbaef83030ac1010b259992ce5d9b2214b8334578e5b30cd843e958"
   },
@@ -60,7 +68,8 @@
     "hard_fail_checks_passed": true,
     "hard_fail_errors": [],
     "warnings": [
-      "ssmsi rows skipped due missing/non-numeric \"nombre\": 3"
+      "ssmsi rows skipped due missing/non-numeric \"nombre\": 3",
+      "green-space parser skipped 2 non-polygon features"
     ],
     "coverage_by_dimension": {
       "housing": 20,
@@ -68,7 +77,7 @@
       "safety": 20,
       "transport": 20,
       "nightlife": 0,
-      "greenSpace": 0,
+      "greenSpace": 20,
       "noise": 20,
       "amenities": 20
     }
