@@ -27,7 +27,7 @@ export function DimensionSelect({ value, onChange }: Props) {
     <Popover>
       <PopoverTrigger
         className={cn(
-          "flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium backdrop-blur-sm transition-colors",
+          "flex h-7 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium backdrop-blur-sm transition-colors",
           "bg-background/80 text-muted-foreground border-border/60",
           "data-[state=open]:bg-foreground data-[state=open]:text-background data-[state=open]:border-transparent",
         )}
@@ -64,7 +64,7 @@ function Chip({
     <button
       onClick={onClick}
       className={cn(
-        "rounded-full border px-2.5 py-1 text-xs font-medium transition-colors",
+        "rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors",
         active
           ? "bg-foreground text-background border-transparent"
           : "bg-background/80 text-muted-foreground hover:text-foreground hover:bg-muted border-border/60 backdrop-blur-sm",

@@ -10,7 +10,7 @@ import Map, {
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useQueryState, parseAsInteger } from "nuqs";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import type { Arrondissement, DimensionKey, PersonaKey } from "@/lib/types";
 import type { FeatureCollection, Geometry } from "geojson";
 import { PERSONA_WEIGHTS } from "@/lib/personas";
@@ -50,6 +50,7 @@ export function ParisMap({
   seine,
 }: Props) {
   const t = useTranslations();
+  const locale = useLocale();
   const mapRef = useRef<MapRef>(null);
   const hoveredIdRef = useRef<number | null>(null);
   const [persona, setPersona] = useState<PersonaKey>("tourist");
@@ -107,12 +108,12 @@ export function ParisMap({
             ...f.properties,
             score,
             number: num,
-            label: formatArrondissement(num),
+            label: formatArrondissement(num, locale),
           },
         };
       }),
     };
-  }, [boundaries, scoreMap]);
+  }, [boundaries, scoreMap, locale]);
 
   const selectedArrondissement = useMemo(
     () =>
@@ -131,7 +132,7 @@ export function ParisMap({
         return;
       }
       const a = ranked.find((r) => r.number === num);
-      const name = formatArrondissement(num);
+      const name = formatArrondissement(num, locale);
       const score =
         a != null
           ? dimension === "composite"
@@ -155,7 +156,7 @@ export function ParisMap({
         scoreEl.style.display = "none";
       }
     },
-    [ranked, dimension, t],
+    [ranked, dimension, locale, t],
   );
 
   const setHoverState = useCallback(
