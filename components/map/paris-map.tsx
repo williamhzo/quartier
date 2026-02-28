@@ -20,6 +20,7 @@ import { PersonaSelector } from "@/components/scoring/persona-selector";
 import { DimensionSelect } from "@/components/scoring/dimension-select";
 import { MapPanel } from "./map-panel";
 import { MapLegend } from "./map-legend";
+import { choroplethFillColor } from "./map-colors";
 
 const PARIS_CENTER = { longitude: 2.3488, latitude: 48.8566 };
 const INITIAL_ZOOM = 11.5;
@@ -207,24 +208,6 @@ export function ParisMap({
     [setSelectedNumber, ranked, persona, dimension],
   );
 
-  const fillColor: maplibregl.ExpressionSpecification = [
-    "interpolate",
-    ["linear"],
-    ["coalesce", ["get", "score"], 0],
-    0,
-    "#f7fbff",
-    20,
-    "#c6dbef",
-    40,
-    "#6baed6",
-    60,
-    "#2171b5",
-    80,
-    "#08519c",
-    100,
-    "#08306b",
-  ];
-
   // Memoize paint expressions so they only change when selectedNumber changes,
   // not on every hover. Hover styling is handled via MapLibre feature-state.
   const fillOpacity = useMemo(
@@ -318,7 +301,7 @@ export function ParisMap({
             id="arrondissements-fill"
             type="fill"
             paint={{
-              "fill-color": fillColor as unknown as string,
+              "fill-color": choroplethFillColor as unknown as string,
               "fill-opacity": fillOpacity as unknown as number,
             }}
           />
