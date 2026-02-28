@@ -54,7 +54,13 @@
         "pct_above_lden_threshold": 14.1,
         "pct_above_night_threshold": 7.34
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 20,
+        "doctors": 100,
+        "schools": 10,
+        "gyms": 6,
+        "cinemas": 1
+      }
     },
     "scores": {
       "housing": 30.4,
@@ -64,7 +70,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 64.49,
-      "amenities": null
+      "amenities": 26.27
     }
   },
   {
@@ -113,7 +119,13 @@
         "pct_above_lden_threshold": 14.1,
         "pct_above_night_threshold": 7.34
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 22,
+        "doctors": 78,
+        "schools": 15,
+        "gyms": 7,
+        "cinemas": 3
+      }
     },
     "scores": {
       "housing": 49.95,
@@ -123,7 +135,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 64.49,
-      "amenities": null
+      "amenities": 59.98
     }
   },
   {
@@ -171,7 +183,13 @@
         "pct_above_lden_threshold": 14.1,
         "pct_above_night_threshold": 7.34
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 21,
+        "doctors": 120,
+        "schools": 23,
+        "gyms": 9,
+        "cinemas": 1
+      }
     },
     "scores": {
       "housing": 42.59,
@@ -181,7 +199,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 64.49,
-      "amenities": null
+      "amenities": 74.83
     }
   },
   {
@@ -230,7 +248,13 @@
         "pct_above_lden_threshold": 14.1,
         "pct_above_night_threshold": 7.34
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 24,
+        "doctors": 153,
+        "schools": 27,
+        "gyms": 5,
+        "cinemas": 1
+      }
     },
     "scores": {
       "housing": 28.2,
@@ -240,7 +264,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 64.49,
-      "amenities": null
+      "amenities": 63.34
     }
   },
   {
@@ -289,7 +313,13 @@
         "pct_above_lden_threshold": 14.55,
         "pct_above_night_threshold": 5.11
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 44,
+        "doctors": 320,
+        "schools": 43,
+        "gyms": 19,
+        "cinemas": 12
+      }
     },
     "scores": {
       "housing": 40.58,
@@ -299,7 +329,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 62.09,
-      "amenities": null
+      "amenities": 90.6
     }
   },
   {
@@ -347,7 +377,13 @@
         "pct_above_lden_threshold": 15.25,
         "pct_above_night_threshold": 4.2
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 41,
+        "doctors": 300,
+        "schools": 35,
+        "gyms": 11,
+        "cinemas": 15
+      }
     },
     "scores": {
       "housing": 0,
@@ -357,7 +393,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 58.37,
-      "amenities": null
+      "amenities": 100
     }
   },
   {
@@ -405,7 +441,13 @@
         "pct_above_lden_threshold": 8.79,
         "pct_above_night_threshold": 1.35
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 36,
+        "doctors": 364,
+        "schools": 43,
+        "gyms": 14,
+        "cinemas": 1
+      }
     },
     "scores": {
       "housing": 8.39,
@@ -415,7 +457,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 92.72,
-      "amenities": null
+      "amenities": 50.64
     }
   },
   {
@@ -473,7 +515,13 @@
         "pct_above_lden_threshold": 26.23,
         "pct_above_night_threshold": 13.66
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 53,
+        "doctors": 478,
+        "schools": 29,
+        "gyms": 13,
+        "cinemas": 9
+      }
     },
     "scores": {
       "housing": 32.18,
@@ -483,7 +531,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 0,
-      "amenities": null
+      "amenities": 75.75
     }
   },
   {
@@ -542,7 +590,13 @@
         "pct_above_lden_threshold": 17.27,
         "pct_above_night_threshold": 5.02
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 68,
+        "doctors": 227,
+        "schools": 42,
+        "gyms": 10,
+        "cinemas": 5
+      }
     },
     "scores": {
       "housing": 58.23,
@@ -552,7 +606,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 47.63,
-      "amenities": null
+      "amenities": 83.41
     }
   },
   {
@@ -612,7 +666,13 @@
         "pct_above_lden_threshold": 20.89,
         "pct_above_night_threshold": 12.93
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 58,
+        "doctors": 166,
+        "schools": 51,
+        "gyms": 17,
+        "cinemas": 3
+      }
     },
     "scores": {
       "housing": 79.89,
@@ -622,7 +682,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 28.39,
-      "amenities": null
+      "amenities": 44.06
     }
   },
   {
@@ -678,7 +738,13 @@
         "pct_above_lden_threshold": 10.44,
         "pct_above_night_threshold": 4.35
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 78,
+        "doctors": 381,
+        "schools": 76,
+        "gyms": 25,
+        "cinemas": 3
+      }
     },
     "scores": {
       "housing": 69.71,
@@ -688,7 +754,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 83.94,
-      "amenities": null
+      "amenities": 78.13
     }
   },
   {
@@ -746,7 +812,13 @@
         "pct_above_lden_threshold": 8.36,
         "pct_above_night_threshold": 2.64
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 70,
+        "doctors": 388,
+        "schools": 77,
+        "gyms": 38,
+        "cinemas": 3
+      }
     },
     "scores": {
       "housing": 84.69,
@@ -756,7 +828,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 95,
-      "amenities": null
+      "amenities": 0
     }
   },
   {
@@ -812,7 +884,13 @@
         "pct_above_lden_threshold": 7.42,
         "pct_above_night_threshold": 2.03
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 64,
+        "doctors": 605,
+        "schools": 112,
+        "gyms": 39,
+        "cinemas": 5
+      }
     },
     "scores": {
       "housing": 87.8,
@@ -822,7 +900,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 100,
-      "amenities": null
+      "amenities": 52.9
     }
   },
   {
@@ -871,7 +949,13 @@
         "pct_above_lden_threshold": 10.22,
         "pct_above_night_threshold": 4.56
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 62,
+        "doctors": 451,
+        "schools": 60,
+        "gyms": 26,
+        "cinemas": 6
+      }
     },
     "scores": {
       "housing": 77.97,
@@ -881,7 +965,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 85.11,
-      "amenities": null
+      "amenities": 47.85
     }
   },
   {
@@ -937,7 +1021,13 @@
         "pct_above_lden_threshold": 9.61,
         "pct_above_night_threshold": 1.57
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 104,
+        "doctors": 620,
+        "schools": 106,
+        "gyms": 41,
+        "cinemas": 3
+      }
     },
     "scores": {
       "housing": 75.22,
@@ -947,7 +1037,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 88.36,
-      "amenities": null
+      "amenities": 44.64
     }
   },
   {
@@ -1003,7 +1093,13 @@
         "pct_above_lden_threshold": 12.03,
         "pct_above_night_threshold": 2.98
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 85,
+        "doctors": 777,
+        "schools": 85,
+        "gyms": 23,
+        "cinemas": 1
+      }
     },
     "scores": {
       "housing": 55.21,
@@ -1013,7 +1109,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 75.49,
-      "amenities": null
+      "amenities": 15.85
     }
   },
   {
@@ -1071,7 +1167,13 @@
         "pct_above_lden_threshold": 11.61,
         "pct_above_night_threshold": 4.59
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 90,
+        "doctors": 518,
+        "schools": 78,
+        "gyms": 21,
+        "cinemas": 4
+      }
     },
     "scores": {
       "housing": 66.5,
@@ -1081,7 +1183,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 77.72,
-      "amenities": null
+      "amenities": 59.52
     }
   },
   {
@@ -1130,7 +1232,13 @@
         "pct_above_lden_threshold": 14.3,
         "pct_above_night_threshold": 6.93
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 95,
+        "doctors": 233,
+        "schools": 99,
+        "gyms": 24,
+        "cinemas": 2
+      }
     },
     "scores": {
       "housing": 88.39,
@@ -1140,7 +1248,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 63.42,
-      "amenities": null
+      "amenities": 26.58
     }
   },
   {
@@ -1196,7 +1304,13 @@
         "pct_above_lden_threshold": 7.96,
         "pct_above_night_threshold": 2.34
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 49,
+        "doctors": 369,
+        "schools": 120,
+        "gyms": 27,
+        "cinemas": 5
+      }
     },
     "scores": {
       "housing": 100,
@@ -1206,7 +1320,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 97.13,
-      "amenities": null
+      "amenities": 32.11
     }
   },
   {
@@ -1262,7 +1376,13 @@
         "pct_above_lden_threshold": 12.05,
         "pct_above_night_threshold": 5.24
       },
-      "amenities": null
+      "amenities": {
+        "pharmacies": 66,
+        "doctors": 252,
+        "schools": 111,
+        "gyms": 30,
+        "cinemas": 2
+      }
     },
     "scores": {
       "housing": 94,
@@ -1272,7 +1392,7 @@
       "nightlife": null,
       "greenSpace": null,
       "noise": 75.39,
-      "amenities": null
+      "amenities": 27.57
     }
   }
 ]

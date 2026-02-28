@@ -46,6 +46,7 @@ export const DATA_CONFIG = {
     "safety",
     "transport",
     "noise",
+    "amenities",
   ] as DataDimension[],
   sourceVintages: {
     boundaries: "opendata-paris-arrondissements-snapshot-2026-02-27",
@@ -55,6 +56,7 @@ export const DATA_CONFIG = {
     safety: "ssmsi-communal-2024-geographie2025-produit-2025-06-04",
     transport: "idfm-emplacement-des-gares-idf-export-2026-02-27",
     noise: "ville-paris-bruit-routier-cnossos-2022",
+    bpe: "buildingref-france-bpe-all-millesime-2016",
     sirene: "V3.11",
   },
   sourceUrls: {
@@ -71,6 +73,7 @@ export const DATA_CONFIG = {
       "https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/emplacement-des-gares-idf/exports/geojson?where=mode%20in%20(%22METRO%22,%22RER%22)&limit=-1",
     noise:
       "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/bruit-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journ/exports/csv",
+    bpe: "https://public.opendatasoft.com/explore/dataset/buildingref-france-bpe-all-millesime/",
     sirene: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
   },
   sources: {
@@ -127,6 +130,48 @@ export const DATA_CONFIG = {
       timeoutMs: 120_000,
       maxRetries: 3,
       initialRetryDelayMs: 500,
+    },
+    bpe: {
+      apiBaseUrl:
+        "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/buildingref-france-bpe-all-millesime/records",
+      sourceUrl:
+        "https://public.opendatasoft.com/explore/dataset/buildingref-france-bpe-all-millesime/",
+      cachePath: "data/raw/bpe/amenities-paris-2016.json",
+      year: "2016-01-01",
+      timeoutMs: 120_000,
+      maxRetries: 3,
+      initialRetryDelayMs: 500,
+      maxRecords: 2_000,
+      equipmentCodes: {
+        pharmacies: ["D301"],
+        doctors: [
+          "D201",
+          "D202",
+          "D203",
+          "D204",
+          "D205",
+          "D206",
+          "D207",
+          "D208",
+          "D209",
+          "D210",
+          "D211",
+          "D212",
+          "D213",
+        ],
+        schools: [
+          "C101",
+          "C102",
+          "C104",
+          "C105",
+          "C201",
+          "C301",
+          "C302",
+          "C303",
+        ],
+        gyms: ["F120", "F121"],
+        cinemas: ["F303"],
+      },
     },
     sirene: {
       apiVersion: "V3.11",

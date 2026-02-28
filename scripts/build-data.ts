@@ -18,6 +18,10 @@ import {
   type TransportMetric,
 } from "./sources/transport";
 import { buildNoiseFromRoadExposure, type NoiseMetric } from "./sources/noise";
+import {
+  buildAmenitiesFromBpe,
+  type AmenitiesMetric,
+} from "./sources/amenities";
 
 type BuildOptions = {
   offline: boolean;
@@ -51,7 +55,7 @@ type ArrondissementDimensions = {
   nightlife: null;
   greenSpace: null;
   noise: NoiseMetric | null;
-  amenities: null;
+  amenities: AmenitiesMetric | null;
 };
 type ArrondissementScores = Record<DataDimension, number | null>;
 
@@ -543,6 +547,40 @@ async function applyNoiseDimension(
   };
 }
 
+async function applyAmenitiesDimension(
+  rows: ArrondissementRow[],
+  mode: "network-first" | "cache-only",
+): Promise<BuildSourceContributions> {
+  if (!DATA_CONFIG.enabledDimensions.includes("amenities")) {
+    return {
+      sourceRowCounts: {},
+      sourceChecksums: {},
+      sourceUrls: {},
+      warnings: [],
+    };
+  }
+
+  const amenities = await buildAmenitiesFromBpe({
+    communes: PARIS_ARRONDISSEMENT_COMMUNES,
+    mode,
+    config: DATA_CONFIG.sources.bpe,
+  });
+
+  const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
+  for (const [code, metric] of amenities.byCommune) {
+    const row = rowByCode.get(code);
+    if (!row) continue;
+    row.dimensions.amenities = metric;
+  }
+
+  return {
+    sourceRowCounts: amenities.sourceRowCounts,
+    sourceChecksums: amenities.sourceChecksums,
+    sourceUrls: amenities.sourceUrls,
+    warnings: amenities.warnings,
+  };
+}
+
 function applyIncomeDimension(
   rows: ArrondissementRow[],
   incomeByCommune: Map<string, IncomeMetric>,
@@ -577,6 +615,22 @@ function getRawMetricForDimension(
   }
   if (dimension === "noise") {
     return row.dimensions.noise?.pct_above_lden_threshold ?? null;
+  }
+  if (dimension === "amenities") {
+    const amenities = row.dimensions.amenities;
+    if (!amenities) return null;
+
+    const total =
+      amenities.pharmacies +
+      amenities.doctors +
+      amenities.schools +
+      amenities.gyms +
+      amenities.cinemas;
+    if (!Number.isFinite(total) || row.area_km2 <= 0) {
+      return null;
+    }
+
+    return total / row.area_km2;
   }
 
   return null;
@@ -854,6 +908,12 @@ async function main(): Promise<void> {
   Object.assign(sourceChecksums, noiseContribution.sourceChecksums);
   Object.assign(sourceUrls, noiseContribution.sourceUrls);
   warnings.push(...noiseContribution.warnings);
+
+  const amenitiesContribution = await applyAmenitiesDimension(rows, mode);
+  Object.assign(sourceRowCounts, amenitiesContribution.sourceRowCounts);
+  Object.assign(sourceChecksums, amenitiesContribution.sourceChecksums);
+  Object.assign(sourceUrls, amenitiesContribution.sourceUrls);
+  warnings.push(...amenitiesContribution.warnings);
 
   warnings.push(
     ...collectRowCountDriftWarnings(sourceRowCounts, driftBaseline.metadata),
