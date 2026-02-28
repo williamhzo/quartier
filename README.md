@@ -2,7 +2,7 @@
 
 Paris has 20 arrondissements. Everyone who's ever lived there has opinions about which one is best. This app replaces those opinions with data (and then you can argue about the data instead).
 
-Pick a persona (young professional, family, tourist, business owner) and Quartier ranks all 20 arrondissements using French open data: real estate prices, crime stats, metro density, income, noise. Nightlife, green space, and amenities are next.
+Pick a persona (young professional, family, tourist, business owner) and Quartier ranks all 20 arrondissements across 10 dimensions using French open data: housing prices, income, safety, transport, nightlife, green space, noise, amenities, culture, and sports facilities.
 
 Map-first. Mobile-first. French and English. No backend, just pre-computed static JSON.
 
@@ -57,14 +57,17 @@ Next.js 16 · TypeScript · Tailwind CSS 4 · shadcn/ui · MapLibre GL · react-
 
 Everything is French government open data:
 
-- Housing prices: [DVF](https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres/) (actual transaction records, not asking prices)
-- Income & poverty: [INSEE Filosofi](https://www.insee.fr/fr/statistiques/5359146)
-- Crime: [SSMSI](https://www.data.gouv.fr/fr/datasets/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/)
-- Transport: [IDFM](https://data.iledefrance-mobilites.fr/explore/dataset/emplacement-des-gares-idf/)
-- Noise: [Bruitparif / Ville de Paris](https://www.data.gouv.fr/fr/datasets/bruit-routier-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journee-complete/)
-- Nightlife (soon): [SIRENE](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/)
-- Green space (soon): [opendata.paris.fr](https://opendata.paris.fr/explore/dataset/espaces_verts/)
-- Amenities (soon): [INSEE BPE](https://www.data.gouv.fr/fr/datasets/base-permanente-des-equipements-1/)
+- Housing prices: [DVF](https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres/) (actual transaction records, not asking prices). Geo-split CSVs from [files.data.gouv.fr](https://files.data.gouv.fr/geo-dvf/latest/csv/)
+- Income & poverty: [INSEE Filosofi](https://www.insee.fr/fr/statistiques/5359146) (dossier complet)
+- Safety: [SSMSI](https://www.data.gouv.fr/fr/datasets/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/) (communal crime stats)
+- Transport: [IDFM](https://data.iledefrance-mobilites.fr/explore/dataset/emplacement-des-gares-idf/) (metro/RER station locations)
+- Noise: [Bruitparif / Ville de Paris](https://www.data.gouv.fr/fr/datasets/bruit-routier-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journee-complete/) (road noise exposure)
+- Green space: [opendata.paris.fr](https://opendata.paris.fr/explore/dataset/espaces_verts/) (park polygons, clipped per arrondissement)
+- Amenities: [INSEE BPE](https://www.data.gouv.fr/fr/datasets/base-permanente-des-equipements-1/) (pharmacies, doctors, schools, gyms, cinemas). Parser source: [OpenDataSoft BPE](https://public.opendatasoft.com/explore/dataset/buildingref-france-bpe-all-millesime/)
+- Culture: [INSEE BPE](https://www.insee.fr/fr/statistiques/fichier/3232691/correspondance_sous_domaine_fonction_type_equipement_2023.htm) (cinemas, libraries, heritage, live performance venues, archives, museums)
+- Sports facilities: [Data ES](https://equipements.sports.gouv.fr/explore/assets/data-es/) (Ministry of Sports). [API](https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records), also on [data.gouv.fr](https://www.data.gouv.fr/datasets/recensement-des-equipements-sportifs-espaces-et-sites-de-pratiques)
+- Nightlife (pending): [INSEE SIRENE API](https://api.insee.fr/entreprises/sirene/V3.11) (restaurants, bars, cafes). Dataset on [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/)
+- Arrondissement boundaries: [opendata.paris.fr](https://opendata.paris.fr/explore/dataset/arrondissements/)
 
 ## Contributing
 
