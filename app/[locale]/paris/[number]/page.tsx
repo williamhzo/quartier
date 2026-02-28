@@ -1,7 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { loadArrondissements } from "@/lib/data";
-import { loadBoundaries } from "@/lib/geo";
+import { loadBoundaries, loadSeine } from "@/lib/geo";
 import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
 import { EQUAL_WEIGHTS } from "@/lib/personas";
 import { computeComposite, rankByComposite } from "@/lib/scoring";
@@ -52,9 +52,10 @@ export default async function DetailPage({ params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale });
-  const [data, boundaries] = await Promise.all([
+  const [data, boundaries, seine] = await Promise.all([
     loadArrondissements(),
     loadBoundaries(),
+    loadSeine(),
   ]);
   const arrondissement = data.find((a) => a.number === Number(number));
 
@@ -114,6 +115,7 @@ export default async function DetailPage({ params }: Props) {
       <div className="mt-6">
         <MiniMap
           boundaries={boundaries}
+          seine={seine}
           highlightNumber={arrondissement.number}
           center={center}
         />

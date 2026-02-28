@@ -8,11 +8,12 @@ import type { FeatureCollection, Geometry } from "geojson";
 
 type Props = {
   boundaries: FeatureCollection<Geometry>;
+  seine: FeatureCollection<Geometry>;
   highlightNumber: number;
   center: { longitude: number; latitude: number };
 };
 
-export function MiniMap({ boundaries, highlightNumber, center }: Props) {
+export function MiniMap({ boundaries, seine, highlightNumber, center }: Props) {
   const fillColor: maplibregl.ExpressionSpecification = useMemo(
     () => [
       "case",
@@ -65,6 +66,18 @@ export function MiniMap({ boundaries, highlightNumber, center }: Props) {
         interactive={false}
         attributionControl={false}
       >
+        <Source id="seine" type="geojson" data={seine}>
+          <Layer
+            id="seine-line"
+            type="line"
+            paint={{
+              "line-color": "#93c5fd",
+              "line-width": 1.5,
+              "line-opacity": 0.5,
+            }}
+            layout={{ "line-cap": "round", "line-join": "round" }}
+          />
+        </Source>
         <Source id="arrondissements" type="geojson" data={boundaries}>
           <Layer
             id="fill"

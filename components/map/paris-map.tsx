@@ -29,12 +29,14 @@ type Props = {
   arrondissements: Arrondissement[];
   boundaries: FeatureCollection<Geometry>;
   contextBoundaries: FeatureCollection<Geometry>;
+  seine: FeatureCollection<Geometry>;
 };
 
 export function ParisMap({
   arrondissements,
   boundaries,
   contextBoundaries,
+  seine,
 }: Props) {
   const t = useTranslations();
   const mapRef = useRef<MapRef>(null);
@@ -308,6 +310,18 @@ export function ParisMap({
               "line-width": 0.5,
               "line-opacity": 0.5,
             }}
+          />
+        </Source>
+        <Source id="seine" type="geojson" data={seine}>
+          <Layer
+            id="seine-line"
+            type="line"
+            paint={{
+              "line-color": "#93c5fd",
+              "line-width": 2.5,
+              "line-opacity": 0.5,
+            }}
+            layout={{ "line-cap": "round", "line-join": "round" }}
           />
         </Source>
         <Source

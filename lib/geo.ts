@@ -4,6 +4,7 @@ import type { FeatureCollection, Geometry } from "geojson";
 
 let cached: FeatureCollection<Geometry> | null = null;
 let cachedContext: FeatureCollection<Geometry> | null = null;
+let cachedSeine: FeatureCollection<Geometry> | null = null;
 
 export async function loadBoundaries(): Promise<FeatureCollection<Geometry>> {
   if (cached) return cached;
@@ -27,4 +28,15 @@ export async function loadContextBoundaries(): Promise<
   );
   cachedContext = JSON.parse(raw) as FeatureCollection<Geometry>;
   return cachedContext;
+}
+
+export async function loadSeine(): Promise<FeatureCollection<Geometry>> {
+  if (cachedSeine) return cachedSeine;
+
+  const raw = await readFile(
+    join(process.cwd(), "data/seine.geojson"),
+    "utf-8",
+  );
+  cachedSeine = JSON.parse(raw) as FeatureCollection<Geometry>;
+  return cachedSeine;
 }
