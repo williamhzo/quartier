@@ -6,6 +6,7 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { createInterface } from "node:readline";
 import { createGunzip } from "node:zlib";
+import type { ReadableStream as NodeReadableStream } from "stream/web";
 
 type SsmsiFetchMode = "network-first" | "cache-only";
 
@@ -137,8 +138,9 @@ async function fetchArchiveToCache(
 
       const tempPath = `${cachePath}.tmp-${Date.now()}`;
       await mkdir(path.dirname(cachePath), { recursive: true });
+      const nodeBody = response.body as unknown as NodeReadableStream<Uint8Array>;
       await pipeline(
-        Readable.fromWeb(response.body as ReadableStream),
+        Readable.fromWeb(nodeBody),
         createWriteStream(tempPath),
       );
       await rename(tempPath, cachePath);

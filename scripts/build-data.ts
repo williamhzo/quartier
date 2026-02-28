@@ -17,6 +17,7 @@ import {
   buildTransportFromIdfm,
   type TransportMetric,
 } from "./sources/transport";
+import { buildNoiseFromRoadExposure, type NoiseMetric } from "./sources/noise";
 
 type BuildOptions = {
   offline: boolean;
@@ -49,7 +50,7 @@ type ArrondissementDimensions = {
   transport: TransportMetric | null;
   nightlife: null;
   greenSpace: null;
-  noise: null;
+  noise: NoiseMetric | null;
   amenities: null;
 };
 type ArrondissementScores = Record<DataDimension, number | null>;
@@ -504,6 +505,44 @@ async function applyTransportDimension(
   };
 }
 
+async function applyNoiseDimension(
+  rows: ArrondissementRow[],
+  mode: "network-first" | "cache-only",
+): Promise<BuildSourceContributions> {
+  if (!DATA_CONFIG.enabledDimensions.includes("noise")) {
+    return {
+      sourceRowCounts: {},
+      sourceChecksums: {},
+      sourceUrls: {},
+      warnings: [],
+    };
+  }
+
+  const populationByCommune = new Map(
+    rows.map((row) => [row.code, row.population] as const),
+  );
+  const noise = await buildNoiseFromRoadExposure({
+    communes: PARIS_ARRONDISSEMENT_COMMUNES,
+    populationByCommune,
+    mode,
+    config: DATA_CONFIG.sources.noise,
+  });
+
+  const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
+  for (const [code, metric] of noise.byCommune) {
+    const row = rowByCode.get(code);
+    if (!row) continue;
+    row.dimensions.noise = metric;
+  }
+
+  return {
+    sourceRowCounts: noise.sourceRowCounts,
+    sourceChecksums: noise.sourceChecksums,
+    sourceUrls: noise.sourceUrls,
+    warnings: noise.warnings,
+  };
+}
+
 function applyIncomeDimension(
   rows: ArrondissementRow[],
   incomeByCommune: Map<string, IncomeMetric>,
@@ -535,6 +574,9 @@ function getRawMetricForDimension(
   }
   if (dimension === "transport") {
     return row.dimensions.transport?.stations_per_km2 ?? null;
+  }
+  if (dimension === "noise") {
+    return row.dimensions.noise?.pct_above_lden_threshold ?? null;
   }
 
   return null;
@@ -806,6 +848,12 @@ async function main(): Promise<void> {
   Object.assign(sourceChecksums, transportContribution.sourceChecksums);
   Object.assign(sourceUrls, transportContribution.sourceUrls);
   warnings.push(...transportContribution.warnings);
+
+  const noiseContribution = await applyNoiseDimension(rows, mode);
+  Object.assign(sourceRowCounts, noiseContribution.sourceRowCounts);
+  Object.assign(sourceChecksums, noiseContribution.sourceChecksums);
+  Object.assign(sourceUrls, noiseContribution.sourceUrls);
+  warnings.push(...noiseContribution.warnings);
 
   warnings.push(
     ...collectRowCountDriftWarnings(sourceRowCounts, driftBaseline.metadata),

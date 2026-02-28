@@ -45,6 +45,7 @@ export const DATA_CONFIG = {
     "income",
     "safety",
     "transport",
+    "noise",
   ] as DataDimension[],
   sourceVintages: {
     boundaries: "opendata-paris-arrondissements-snapshot-2026-02-27",
@@ -53,6 +54,7 @@ export const DATA_CONFIG = {
     dvf_prior: "geo-dvf-2023-departement-75",
     safety: "ssmsi-communal-2024-geographie2025-produit-2025-06-04",
     transport: "idfm-emplacement-des-gares-idf-export-2026-02-27",
+    noise: "ville-paris-bruit-routier-cnossos-2022",
     sirene: "V3.11",
   },
   sourceUrls: {
@@ -67,6 +69,8 @@ export const DATA_CONFIG = {
       "https://static.data.gouv.fr/resources/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/20250710-144817/donnee-data.gouv-2024-geographie2025-produit-le2025-06-04.csv.gz",
     transport:
       "https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/emplacement-des-gares-idf/exports/geojson?where=mode%20in%20(%22METRO%22,%22RER%22)&limit=-1",
+    noise:
+      "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/bruit-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journ/exports/csv",
     sirene: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
   },
   sources: {
@@ -110,6 +114,16 @@ export const DATA_CONFIG = {
       sourceUrl:
         "https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/emplacement-des-gares-idf/exports/geojson?where=mode%20in%20(%22METRO%22,%22RER%22)&limit=-1",
       cachePath: "data/raw/idfm/emplacement-des-gares-idf-metro-rer.geojson",
+      timeoutMs: 120_000,
+      maxRetries: 3,
+      initialRetryDelayMs: 500,
+    },
+    noise: {
+      sourceUrl:
+        "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/bruit-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journ/exports/csv",
+      cachePath:
+        "data/raw/noise/bruit-exposition-des-parisien-ne-s-aux-depassements-des-seuils.csv",
+      year: 2022,
       timeoutMs: 120_000,
       maxRetries: 3,
       initialRetryDelayMs: 500,

@@ -4,6 +4,7 @@ import { mkdir, readFile, rename } from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
+import type { ReadableStream as NodeReadableStream } from "stream/web";
 
 type IdfmFetchMode = "network-first" | "cache-only";
 
@@ -118,10 +119,9 @@ async function fetchGeojsonToCache(
 
       const tempPath = `${cachePath}.tmp-${Date.now()}`;
       await mkdir(path.dirname(cachePath), { recursive: true });
-      await pipeline(
-        Readable.fromWeb(response.body as ReadableStream),
-        createWriteStream(tempPath),
-      );
+      const nodeBody =
+        response.body as unknown as NodeReadableStream<Uint8Array>;
+      await pipeline(Readable.fromWeb(nodeBody), createWriteStream(tempPath));
       await rename(tempPath, cachePath);
       return;
     } catch (error) {

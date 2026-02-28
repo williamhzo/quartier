@@ -140,11 +140,9 @@ async function fetchArchiveToCache(
 
       const tempPath = `${cachePath}.tmp-${Date.now()}`;
       await mkdir(path.dirname(cachePath), { recursive: true });
-      const nodeBody = response.body as unknown as NodeReadableStream<Uint8Array>;
-      await pipeline(
-        Readable.fromWeb(nodeBody),
-        createWriteStream(tempPath),
-      );
+      const nodeBody =
+        response.body as unknown as NodeReadableStream<Uint8Array>;
+      await pipeline(Readable.fromWeb(nodeBody), createWriteStream(tempPath));
       await rename(tempPath, cachePath);
       return;
     } catch (error) {
