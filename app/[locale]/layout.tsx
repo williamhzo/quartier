@@ -30,13 +30,17 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  const languages = Object.fromEntries(
+  const languages: Record<string, string> = Object.fromEntries(
     routing.locales.map((l) => [l, `https://quartier.sh/${l}`]),
   );
+  languages["x-default"] = `https://quartier.sh/${routing.defaultLocale}`;
 
   return {
     metadataBase: new URL("https://quartier.sh"),
-    title: t("title"),
+    title: {
+      default: t("title"),
+      template: `%s - quartier`,
+    },
     description: t("description"),
     alternates: {
       canonical: `https://quartier.sh/${locale}`,
