@@ -393,7 +393,16 @@ export function ParisMap({
         </div>
       </div>
 
-      <MapLegend dimension={dimension} />
+      <MapLegend
+        dimension={dimension}
+        selectedScore={
+          selectedArrondissement
+            ? dimension === "composite"
+              ? selectedArrondissement.composite
+              : (selectedArrondissement.scores[dimension] ?? null)
+            : null
+        }
+      />
 
       {selectedArrondissement && (
         <MapPanel
