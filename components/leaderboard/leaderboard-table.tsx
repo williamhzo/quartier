@@ -70,14 +70,14 @@ export function LeaderboardTable({ data }: Props) {
       <div className="flex items-center gap-3">
         <PersonaSelector value={persona} onChange={setPersona} />
       </div>
-      <div className="overflow-x-auto rounded-lg border">
+      <div className="overflow-clip rounded-lg border">
         <Table>
           <TableHeader>
-            <TableRow className="bg-muted/50 hover:bg-muted/50">
-              <TableHead className="bg-muted/50 sticky left-0 z-10 w-12 text-center">
+            <TableRow className="bg-muted hover:bg-muted">
+              <TableHead className="bg-muted sticky left-0 z-10 w-12 text-center">
                 {t("leaderboard.rank")}
               </TableHead>
-              <TableHead className="bg-muted/50 sticky left-12 z-10">
+              <TableHead className="bg-muted sticky left-12 z-10 border-r">
                 <SortButton
                   active={sortKey === "number"}
                   asc={sortAsc}
@@ -142,7 +142,7 @@ export function LeaderboardTable({ data }: Props) {
                   <TableCell className="bg-background sticky left-0 z-10 text-center font-mono text-xs">
                     <RankBadge rank={a.rank} />
                   </TableCell>
-                  <TableCell className="bg-background sticky left-12 z-10 font-medium">
+                  <TableCell className="bg-background sticky left-12 z-10 border-r font-medium">
                     <Link
                       href={`/paris/${a.number}`}
                       className="hover:text-primary transition-colors hover:underline"
