@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { createWriteStream } from "node:fs";
-import { mkdir, readFile, rename } from "node:fs/promises";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
@@ -24,6 +24,10 @@ type BpeAmenitiesConfig = {
     gyms: string[];
     cinemas: string[];
   };
+  cultureCodebook: {
+    version: string;
+    byType: Record<string, string[]>;
+  };
 };
 
 export type AmenitiesMetric = {
@@ -36,6 +40,7 @@ export type AmenitiesMetric = {
 
 export type BuildAmenitiesFromBpeOutput = {
   byCommune: Map<string, AmenitiesMetric>;
+  byEquipmentByCommune: Map<string, Map<string, number>>;
   sourceRowCounts: Record<string, number>;
   sourceChecksums: Record<string, string>;
   sourceUrls: Record<string, string>;
@@ -65,6 +70,10 @@ function getCachePath(cachePath: string): string {
   return path.join(process.cwd(), cachePath);
 }
 
+function getQueryMarkerPath(cachePath: string): string {
+  return `${cachePath}.query`;
+}
+
 function sha256(input: string): string {
   return createHash("sha256").update(input).digest("hex");
 }
@@ -77,9 +86,9 @@ function buildBpeQueryUrl(
   communes: readonly string[],
   config: BpeAmenitiesConfig,
 ): string {
-  const equipmentCodes = [
-    ...new Set(Object.values(config.equipmentCodes).flat()),
-  ];
+  const amenityCodes = Object.values(config.equipmentCodes).flat();
+  const cultureCodes = Object.values(config.cultureCodebook.byType).flat();
+  const equipmentCodes = [...new Set([...amenityCodes, ...cultureCodes])];
   const where = `year=date'${config.year}' and com_arm_code in (${encodeQuotedList(communes)}) and equipment_code in (${encodeQuotedList(equipmentCodes)})`;
 
   const params = new URLSearchParams({
@@ -138,6 +147,7 @@ async function fetchResponseToCache(
         createWriteStream(tempPath),
       );
       await rename(tempPath, cachePath);
+      await writeFile(getQueryMarkerPath(cachePath), fetchUrl);
       return;
     } catch (error) {
       if (attempt >= config.maxRetries) throw error;
@@ -156,14 +166,58 @@ async function ensureResponsePath(
   config: BpeAmenitiesConfig,
 ): Promise<string> {
   const cachePath = getCachePath(config.cachePath);
+  const queryMarkerPath = getQueryMarkerPath(cachePath);
 
   try {
     await readFile(cachePath, "utf8");
-    return cachePath;
+    try {
+      const cachedQuery = (await readFile(queryMarkerPath, "utf8")).trim();
+      if (cachedQuery === fetchUrl) {
+        return cachePath;
+      }
+
+      if (mode === "cache-only") {
+        throw new Error(
+          `stale bpe cache in --offline mode: query changed. expected ${fetchUrl}`,
+        );
+      }
+
+      await fetchResponseToCache(fetchUrl, config, cachePath);
+      return cachePath;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      const code = (error as { code?: string }).code;
+      if (code === "ENOENT") {
+        // Backfill path for legacy caches that predate query markers.
+        if (mode === "cache-only") {
+          return cachePath;
+        }
+
+        await fetchResponseToCache(fetchUrl, config, cachePath);
+        return cachePath;
+      }
+
+      if (mode === "cache-only") {
+        if (message.startsWith("stale bpe cache in --offline mode")) {
+          throw new Error(message);
+        }
+      }
+
+      if (mode !== "cache-only") {
+        await fetchResponseToCache(fetchUrl, config, cachePath);
+        return cachePath;
+      }
+
+      throw error;
+    }
   } catch (error) {
     if (mode === "cache-only") {
+      const message = error instanceof Error ? error.message : String(error);
+      if (message.startsWith("stale bpe cache in --offline mode")) {
+        throw new Error(message);
+      }
       throw new Error(
-        `missing bpe cache in --offline mode: ${cachePath}. (${error instanceof Error ? error.message : String(error)})`,
+        `missing bpe cache in --offline mode: ${cachePath}. (${message})`,
       );
     }
   }
@@ -241,6 +295,7 @@ export async function buildAmenitiesFromBpe(options: {
   const cinemaCodes = new Set(options.config.equipmentCodes.cinemas);
 
   const aggregateByCommune = new Map<string, AmenitiesMetric>();
+  const byEquipmentByCommune = new Map<string, Map<string, number>>();
   for (const commune of options.communes) {
     aggregateByCommune.set(commune, {
       pharmacies: 0,
@@ -249,6 +304,7 @@ export async function buildAmenitiesFromBpe(options: {
       gyms: 0,
       cinemas: 0,
     });
+    byEquipmentByCommune.set(commune, new Map<string, number>());
   }
 
   let matchedRows = 0;
@@ -270,6 +326,8 @@ export async function buildAmenitiesFromBpe(options: {
 
     const aggregate = aggregateByCommune.get(commune);
     if (!aggregate) continue;
+    const equipmentByCommune = byEquipmentByCommune.get(commune);
+    if (!equipmentByCommune) continue;
 
     if (pharmacyCodes.has(equipmentCode)) {
       aggregate.pharmacies = round(aggregate.pharmacies + count, 2);
@@ -286,6 +344,11 @@ export async function buildAmenitiesFromBpe(options: {
     if (cinemaCodes.has(equipmentCode)) {
       aggregate.cinemas = round(aggregate.cinemas + count, 2);
     }
+    const previousEquipmentCount = equipmentByCommune.get(equipmentCode) ?? 0;
+    equipmentByCommune.set(
+      equipmentCode,
+      round(previousEquipmentCount + count, 2),
+    );
 
     matchedRows += 1;
   }
@@ -303,6 +366,7 @@ export async function buildAmenitiesFromBpe(options: {
 
   return {
     byCommune,
+    byEquipmentByCommune,
     sourceRowCounts: {
       bpe_rows_total: parsed.results.length,
       bpe_rows_matched: matchedRows,

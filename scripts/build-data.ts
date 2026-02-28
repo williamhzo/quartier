@@ -77,6 +77,11 @@ type CultureMetric = {
   cultural_buildings_per_10k_residents: number;
   by_type: {
     cinemas: number;
+    libraries: number;
+    heritage: number;
+    livePerformanceVenues: number;
+    archives: number;
+    museums: number;
   };
 };
 
@@ -732,7 +737,14 @@ async function applyNightlifeDimension(
 
 const EXPECTED_CULTURE_BPE_CODEBOOK = {
   cinemas: ["F303"],
+  libraries: ["F305"],
+  heritage: ["F307"],
+  livePerformanceVenues: ["F312"],
+  archives: ["F314"],
+  museums: ["F315"],
 } as const;
+
+type CultureTypeKey = keyof typeof EXPECTED_CULTURE_BPE_CODEBOOK;
 
 function assertPinnedCultureCodebook(): void {
   const configuredCodebook = DATA_CONFIG.sources.bpe.cultureCodebook?.byType;
@@ -749,14 +761,17 @@ function assertPinnedCultureCodebook(): void {
     );
   }
 
-  const configuredCinemas = [...(configuredCodebook.cinemas ?? [])].sort();
-  const expectedCinemas = [...EXPECTED_CULTURE_BPE_CODEBOOK.cinemas].sort();
-  if (configuredCinemas.join(",") !== expectedCinemas.join(",")) {
-    throw new Error(
-      `bpe culture codebook drift for "cinemas": expected [${expectedCinemas.join(", ")}], got [${configuredCinemas.join(", ")}]`,
-    );
+  for (const type of expectedTypes as CultureTypeKey[]) {
+    const configuredCodes = [...(configuredCodebook[type] ?? [])].sort();
+    const expectedCodes = [...EXPECTED_CULTURE_BPE_CODEBOOK[type]].sort();
+    if (configuredCodes.join(",") !== expectedCodes.join(",")) {
+      throw new Error(
+        `bpe culture codebook drift for "${type}": expected [${expectedCodes.join(", ")}], got [${configuredCodes.join(", ")}]`,
+      );
+    }
   }
 
+  const expectedCinemas = [...EXPECTED_CULTURE_BPE_CODEBOOK.cinemas].sort();
   const amenitiesCinemaCodes = [...DATA_CONFIG.sources.bpe.equipmentCodes.cinemas]
     .sort();
   if (amenitiesCinemaCodes.join(",") !== expectedCinemas.join(",")) {
@@ -766,14 +781,34 @@ function assertPinnedCultureCodebook(): void {
   }
 }
 
+function buildCultureByType(
+  equipmentByCommune: Map<string, number>,
+): CultureMetric["by_type"] {
+  const byType = Object.fromEntries(
+    (Object.entries(EXPECTED_CULTURE_BPE_CODEBOOK) as Array<
+      [CultureTypeKey, readonly string[]]
+    >).map(([type, codes]) => {
+      const totalForType = codes.reduce(
+        (sum, code) => sum + (equipmentByCommune.get(code) ?? 0),
+        0,
+      );
+      return [type, round(totalForType, 2)];
+    }),
+  ) as CultureMetric["by_type"];
+
+  return byType;
+}
+
 function toCultureMetric(
-  cinemas: number,
+  byType: CultureMetric["by_type"],
   areaKm2: number,
   population: number,
 ): CultureMetric | null {
+  const total = Object.values(byType).reduce((sum, value) => sum + value, 0);
+
   if (
-    !Number.isFinite(cinemas) ||
-    cinemas < 0 ||
+    !Number.isFinite(total) ||
+    total < 0 ||
     !Number.isFinite(areaKm2) ||
     areaKm2 <= 0 ||
     !Number.isFinite(population) ||
@@ -783,12 +818,10 @@ function toCultureMetric(
   }
 
   return {
-    cultural_buildings_total: round(cinemas, 2),
-    cultural_buildings_per_km2: round(cinemas / areaKm2, 2),
-    cultural_buildings_per_10k_residents: round((cinemas / population) * 10_000, 2),
-    by_type: {
-      cinemas: round(cinemas, 2),
-    },
+    cultural_buildings_total: round(total, 2),
+    cultural_buildings_per_km2: round(total / areaKm2, 2),
+    cultural_buildings_per_10k_residents: round((total / population) * 10_000, 2),
+    by_type: byType,
   };
 }
 
@@ -817,17 +850,43 @@ async function applyAmenitiesDimension(
     config: DATA_CONFIG.sources.bpe,
   });
 
+  const cultureWarnings: string[] = [];
+  if (cultureEnabled) {
+    for (const [type, codes] of Object.entries(
+      EXPECTED_CULTURE_BPE_CODEBOOK,
+    ) as Array<[CultureTypeKey, readonly string[]]>) {
+      let total = 0;
+      for (const communeCode of PARIS_ARRONDISSEMENT_COMMUNES) {
+        const equipmentByCommune = amenities.byEquipmentByCommune.get(communeCode);
+        if (!equipmentByCommune) continue;
+        total += codes.reduce(
+          (sum, code) => sum + (equipmentByCommune.get(code) ?? 0),
+          0,
+        );
+      }
+
+      if (total <= 0) {
+        cultureWarnings.push(
+          `culture codebook bucket "${type}" has zero count across all arrondissements for the cached BPE payload`,
+        );
+      }
+    }
+  }
+
   const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
   for (const [code, metric] of amenities.byCommune) {
     const row = rowByCode.get(code);
     if (!row) continue;
+    const equipmentByCommune =
+      amenities.byEquipmentByCommune.get(code) ?? new Map<string, number>();
 
     if (amenitiesEnabled) {
       row.dimensions.amenities = metric;
     }
     if (cultureEnabled) {
+      const byType = buildCultureByType(equipmentByCommune);
       row.dimensions.culture = toCultureMetric(
-        metric.cinemas,
+        byType,
         row.area_km2,
         row.population,
       );
@@ -838,7 +897,7 @@ async function applyAmenitiesDimension(
     sourceRowCounts: amenities.sourceRowCounts,
     sourceChecksums: amenities.sourceChecksums,
     sourceUrls: amenities.sourceUrls,
-    warnings: amenities.warnings,
+    warnings: [...amenities.warnings, ...cultureWarnings],
   };
 }
 

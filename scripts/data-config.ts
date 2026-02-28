@@ -61,6 +61,7 @@ export const DATA_CONFIG = {
     greenSpace: "opendata-paris-espaces-verts-export-2026-02-28",
     noise: "ville-paris-bruit-routier-cnossos-2022",
     bpe: "buildingref-france-bpe-all-millesime-2016",
+    bpe_culture_codebook: "bpe-culture-v2",
     sirene: "V3.11",
   },
   sourceUrls: {
@@ -187,9 +188,14 @@ export const DATA_CONFIG = {
         cinemas: ["F303"],
       },
       cultureCodebook: {
-        version: "bpe-culture-v1",
+        version: "bpe-culture-v2",
         byType: {
           cinemas: ["F303"],
+          libraries: ["F305"],
+          heritage: ["F307"],
+          livePerformanceVenues: ["F312"],
+          archives: ["F314"],
+          museums: ["F315"],
         },
       },
     },
