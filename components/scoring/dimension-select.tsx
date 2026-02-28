@@ -66,16 +66,31 @@ export function DimensionSelect({ value, onChange }: Props) {
         {t(value)}
       </PopoverTrigger>
       <PopoverContent align="start" sideOffset={4} className="w-auto">
-        <div className="flex flex-col items-start gap-1">
-          {ALL_VALUES.map((key) => (
-            <Chip
-              key={key}
-              icon={DIMENSION_ICONS[key]}
-              label={t(key)}
-              active={key === value}
-              onClick={() => onChange(key)}
-            />
-          ))}
+        <div className="flex flex-col gap-1">
+          <button
+            onClick={() => onChange("composite")}
+            className={cn(
+              "flex w-full items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors",
+              value === "composite"
+                ? "bg-foreground text-background border-transparent"
+                : "bg-muted/60 text-foreground hover:bg-muted border-border/60",
+            )}
+          >
+            <SlidersHorizontal className="size-3" />
+            {t("composite")}
+          </button>
+          <div className="border-border/40 my-0.5 border-t" />
+          <div className="flex flex-col items-start gap-1">
+            {DIMENSION_KEYS.map((key) => (
+              <Chip
+                key={key}
+                icon={DIMENSION_ICONS[key]}
+                label={t(key)}
+                active={key === value}
+                onClick={() => onChange(key)}
+              />
+            ))}
+          </div>
         </div>
       </PopoverContent>
     </Popover>
