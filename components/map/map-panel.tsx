@@ -27,7 +27,7 @@ export function MapPanel({ arrondissement, allArrondissements, composite, rank, 
   return (
     <>
       {/* Desktop: side panel */}
-      <div className="bg-background motion-safe:animate-in motion-safe:slide-in-from-right-full absolute top-0 right-0 z-20 hidden h-full overflow-y-auto border-l shadow-lg md:block md:w-96 lg:w-[28rem]">
+      <div className="bg-background motion-safe:animate-in motion-safe:slide-in-from-right-full absolute top-0 right-0 z-20 hidden h-full overflow-y-auto border-l shadow-lg md:block md:w-[40vw] md:max-w-lg">
         <PanelContent
           label={label}
           num={num}
