@@ -1,13 +1,14 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/share-button";
+import { ArrondissementLabel } from "@/components/arrondissement-label";
 import { ScoreBar } from "@/components/detail/score-bar";
 import { ScoreOverview } from "@/components/detail/score-overview";
 import { DimensionSection } from "@/components/detail/dimension-section";
-import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
+import { DIMENSION_KEYS } from "@/lib/arrondissements";
 import { rankByDimension, dimensionMedian } from "@/lib/scoring";
 import { Link } from "@/i18n/navigation";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
@@ -22,14 +23,12 @@ type Props = {
 
 export function MapPanel({ arrondissement, allArrondissements, composite, rank, onClose }: Props) {
   const num = arrondissement.number;
-  const label = formatArrondissement(num);
 
   return (
     <>
       {/* Desktop: side panel */}
       <div className="bg-background motion-safe:animate-in motion-safe:slide-in-from-right-full absolute top-0 right-0 z-20 hidden h-full overflow-y-auto border-l shadow-lg md:block md:w-[40vw] md:max-w-lg">
         <PanelContent
-          label={label}
           num={num}
           composite={composite}
           rank={rank}
@@ -45,7 +44,6 @@ export function MapPanel({ arrondissement, allArrondissements, composite, rank, 
           <div className="bg-muted-foreground/30 h-1.5 w-12 rounded-full" />
         </div>
         <PanelContent
-          label={label}
           num={num}
           composite={composite}
           rank={rank}
@@ -59,7 +57,6 @@ export function MapPanel({ arrondissement, allArrondissements, composite, rank, 
 }
 
 function PanelContent({
-  label,
   num,
   composite,
   rank,
@@ -67,7 +64,6 @@ function PanelContent({
   allArrondissements,
   onClose,
 }: {
-  label: string;
   num: number;
   composite: number;
   rank: number;
@@ -76,13 +72,16 @@ function PanelContent({
   onClose: () => void;
 }) {
   const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <div className="p-5">
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <h2 className="text-headline text-balance text-xl">{label}</h2>
-          <p className="text-muted-foreground font-mono text-sm tabular-nums">
+          <h2 className="text-display text-balance text-2xl">
+            <ArrondissementLabel number={num} locale={locale} />
+          </h2>
+          <p className="text-muted-foreground/70 font-mono text-xs tabular-nums">
             {t("detail.rank")}: {rank} {t("detail.outOf")}
           </p>
         </div>

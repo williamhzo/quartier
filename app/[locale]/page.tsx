@@ -1,7 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { SearchParams } from "nuqs/server";
 import { searchParamsCache } from "@/lib/search-params";
-import { ARRONDISSEMENT_NAMES } from "@/lib/arrondissements";
+import { arrondissementName } from "@/lib/arrondissements";
 import { loadArrondissements } from "@/lib/data";
 import { loadBoundaries, loadContextBoundaries, loadSeine } from "@/lib/geo";
 import { ParisMap } from "@/components/map/paris-map";
@@ -17,7 +17,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
   const t = await getTranslations({ locale, namespace: "metadata" });
 
   if (arr != null && arr >= 1 && arr <= 20) {
-    const name = ARRONDISSEMENT_NAMES[arr];
+    const name = arrondissementName(arr, locale);
     const title = `${name} - quartier`;
     return {
       title,

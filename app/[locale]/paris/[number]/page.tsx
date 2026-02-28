@@ -2,7 +2,11 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { loadArrondissements } from "@/lib/data";
 import { loadBoundaries, loadSeine } from "@/lib/geo";
-import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
+import {
+  DIMENSION_KEYS,
+  formatArrondissement,
+} from "@/lib/arrondissements";
+import { ArrondissementLabel } from "@/components/arrondissement-label";
 import { EQUAL_WEIGHTS } from "@/lib/personas";
 import {
   computeComposite,
@@ -31,7 +35,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { locale, number } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
-  const label = formatArrondissement(Number(number));
+  const label = formatArrondissement(Number(number), locale);
   const title = `${label} - ${t("title")}`;
   const ogImage = `/api/og/${number}`;
 
@@ -75,7 +79,7 @@ export default async function DetailPage({ params }: Props) {
           {t("detail.backToMap")}
         </Link>
         <h1 className="mt-4 text-balance text-2xl font-semibold">
-          {formatArrondissement(Number(number))}
+          <ArrondissementLabel number={Number(number)} locale={locale} />
         </h1>
         <p className="text-muted-foreground mt-2">{t("common.na")}</p>
       </div>
@@ -106,7 +110,7 @@ export default async function DetailPage({ params }: Props) {
         {t("detail.backToMap")}
       </Link>
       <h1 className="text-display mt-4 text-balance text-4xl sm:text-5xl">
-        {formatArrondissement(arrondissement.number)}
+        <ArrondissementLabel number={arrondissement.number} locale={locale} />
       </h1>
       <div className="mt-3 flex items-center gap-3">
         <Badge variant="secondary" className="font-mono text-base">

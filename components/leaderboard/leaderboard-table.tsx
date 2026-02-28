@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Table,
   TableBody,
@@ -15,7 +15,8 @@ import { Link } from "@/i18n/navigation";
 import { PersonaSelector } from "@/components/scoring/persona-selector";
 import { PERSONA_WEIGHTS } from "@/lib/personas";
 import { rankByComposite } from "@/lib/scoring";
-import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
+import { DIMENSION_KEYS } from "@/lib/arrondissements";
+import { ArrondissementLabel } from "@/components/arrondissement-label";
 import type { Arrondissement, DimensionKey, PersonaKey } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
@@ -28,6 +29,7 @@ type Props = {
 
 export function LeaderboardTable({ data }: Props) {
   const t = useTranslations();
+  const locale = useLocale();
   const [persona, setPersona] = useState<PersonaKey>("tourist");
   const [sortKey, setSortKey] = useState<SortKey>("composite");
   const [sortAsc, setSortAsc] = useState(false);
@@ -152,7 +154,7 @@ export function LeaderboardTable({ data }: Props) {
                       href={`/paris/${a.number}`}
                       className="hover:text-primary transition-colors hover:underline"
                     >
-                      {formatArrondissement(a.number)}
+                      <ArrondissementLabel number={a.number} locale={locale} />
                     </Link>
                   </TableCell>
                   <TableCell
