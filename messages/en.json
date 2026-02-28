@@ -69,6 +69,9 @@
       "povertyRate": "Poverty rate"
     },
     "scoreOverview": "Score overview",
+    "dimensionRank": "#{rank} of {total}",
+    "parisMedian": "Paris median",
+    "breakdown": "Breakdown",
     "crimeBreakdown": "Crime by type",
     "cases": "cases",
     "safety": {

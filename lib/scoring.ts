@@ -1,5 +1,37 @@
 import type { Arrondissement, DimensionKey, PersonaWeights } from "./types";
 
+export function rankByDimension(
+  arrondissements: Arrondissement[],
+  key: DimensionKey,
+): Map<number, { rank: number; score: number }> {
+  const withScore = arrondissements
+    .filter((a) => a.scores[key] != null)
+    .map((a) => ({ number: a.number, score: a.scores[key]! }))
+    .sort((a, b) => b.score - a.score);
+
+  const result = new Map<number, { rank: number; score: number }>();
+  withScore.forEach((a, i) => {
+    result.set(a.number, { rank: i + 1, score: a.score });
+  });
+  return result;
+}
+
+export function dimensionMedian(
+  arrondissements: Arrondissement[],
+  key: DimensionKey,
+): number | null {
+  const scores = arrondissements
+    .map((a) => a.scores[key])
+    .filter((s): s is number => s != null)
+    .sort((a, b) => a - b);
+
+  if (scores.length === 0) return null;
+  const mid = Math.floor(scores.length / 2);
+  return scores.length % 2 === 0
+    ? (scores[mid - 1] + scores[mid]) / 2
+    : scores[mid];
+}
+
 export function computeComposite(
   scores: Record<DimensionKey, number | null>,
   weights: PersonaWeights,
