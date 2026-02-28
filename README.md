@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quartier
 
-## Getting Started
+Paris has 20 arrondissements. Everyone who's ever lived there has opinions about which one is best. This app replaces those opinions with data (and then you can argue about the data instead).
 
-First, run the development server:
+Pick a persona (young professional, family, tourist, business owner) and Quartier ranks all 20 arrondissements using French open data: real estate prices, crime stats, metro density, income, noise. Nightlife, green space, and amenities are next.
+
+Map-first. Mobile-first. French and English. No backend, just pre-computed static JSON.
+
+**[quartier.sh](https://quartier.sh)**
+
+## Run locally
+
+Needs [Bun](https://bun.sh).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+git clone git@github.com:williamhzo/quartier.git
+cd quartier
+bun install
+```
+
+Grab a free [MapTiler key](https://cloud.maptiler.com/account/keys/) and drop it in `.env.local`:
+
+```
+NEXT_PUBLIC_MAPTILER_KEY=your_key_here
+```
+
+```bash
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [localhost:3000](http://localhost:3000). That's it.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | What it does |
+| --- | --- |
+| `bun dev` | Dev server |
+| `bun run build` | Production build |
+| `bun run lint` | ESLint |
+| `bun run format` | Prettier |
+| `bun run data:build` | Rebuild data from source datasets |
 
-## Learn More
+## Fork it
 
-To learn more about Next.js, take a look at the following resources:
+1. Fork + clone
+2. `bun install`
+3. Get a [MapTiler key](https://cloud.maptiler.com/account/keys/) (free tier works)
+4. `bun dev`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All source data is French open data, no paid APIs needed. Want to add a dimension? Look at `scripts/data-config.ts` for the pattern and `scripts/sources/` for existing parsers.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Stack
 
-## Deploy on Vercel
+Next.js 16 · TypeScript · Tailwind CSS 4 · shadcn/ui · MapLibre GL · react-map-gl · Recharts · nuqs · next-intl · Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Where the data comes from
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Everything is French government open data:
+
+- Housing prices: [DVF](https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres/) (actual transaction records, not asking prices)
+- Income & poverty: [INSEE Filosofi](https://www.insee.fr/fr/statistiques/5359146)
+- Crime: [SSMSI](https://www.data.gouv.fr/fr/datasets/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/)
+- Transport: [IDFM](https://data.iledefrance-mobilites.fr/explore/dataset/emplacement-des-gares-idf/)
+- Noise: [Bruitparif / Ville de Paris](https://www.data.gouv.fr/fr/datasets/bruit-routier-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journee-complete/)
+- Nightlife (soon): [SIRENE](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/)
+- Green space (soon): [opendata.paris.fr](https://opendata.paris.fr/explore/dataset/espaces_verts/)
+- Amenities (soon): [INSEE BPE](https://www.data.gouv.fr/fr/datasets/base-permanente-des-equipements-1/)
+
+## Contributing
+
+Contributions welcome. Bug reports, new data dimensions, UI improvements, translations, whatever.
+
+1. Fork the repo
+2. Create a branch (`git checkout -b your-thing`)
+3. Make your changes
+4. Run `bun run lint && bun run build` to check nothing's broken
+5. Open a PR
+
+If you're adding a new data dimension, open an issue first so we can discuss the data source and schema before you write a parser.
+
+## License
+
+[MIT](LICENSE)
