@@ -137,8 +137,23 @@ function getRawValueRows(
     case "culture":
       return [
         [t("culture.total"), String(data.cultural_buildings_total ?? "-")],
-        [t("culture.perKm2"), data.cultural_buildings_per_km2?.toFixed(1) ?? "-"],
-        [t("culture.per10k"), data.cultural_buildings_per_10k_residents?.toFixed(1) ?? "-"],
+        [
+          t("culture.perKm2"),
+          data.cultural_buildings_per_km2?.toFixed(1) ?? "-",
+        ],
+        [
+          t("culture.per10k"),
+          data.cultural_buildings_per_10k_residents?.toFixed(1) ?? "-",
+        ],
+        [t("culture.cinemas"), String(data.by_type?.cinemas ?? "-")],
+        [t("culture.libraries"), String(data.by_type?.libraries ?? "-")],
+        [t("culture.heritage"), String(data.by_type?.heritage ?? "-")],
+        [
+          t("culture.livePerformanceVenues"),
+          String(data.by_type?.livePerformanceVenues ?? "-"),
+        ],
+        [t("culture.archives"), String(data.by_type?.archives ?? "-")],
+        [t("culture.museums"), String(data.by_type?.museums ?? "-")],
       ];
     default:
       return [];
