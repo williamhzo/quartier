@@ -17,14 +17,14 @@ export function ScoreBar({ score, label, median, className }: Props) {
         <span className={cn(isNull && "text-muted-foreground")}>{label}</span>
         <span
           className={cn(
-            "font-medium tabular-nums",
+            "font-mono font-medium tabular-nums",
             isNull && "text-muted-foreground",
           )}
         >
           {isNull ? "-" : rounded}
         </span>
       </div>
-      <div className="bg-secondary relative h-2 overflow-hidden rounded-full">
+      <div className="bg-secondary relative h-2.5 overflow-hidden rounded-full">
         <div
           className={cn(
             "h-full rounded-full transition-[width]",

@@ -109,10 +109,10 @@ export default async function DetailPage({ params }: Props) {
         {formatArrondissement(arrondissement.number)}
       </h1>
       <div className="mt-3 flex items-center gap-3">
-        <Badge variant="secondary" className="text-base">
+        <Badge variant="secondary" className="font-mono text-base">
           {Math.round(composite)}/100
         </Badge>
-        <span className="text-muted-foreground text-sm tabular-nums">
+        <span className="text-muted-foreground font-mono text-sm tabular-nums">
           #{rank}/20
         </span>
         <ShareButton number={arrondissement.number} />

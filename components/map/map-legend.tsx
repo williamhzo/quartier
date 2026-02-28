@@ -32,7 +32,7 @@ export function MapLegend({ dimension, selectedScore }: Props) {
           />
         )}
       </div>
-      <div className="text-muted-foreground mt-0.5 flex w-36 justify-between text-[10px] md:w-44">
+      <div className="text-muted-foreground mt-0.5 flex w-36 justify-between font-mono text-[10px] md:w-44">
         <span>0</span>
         <span>50</span>
         <span>100</span>

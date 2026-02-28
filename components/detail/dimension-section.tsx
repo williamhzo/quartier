@@ -150,7 +150,7 @@ function RawValues({
       {rows.map(([label, value]) => (
         <div key={label} className="flex justify-between py-1">
           <dt className="text-muted-foreground">{label}</dt>
-          <dd className="font-medium tabular-nums">{value}</dd>
+          <dd className="font-mono font-medium tabular-nums">{value}</dd>
         </div>
       ))}
     </dl>

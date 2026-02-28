@@ -97,7 +97,7 @@ function DotStripRow({
           style={{ left: `${score}%` }}
         />
       </div>
-      <span className="text-muted-foreground shrink-0 text-xs tabular-nums">
+      <span className="text-muted-foreground shrink-0 font-mono text-xs tabular-nums">
         #{rank}
       </span>
     </div>
