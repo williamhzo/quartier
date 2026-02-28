@@ -1,5 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { useTranslations } from "next-intl";
+import { routing } from "@/i18n/routing";
 import { LeaderboardTable } from "@/components/leaderboard/leaderboard-table";
 import { loadArrondissements } from "@/lib/data";
 
@@ -11,12 +12,21 @@ export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "leaderboard" });
 
+  const languages = Object.fromEntries(
+    routing.locales.map((l) => [l, `https://quartier.sh/${l}/leaderboard`]),
+  );
+
   return {
     title: `${t("title")} - quartier`,
     description: t("description"),
+    alternates: {
+      canonical: `https://quartier.sh/${locale}/leaderboard`,
+      languages,
+    },
     openGraph: {
       title: `${t("title")} - quartier`,
       description: t("description"),
+      url: `https://quartier.sh/${locale}/leaderboard`,
       images: [{ url: "/api/og", width: 1200, height: 630 }],
     },
     twitter: {

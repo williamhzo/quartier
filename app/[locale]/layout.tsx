@@ -30,13 +30,25 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
+  const languages = Object.fromEntries(
+    routing.locales.map((l) => [l, `https://quartier.sh/${l}`]),
+  );
+
   return {
     metadataBase: new URL("https://quartier.sh"),
     title: t("title"),
     description: t("description"),
+    alternates: {
+      canonical: `https://quartier.sh/${locale}`,
+      languages,
+    },
     openGraph: {
+      type: "website",
+      siteName: "quartier",
+      locale: locale === "fr" ? "fr_FR" : "en_US",
       title: t("title"),
       description: t("description"),
+      url: `https://quartier.sh/${locale}`,
       images: [{ url: "/api/og", width: 1200, height: 630 }],
     },
     twitter: {
