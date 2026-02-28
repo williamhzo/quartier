@@ -63,6 +63,12 @@ export type FetchSireneNightlifeOptions = {
 
 export type NightlifeBucketCounts = Record<SireneNightlifeBucket, number>;
 
+export type NightlifeMetric = {
+  restaurants_per_km2: number;
+  bars_per_km2: number;
+  cafes_per_km2: number;
+};
+
 export type SireneNightlifeSnapshot = {
   communeCode: string;
   fetchedAt: string;
@@ -83,12 +89,25 @@ export type SireneNightlifeSnapshot = {
   nomenclaturesEncountered: string[];
 };
 
+export type BuildNightlifeFromSireneOutput = {
+  byCommune: Map<string, NightlifeMetric>;
+  sourceRowCounts: Record<string, number>;
+  sourceChecksums: Record<string, string>;
+  sourceUrls: Record<string, string>;
+  warnings: string[];
+};
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function randomJitter(max: number): number {
   return Math.floor(Math.random() * max);
+}
+
+function round(value: number, decimals: number): number {
+  const factor = 10 ** decimals;
+  return Math.round(value * factor) / factor;
 }
 
 function normalizePageResponse(input: unknown): SirenePageResponse {
@@ -418,5 +437,88 @@ export async function fetchSireneNightlifeSnapshot(
     },
     buckets: aggregate.bucketCounts,
     nomenclaturesEncountered: aggregate.nomenclaturesEncountered,
+  };
+}
+
+export async function buildNightlifeFromSirene(options: {
+  communes: readonly string[];
+  areaByCommune: Map<string, number>;
+  buckets: readonly SireneNightlifeBucket[];
+  mode: SireneFetchMode;
+  accessToken: string;
+  expectedNomenclatures?: readonly string[];
+}): Promise<BuildNightlifeFromSireneOutput> {
+  if (options.mode === "network-first" && options.accessToken.length === 0) {
+    throw new Error(
+      "SIRENE_API_TOKEN is required when building nightlife in network mode",
+    );
+  }
+
+  const byCommune = new Map<string, NightlifeMetric>();
+  const snapshots: SireneNightlifeSnapshot[] = [];
+  const warnings: string[] = [];
+  let processedRows = 0;
+  let matchedRows = 0;
+  let unmatchedRows = 0;
+  let fetchedPages = 0;
+
+  for (const communeCode of options.communes) {
+    const areaKm2 = options.areaByCommune.get(communeCode);
+    if (!areaKm2 || !Number.isFinite(areaKm2) || areaKm2 <= 0) {
+      throw new Error(
+        `missing or invalid area for nightlife metric: ${communeCode}`,
+      );
+    }
+
+    const snapshot = await fetchSireneNightlifeSnapshot({
+      communeCode,
+      accessToken: options.accessToken,
+      buckets: options.buckets,
+      mode: options.mode,
+      expectedNomenclatures: options.expectedNomenclatures,
+    });
+
+    snapshots.push(snapshot);
+    processedRows += snapshot.stats.processedEtablissements;
+    matchedRows += snapshot.stats.matchedByApeCount;
+    unmatchedRows += snapshot.stats.unmatchedApeCount;
+    fetchedPages += snapshot.stats.pageCount;
+
+    const restaurantsDensity = round(snapshot.buckets.restaurants / areaKm2, 2);
+    const barsCafesDensity = round(snapshot.buckets.bars_cafes / areaKm2, 2);
+    byCommune.set(communeCode, {
+      restaurants_per_km2: restaurantsDensity,
+      bars_per_km2: barsCafesDensity,
+      cafes_per_km2: barsCafesDensity,
+    });
+  }
+
+  if (options.buckets.includes("nightlife_extension")) {
+    warnings.push(
+      "nightlife_extension bucket is fetched but excluded from v1 nightlife density fields",
+    );
+  }
+
+  warnings.push(
+    "cafes_per_km2 mirrors bars_per_km2 because SIRENE v1 buckets bars and cafes together under NAF 56.30Z",
+  );
+
+  return {
+    byCommune,
+    sourceRowCounts: {
+      sirene_rows_processed: processedRows,
+      sirene_rows_matched: matchedRows,
+      sirene_rows_unmatched: unmatchedRows,
+      sirene_pages_fetched: fetchedPages,
+    },
+    sourceChecksums: {
+      sirene_snapshot_aggregate: createHash("sha256")
+        .update(JSON.stringify(snapshots))
+        .digest("hex"),
+    },
+    sourceUrls: {
+      sirene: DATA_CONFIG.sources.sirene.baseUrl,
+    },
+    warnings,
   };
 }
