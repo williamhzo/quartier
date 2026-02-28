@@ -584,10 +584,9 @@ Use shadcn/ui defaults (radix-nova preset) throughout. No custom styling until a
 
 ### Phase 6: UI Polish
 
-1. Warm editorial aesthetic pass
-2. Recharts mini-charts on detail pages
-3. Map styling refinements
-4. Loading/empty/error states
+1. Recharts mini-charts on detail pages
+2. Map styling refinements
+3. Loading/empty/error states
 
 ### Future
 
