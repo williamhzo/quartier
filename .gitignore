@@ -46,5 +46,6 @@ next-env.d.ts
 .claude/
 .claude/settings.local.json
 
-# spec (local only)
+# local-only docs
 spec.md
+ideas.md

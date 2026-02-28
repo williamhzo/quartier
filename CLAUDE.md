@@ -2,7 +2,7 @@
 
 ## Project
 
-Quartier (quartier.sh) is a Paris arrondissement comparator built on French open data. See `spec.md` for the full product spec and `ideas.md` for broader product direction.
+Quartier (quartier.sh) is a Paris arrondissement comparator built on French open data.
 
 ## Commands
 
@@ -17,14 +17,6 @@ bun run format   # prettier (with tailwind class sorting)
 
 - shadcn components use `data-slot` attributes for styling hooks
 - Add new shadcn components via `bunx shadcn@latest add <component>`
-
-## Spec Tracking
-
-`spec.md` is the single source of truth for what Quartier does and how it works. Keep it current:
-
-- After implementing a feature or changing behavior, update the relevant section of `spec.md` in the same commit
-- If a phase is completed, mark it as done in the Phasing section
-- If implementation diverges from the spec (e.g., different library, changed data source, altered schema), update the spec to match reality
 
 ## Commit & Pull Request Guidelines
 

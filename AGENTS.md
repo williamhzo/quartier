@@ -1,6 +1,5 @@
 # Repository Guidelines
 
-- `ideas.md` and `spec.md`: product and feature direction docs
 
 ## Build, Test, and Development Commands
 
@@ -11,14 +10,6 @@
 - Formatting: Prettier is source of truth; do not hand-format
 - Linting: fix ESLint warnings before opening PRs
 - File names are typically kebab-case (example: `component-example.tsx`), while component exports are PascalCase
-
-## Spec Tracking
-
-`spec.md` is the source of truth for Quartier's product definition. It must stay in sync with the code:
-
-- When implementing a feature or changing behavior, update the relevant `spec.md` section in the same commit
-- Mark completed phases in the Phasing section
-- If implementation diverges from the spec, update the spec to match reality -- never leave stale spec sections
 
 ## Commit & Pull Request Guidelines
 
