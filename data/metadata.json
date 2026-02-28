@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-28T00:18:34.817Z",
+  "generated_at": "2026-02-28T00:22:37.447Z",
   "enabled_dimensions": [
     "housing",
     "income",
@@ -47,7 +47,7 @@
     "bpe_rows_matched": 431
   },
   "source_checksums": {
-    "boundaries": "b810dda64967bd0c8ac75313d800e6a276214300ef8b8298a7339ce69cc04d88",
+    "boundaries": "4dd10d36eb280ba24a15cc0d5676dae6f624ab1c1ccad45972407dc89c24d574",
     "filosofi": "845dc47c4643271542c56819011802850f6a382f336d240dcc1e1ccde44603f2",
     "dvf_current": "fef7fb65c52137888ef8c1aa0098660011532f20a1f2e5f34b803691abffb300",
     "dvf_prior": "c62481e00be2cf2c135618c0a16ea5bb0422edda3f9d8607dadad7daf5959fb7",
@@ -59,7 +59,9 @@
   "quality": {
     "hard_fail_checks_passed": true,
     "hard_fail_errors": [],
-    "warnings": ["ssmsi rows skipped due missing/non-numeric \"nombre\": 3"],
+    "warnings": [
+      "ssmsi rows skipped due missing/non-numeric \"nombre\": 3"
+    ],
     "coverage_by_dimension": {
       "housing": 20,
       "income": 20,
