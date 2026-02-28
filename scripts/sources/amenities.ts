@@ -4,6 +4,7 @@ import { mkdir, readFile, rename } from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
+import type { ReadableStream as NodeReadableStream } from "node:stream/web";
 
 type BpeFetchMode = "network-first" | "cache-only";
 
@@ -129,8 +130,11 @@ async function fetchResponseToCache(
 
       const tempPath = `${cachePath}.tmp-${Date.now()}`;
       await mkdir(path.dirname(cachePath), { recursive: true });
+      const responseBody = response.body as unknown as NodeReadableStream<
+        Uint8Array
+      >;
       await pipeline(
-        Readable.fromWeb(response.body as ReadableStream),
+        Readable.fromWeb(responseBody),
         createWriteStream(tempPath),
       );
       await rename(tempPath, cachePath);
