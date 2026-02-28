@@ -26,7 +26,7 @@ export function ScoreBar({ score, label, className }: Props) {
       <div className="bg-secondary h-2 overflow-hidden rounded-full">
         <div
           className={cn(
-            "h-full rounded-full transition-all",
+            "h-full rounded-full transition-[width]",
             isNull ? "bg-muted" : "bg-primary",
           )}
           style={{ width: isNull ? "100%" : `${rounded}%` }}
