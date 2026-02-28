@@ -1,20 +1,24 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Briefcase, Users, Camera, LaptopMinimal } from "lucide-react";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/ui/toggle-group";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { PersonaKey } from "@/lib/types";
 
-const PERSONA_KEYS: PersonaKey[] = [
-  "youngPro",
-  "family",
-  "tourist",
-  "business",
+const PERSONAS: { key: PersonaKey; icon: typeof Briefcase }[] = [
+  { key: "tourist", icon: Camera },
+  { key: "youngPro", icon: LaptopMinimal },
+  { key: "family", icon: Users },
+  { key: "business", icon: Briefcase },
 ];
 
 type Props = {
@@ -26,17 +30,33 @@ export function PersonaSelector({ value, onChange }: Props) {
   const t = useTranslations("personas");
 
   return (
-    <Select value={value} onValueChange={(v) => onChange(v as PersonaKey)}>
-      <SelectTrigger>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {PERSONA_KEYS.map((key) => (
-          <SelectItem key={key} value={key}>
-            {t(key)}
-          </SelectItem>
+    <TooltipProvider delayDuration={300}>
+      <ToggleGroup
+        type="single"
+        value={value}
+        onValueChange={(v) => {
+          if (v) onChange(v as PersonaKey);
+        }}
+        variant="outline"
+        size="sm"
+      >
+        {PERSONAS.map(({ key, icon: Icon }) => (
+          <Tooltip key={key}>
+            <TooltipTrigger asChild>
+              <ToggleGroupItem
+                value={key}
+                aria-label={t(key)}
+                className="aria-checked:bg-foreground aria-checked:text-background"
+              >
+                <Icon className="size-4" />
+              </ToggleGroupItem>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="text-xs">
+              {t(key)}
+            </TooltipContent>
+          </Tooltip>
         ))}
-      </SelectContent>
-    </Select>
+      </ToggleGroup>
+    </TooltipProvider>
   );
 }

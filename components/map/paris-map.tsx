@@ -38,7 +38,7 @@ export function ParisMap({
   const t = useTranslations();
   const mapRef = useRef<MapRef>(null);
   const hoveredIdRef = useRef<number | null>(null);
-  const [persona, setPersona] = useState<PersonaKey>("youngPro");
+  const [persona, setPersona] = useState<PersonaKey>("tourist");
   const [dimension, setDimension] = useState<DimensionKey | "composite">(
     "composite",
   );
@@ -266,13 +266,11 @@ export function ParisMap({
 
   return (
     <div className="relative h-[calc(100dvh-3.5rem)]">
-      <div className="absolute top-3 left-3 z-10 flex gap-2">
+      <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
         <div className="w-40">
           <DimensionSelect value={dimension} onChange={setDimension} />
         </div>
-        <div className="w-40">
-          <PersonaSelector value={persona} onChange={setPersona} />
-        </div>
+        <PersonaSelector value={persona} onChange={setPersona} />
       </div>
 
       <Map

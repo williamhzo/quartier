@@ -27,7 +27,7 @@ type Props = {
 
 export function LeaderboardTable({ data }: Props) {
   const t = useTranslations();
-  const [persona, setPersona] = useState<PersonaKey>("youngPro");
+  const [persona, setPersona] = useState<PersonaKey>("tourist");
   const [sortKey, setSortKey] = useState<SortKey>("composite");
   const [sortAsc, setSortAsc] = useState(false);
 
