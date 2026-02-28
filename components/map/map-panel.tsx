@@ -81,7 +81,7 @@ function PanelContent({
     <div className="p-4">
       <div className="mb-4 flex items-start justify-between">
         <div>
-          <h2 className="text-balance text-lg font-semibold">{label}</h2>
+          <h2 className="text-headline text-balance text-xl">{label}</h2>
           <p className="text-muted-foreground text-sm tabular-nums">
             {t("detail.rank")}: {rank} {t("detail.outOf")}
           </p>

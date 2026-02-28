@@ -97,7 +97,7 @@ export default async function DetailPage({ params }: Props) {
     : { longitude: 2.3488, latitude: 48.8566 };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
+    <div className="mx-auto max-w-4xl px-4 pt-12 pb-10">
       <Link
         href="/"
         className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm transition-colors"
@@ -105,10 +105,10 @@ export default async function DetailPage({ params }: Props) {
         <ArrowLeft className="size-4" />
         {t("detail.backToMap")}
       </Link>
-      <div className="mt-4 flex items-center gap-4">
-        <h1 className="text-balance text-2xl font-semibold">
-          {formatArrondissement(arrondissement.number)}
-        </h1>
+      <h1 className="text-display mt-4 text-balance text-4xl sm:text-5xl">
+        {formatArrondissement(arrondissement.number)}
+      </h1>
+      <div className="mt-3 flex items-center gap-3">
         <Badge variant="secondary" className="text-base">
           {Math.round(composite)}/100
         </Badge>

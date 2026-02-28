@@ -15,17 +15,18 @@ export function Nav() {
   ];
 
   return (
-    <nav className="border-border flex h-14 items-center justify-between border-b px-4">
+    <nav className="flex h-14 items-center justify-between border-b border-border/40 px-4">
       <div className="flex items-center gap-6">
-        <Link href="/" className="text-lg font-semibold tracking-tight">
+        <Link href="/" className="flex items-baseline gap-0.5 text-lg font-semibold tracking-[-0.04em]">
           {t("title")}
+          <span className="text-muted-foreground font-mono text-sm">.sh</span>
         </Link>
         <div className="flex items-center gap-4">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`text-sm transition-colors ${
+              className={`text-sm tracking-wide transition-colors ${
                 pathname === link.href
                   ? "text-foreground font-medium"
                   : "text-muted-foreground hover:text-foreground"
@@ -35,7 +36,7 @@ export function Nav() {
             </Link>
           ))}
           <AboutDialog>
-            <button className="text-muted-foreground hover:text-foreground cursor-pointer text-sm transition-colors">
+            <button className="text-muted-foreground hover:text-foreground cursor-pointer text-sm tracking-wide transition-colors">
               {t("about")}
             </button>
           </AboutDialog>
