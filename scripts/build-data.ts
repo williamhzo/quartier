@@ -67,8 +67,18 @@ type ArrondissementDimensions = {
   greenSpace: GreenSpaceMetric | null;
   noise: NoiseMetric | null;
   amenities: AmenitiesMetric | null;
+  culture: CultureMetric | null;
 };
 type ArrondissementScores = Record<DataDimension, number | null>;
+
+type CultureMetric = {
+  cultural_buildings_total: number;
+  cultural_buildings_per_km2: number;
+  cultural_buildings_per_10k_residents: number;
+  by_type: {
+    cinemas: number;
+  };
+};
 
 type ArrondissementRow = {
   code: string;
@@ -215,6 +225,7 @@ function createNullDimensions(): ArrondissementDimensions {
     greenSpace: null,
     noise: null,
     amenities: null,
+    culture: null,
   };
 }
 
@@ -228,6 +239,7 @@ function createNullScores(): ArrondissementScores {
     greenSpace: null,
     noise: null,
     amenities: null,
+    culture: null,
   };
 }
 

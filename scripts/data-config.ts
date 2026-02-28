@@ -12,6 +12,7 @@ export const DIMENSION_KEYS = [
   "greenSpace",
   "noise",
   "amenities",
+  "culture",
 ] as const;
 
 export type DataDimension = (typeof DIMENSION_KEYS)[number];
@@ -48,6 +49,7 @@ export const DATA_CONFIG = {
     "greenSpace",
     "noise",
     "amenities",
+    "culture",
   ] as DataDimension[],
   sourceVintages: {
     boundaries: "opendata-paris-arrondissements-snapshot-2026-02-27",
@@ -183,6 +185,12 @@ export const DATA_CONFIG = {
         ],
         gyms: ["F120", "F121"],
         cinemas: ["F303"],
+      },
+      cultureCodebook: {
+        version: "bpe-culture-v1",
+        byType: {
+          cinemas: ["F303"],
+        },
       },
     },
     sirene: {
