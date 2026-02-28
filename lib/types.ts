@@ -59,7 +59,14 @@ export type CultureData = {
   cultural_buildings_total: number;
   cultural_buildings_per_km2: number;
   cultural_buildings_per_10k_residents: number;
-  by_type: Record<string, number>;
+  by_type: {
+    cinemas: number;
+    libraries: number;
+    heritage: number;
+    livePerformanceVenues: number;
+    archives: number;
+    museums: number;
+  };
 };
 
 export type Dimensions = {
