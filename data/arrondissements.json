@@ -50,7 +50,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 14.1,
+        "pct_above_night_threshold": 7.34
+      },
       "amenities": null
     },
     "scores": {
@@ -60,7 +63,7 @@
       "transport": 74.1,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 64.49,
       "amenities": null
     }
   },
@@ -102,17 +105,14 @@
       },
       "transport": {
         "stations_per_km2": 9.0803,
-        "metro_lines": [
-          "METRO 3",
-          "METRO 4",
-          "METRO 7",
-          "METRO 8",
-          "METRO 9"
-        ]
+        "metro_lines": ["METRO 3", "METRO 4", "METRO 7", "METRO 8", "METRO 9"]
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 14.1,
+        "pct_above_night_threshold": 7.34
+      },
       "amenities": null
     },
     "scores": {
@@ -122,7 +122,7 @@
       "transport": 83.62,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 64.49,
       "amenities": null
     }
   },
@@ -163,17 +163,14 @@
       },
       "transport": {
         "stations_per_km2": 7.6865,
-        "metro_lines": [
-          "METRO 11",
-          "METRO 3",
-          "METRO 4",
-          "METRO 8",
-          "METRO 9"
-        ]
+        "metro_lines": ["METRO 11", "METRO 3", "METRO 4", "METRO 8", "METRO 9"]
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 14.1,
+        "pct_above_night_threshold": 7.34
+      },
       "amenities": null
     },
     "scores": {
@@ -183,7 +180,7 @@
       "transport": 68.18,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 64.49,
       "amenities": null
     }
   },
@@ -225,17 +222,14 @@
       },
       "transport": {
         "stations_per_km2": 6.2477,
-        "metro_lines": [
-          "METRO 1",
-          "METRO 11",
-          "METRO 4",
-          "METRO 5",
-          "METRO 7"
-        ]
+        "metro_lines": ["METRO 1", "METRO 11", "METRO 4", "METRO 5", "METRO 7"]
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 14.1,
+        "pct_above_night_threshold": 7.34
+      },
       "amenities": null
     },
     "scores": {
@@ -245,7 +239,7 @@
       "transport": 52.24,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 64.49,
       "amenities": null
     }
   },
@@ -287,16 +281,14 @@
       },
       "transport": {
         "stations_per_km2": 3.938,
-        "metro_lines": [
-          "METRO 10",
-          "METRO 7",
-          "RER B",
-          "RER C"
-        ]
+        "metro_lines": ["METRO 10", "METRO 7", "RER B", "RER C"]
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 14.55,
+        "pct_above_night_threshold": 5.11
+      },
       "amenities": null
     },
     "scores": {
@@ -306,7 +298,7 @@
       "transport": 26.65,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 62.09,
       "amenities": null
     }
   },
@@ -347,16 +339,14 @@
       },
       "transport": {
         "stations_per_km2": 6.5023,
-        "metro_lines": [
-          "METRO 10",
-          "METRO 12",
-          "METRO 4",
-          "RER B"
-        ]
+        "metro_lines": ["METRO 10", "METRO 12", "METRO 4", "RER B"]
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 15.25,
+        "pct_above_night_threshold": 4.2
+      },
       "amenities": null
     },
     "scores": {
@@ -366,7 +356,7 @@
       "transport": 55.06,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 58.37,
       "amenities": null
     }
   },
@@ -407,17 +397,14 @@
       },
       "transport": {
         "stations_per_km2": 3.9119,
-        "metro_lines": [
-          "METRO 10",
-          "METRO 12",
-          "METRO 13",
-          "METRO 8",
-          "RER C"
-        ]
+        "metro_lines": ["METRO 10", "METRO 12", "METRO 13", "METRO 8", "RER C"]
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 8.79,
+        "pct_above_night_threshold": 1.35
+      },
       "amenities": null
     },
     "scores": {
@@ -427,7 +414,7 @@
       "transport": 26.36,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 92.72,
       "amenities": null
     }
   },
@@ -482,7 +469,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 26.23,
+        "pct_above_night_threshold": 13.66
+      },
       "amenities": null
     },
     "scores": {
@@ -492,7 +482,7 @@
       "transport": 57.26,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 0,
       "amenities": null
     }
   },
@@ -548,7 +538,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 17.27,
+        "pct_above_night_threshold": 5.02
+      },
       "amenities": null
     },
     "scores": {
@@ -558,7 +551,7 @@
       "transport": 100,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 47.63,
       "amenities": null
     }
   },
@@ -615,7 +608,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 20.89,
+        "pct_above_night_threshold": 12.93
+      },
       "amenities": null
     },
     "scores": {
@@ -625,7 +621,7 @@
       "transport": 71.14,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 28.39,
       "amenities": null
     }
   },
@@ -678,7 +674,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 10.44,
+        "pct_above_night_threshold": 4.35
+      },
       "amenities": null
     },
     "scores": {
@@ -688,7 +687,7 @@
       "transport": 40.45,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 83.94,
       "amenities": null
     }
   },
@@ -743,7 +742,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 8.36,
+        "pct_above_night_threshold": 2.64
+      },
       "amenities": null
     },
     "scores": {
@@ -753,7 +755,7 @@
       "transport": 0,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 95,
       "amenities": null
     }
   },
@@ -806,7 +808,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 7.42,
+        "pct_above_night_threshold": 2.03
+      },
       "amenities": null
     },
     "scores": {
@@ -816,7 +821,7 @@
       "transport": 18.66,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 100,
       "amenities": null
     }
   },
@@ -858,16 +863,14 @@
       },
       "transport": {
         "stations_per_km2": 2.6715,
-        "metro_lines": [
-          "METRO 13",
-          "METRO 4",
-          "METRO 6",
-          "RER B"
-        ]
+        "metro_lines": ["METRO 13", "METRO 4", "METRO 6", "RER B"]
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 10.22,
+        "pct_above_night_threshold": 4.56
+      },
       "amenities": null
     },
     "scores": {
@@ -877,7 +880,7 @@
       "transport": 12.62,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 85.11,
       "amenities": null
     }
   },
@@ -930,7 +933,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 9.61,
+        "pct_above_night_threshold": 1.57
+      },
       "amenities": null
     },
     "scores": {
@@ -940,7 +946,7 @@
       "transport": 19.54,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 88.36,
       "amenities": null
     }
   },
@@ -993,7 +999,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 12.03,
+        "pct_above_night_threshold": 2.98
+      },
       "amenities": null
     },
     "scores": {
@@ -1003,7 +1012,7 @@
       "transport": 1.97,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 75.49,
       "amenities": null
     }
   },
@@ -1058,7 +1067,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 11.61,
+        "pct_above_night_threshold": 4.59
+      },
       "amenities": null
     },
     "scores": {
@@ -1068,7 +1080,7 @@
       "transport": 14.29,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 77.72,
       "amenities": null
     }
   },
@@ -1110,16 +1122,14 @@
       },
       "transport": {
         "stations_per_km2": 2.3349,
-        "metro_lines": [
-          "METRO 12",
-          "METRO 13",
-          "METRO 2",
-          "METRO 4"
-        ]
+        "metro_lines": ["METRO 12", "METRO 13", "METRO 2", "METRO 4"]
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 14.3,
+        "pct_above_night_threshold": 6.93
+      },
       "amenities": null
     },
     "scores": {
@@ -1129,7 +1139,7 @@
       "transport": 8.89,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 63.42,
       "amenities": null
     }
   },
@@ -1182,7 +1192,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 7.96,
+        "pct_above_night_threshold": 2.34
+      },
       "amenities": null
     },
     "scores": {
@@ -1192,7 +1205,7 @@
       "transport": 17.27,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 97.13,
       "amenities": null
     }
   },
@@ -1245,7 +1258,10 @@
       },
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": {
+        "pct_above_lden_threshold": 12.05,
+        "pct_above_night_threshold": 5.24
+      },
       "amenities": null
     },
     "scores": {
@@ -1255,7 +1271,7 @@
       "transport": 16.35,
       "nightlife": null,
       "greenSpace": null,
-      "noise": null,
+      "noise": 75.39,
       "amenities": null
     }
   }

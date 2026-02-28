@@ -1,11 +1,6 @@
 {
-  "generated_at": "2026-02-27T23:52:08.817Z",
-  "enabled_dimensions": [
-    "housing",
-    "income",
-    "safety",
-    "transport"
-  ],
+  "generated_at": "2026-02-27T23:59:52.877Z",
+  "enabled_dimensions": ["housing", "income", "safety", "transport", "noise"],
   "source_vintages": {
     "boundaries": "opendata-paris-arrondissements-snapshot-2026-02-27",
     "filosofi": "insee-dossier-complet-2025-10-14",
@@ -13,6 +8,7 @@
     "dvf_prior": "geo-dvf-2023-departement-75",
     "safety": "ssmsi-communal-2024-geographie2025-produit-2025-06-04",
     "transport": "idfm-emplacement-des-gares-idf-export-2026-02-27",
+    "noise": "ville-paris-bruit-routier-cnossos-2022",
     "sirene": "V3.11"
   },
   "source_urls": {
@@ -22,6 +18,7 @@
     "dvf_prior": "https://files.data.gouv.fr/geo-dvf/latest/csv/2023/departements/75.csv.gz",
     "safety": "https://static.data.gouv.fr/resources/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/20250710-144817/donnee-data.gouv-2024-geographie2025-produit-le2025-06-04.csv.gz",
     "transport": "https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/emplacement-des-gares-idf/exports/geojson?where=mode%20in%20(%22METRO%22,%22RER%22)&limit=-1",
+    "noise": "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/bruit-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journ/exports/csv",
     "sirene": "https://api.insee.fr/entreprises/sirene/V3.11/siret"
   },
   "source_row_counts": {
@@ -34,22 +31,23 @@
     "ssmsi_rows_matched": 300,
     "transport_rows_total": 657,
     "transport_rows_mode_filtered": 657,
-    "transport_rows_assigned": 362
+    "transport_rows_assigned": 362,
+    "noise_rows_scanned": 2,
+    "noise_rows_matched": 1
   },
   "source_checksums": {
-    "boundaries": "74ada3293a45642fdb70e6c199ff34dc814953864ad5c3b09443a94696f0e1dd",
+    "boundaries": "c141e538b92ee8a95c852f81285bf2b30940db01ccd8ad86c9b4ebd643b04544",
     "filosofi": "845dc47c4643271542c56819011802850f6a382f336d240dcc1e1ccde44603f2",
     "dvf_current": "fef7fb65c52137888ef8c1aa0098660011532f20a1f2e5f34b803691abffb300",
     "dvf_prior": "c62481e00be2cf2c135618c0a16ea5bb0422edda3f9d8607dadad7daf5959fb7",
     "safety": "24c0ae955facf0bdac66053c9a197587c61c888ff6ecc2703360ded23ae0f283",
-    "transport": "10ad2b16f97ed5645a6c2ca5ec6188ad08bb5386cc0c919bfe826e03f6504855"
+    "transport": "10ad2b16f97ed5645a6c2ca5ec6188ad08bb5386cc0c919bfe826e03f6504855",
+    "noise": "65093ad11459f0fa08c2c43ac03e37ab6ac6729a7fe8329b4fdf6f251db8b17c"
   },
   "quality": {
     "hard_fail_checks_passed": true,
     "hard_fail_errors": [],
-    "warnings": [
-      "ssmsi rows skipped due missing/non-numeric \"nombre\": 3"
-    ],
+    "warnings": ["ssmsi rows skipped due missing/non-numeric \"nombre\": 3"],
     "coverage_by_dimension": {
       "housing": 20,
       "income": 20,
@@ -57,7 +55,7 @@
       "transport": 20,
       "nightlife": 0,
       "greenSpace": 0,
-      "noise": 0,
+      "noise": 20,
       "amenities": 0
     }
   }
