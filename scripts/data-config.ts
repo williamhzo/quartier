@@ -13,6 +13,7 @@ export const DIMENSION_KEYS = [
   "noise",
   "amenities",
   "culture",
+  "sports",
 ] as const;
 
 export type DataDimension = (typeof DIMENSION_KEYS)[number];
@@ -50,6 +51,7 @@ export const DATA_CONFIG = {
     "noise",
     "amenities",
     "culture",
+    "sports",
   ] as DataDimension[],
   sourceVintages: {
     boundaries: "opendata-paris-arrondissements-snapshot-2026-02-27",
@@ -63,6 +65,7 @@ export const DATA_CONFIG = {
     bpe: "buildingref-france-bpe-all-millesime-2016",
     bpe_culture_codebook: "bpe-culture-v2",
     sirene: "V3.11",
+    sports: "data-es-open-daily-v1",
   },
   sourceUrls: {
     boundaries: "https://opendata.paris.fr/explore/dataset/arrondissements/",
@@ -82,6 +85,8 @@ export const DATA_CONFIG = {
       "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/bruit-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journ/exports/csv",
     bpe: "https://public.opendatasoft.com/explore/dataset/buildingref-france-bpe-all-millesime/",
     sirene: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
+    sports:
+      "https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records",
   },
   sources: {
     filosofi: {
@@ -205,6 +210,69 @@ export const DATA_CONFIG = {
       enabledNightlifeBuckets: DEFAULT_SIRENE_NIGHTLIFE_BUCKETS,
       includeNightlifeExtension: false,
       expectedNomenclatures: ["NAFRev2"] as const,
+    },
+    sports: {
+      apiBaseUrl:
+        "https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records",
+      sourceUrl: "https://equipements.sports.gouv.fr/explore/dataset/data-es/",
+      cachePath: "data/raw/sports/data-es-paris.json",
+      timeoutMs: 120_000,
+      maxRetries: 3,
+      initialRetryDelayMs: 500,
+      maxRecords: 5_000,
+      departmentCode: "75",
+      bucketMapping: {
+        fitness: [
+          "Salles de remise en forme",
+          "Salles de fitness",
+          "Remise en forme",
+          "Equipement d'activités de forme et de santé",
+        ],
+        tennis: ["Courts de tennis", "Court de tennis", "Tennis"],
+        swimming: [
+          "Bassins de natation",
+          "Bassin de natation",
+          "Piscines",
+          "Natation",
+          "Site d'activités aquatiques et nautiques",
+        ],
+        multisport: [
+          "Salles + Plateaux multisports",
+          "Salles multisports",
+          "Salle multisports",
+          "Plateaux multisports",
+          "Multisports/City-stades",
+          "Salle ou terrain spécialisé",
+          "Salle non spécialisée",
+          "Structure Artificielle d'Escalade",
+          "Skatepark & vélo Freestyle",
+          "Boulodrome",
+          "Bowling",
+          "Aire de sports de glaces",
+          "Mur et fronton",
+          "Parcours de golf",
+          "Parcours sportif/santé",
+          "Equipement équestre",
+          "Equipement de cyclisme",
+          "Divers équipements",
+          "Site d'activités aériennes",
+          "Pas de tir",
+        ],
+        combat: ["Salles de combat", "Salle de combat", "Sports de combat", "Dojos"],
+        athletics: [
+          "Equipements d'athletisme",
+          "Equipement d'athlétisme",
+          "Athletisme",
+          "Stades d'athletisme",
+        ],
+        team_sports: [
+          "Grands terrains de sports collectifs",
+          "Petits terrains de sports collectifs",
+          "Terrains de sports collectifs",
+          "Terrain de grands jeux",
+          "Terrain extérieur de petits jeux collectifs",
+        ],
+      },
     },
   },
 };

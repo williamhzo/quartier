@@ -6,50 +6,47 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import type { ReadableStream as NodeReadableStream } from "node:stream/web";
 
-type BpeFetchMode = "network-first" | "cache-only";
+type SportsFetchMode = "network-first" | "cache-only";
 
-type BpeAmenitiesConfig = {
+type SportsBucket =
+  | "fitness"
+  | "tennis"
+  | "swimming"
+  | "multisport"
+  | "combat"
+  | "athletics"
+  | "team_sports";
+
+type DataEsSportsConfig = {
   apiBaseUrl: string;
   sourceUrl: string;
   cachePath: string;
-  year: string;
   timeoutMs: number;
   maxRetries: number;
   initialRetryDelayMs: number;
   maxRecords: number;
-  equipmentCodes: {
-    pharmacies: string[];
-    doctors: string[];
-    schools: string[];
-    gyms: string[];
-    cinemas: string[];
-  };
-  cultureCodebook: {
-    version: string;
-    byType: Record<string, string[]>;
-  };
+  departmentCode: string;
+  bucketMapping: Record<SportsBucket, string[]>;
 };
 
-export type AmenitiesMetric = {
-  pharmacies: number;
-  doctors: number;
-  schools: number;
-  gyms: number;
-  cinemas: number;
+export type SportsMetric = {
+  facilities_total: number;
+  facilities_per_km2: number;
+  facilities_per_10k_residents: number;
+  by_type: Record<SportsBucket, number>;
 };
 
-export type BuildAmenitiesFromBpeOutput = {
-  byCommune: Map<string, AmenitiesMetric>;
-  byEquipmentByCommune: Map<string, Map<string, number>>;
+export type BuildSportsFromDataEsOutput = {
+  byCommune: Map<string, SportsMetric>;
   sourceRowCounts: Record<string, number>;
   sourceChecksums: Record<string, string>;
   sourceUrls: Record<string, string>;
   warnings: string[];
 };
 
-type AggregatedBpeRow = {
-  com_arm_code?: unknown;
-  equipment_code?: unknown;
+type AggregatedSportsRow = {
+  new_code?: unknown;
+  equip_type_famille?: unknown;
   count?: unknown;
 };
 
@@ -82,28 +79,58 @@ function encodeQuotedList(values: readonly string[]): string {
   return values.map((value) => `"${value}"`).join(",");
 }
 
-function buildBpeQueryUrl(
-  communes: readonly string[],
-  config: BpeAmenitiesConfig,
-): string {
-  const amenityCodes = Object.values(config.equipmentCodes).flat();
-  const cultureCodes = Object.values(config.cultureCodebook.byType).flat();
-  const equipmentCodes = [...new Set([...amenityCodes, ...cultureCodes])];
-  const where = `year=date'${config.year}' and com_arm_code in (${encodeQuotedList(communes)}) and equipment_code in (${encodeQuotedList(equipmentCodes)})`;
+function normalizeLabel(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
+function buildBucketByFamily(
+  mapping: DataEsSportsConfig["bucketMapping"],
+): Map<string, SportsBucket> {
+  const bucketByFamily = new Map<string, SportsBucket>();
+  for (const [bucket, families] of Object.entries(mapping) as Array<
+    [SportsBucket, string[]]
+  >) {
+    for (const family of families) {
+      bucketByFamily.set(normalizeLabel(family), bucket);
+    }
+  }
+  return bucketByFamily;
+}
+
+function createZeroByType(): SportsMetric["by_type"] {
+  return {
+    fitness: 0,
+    tennis: 0,
+    swimming: 0,
+    multisport: 0,
+    combat: 0,
+    athletics: 0,
+    team_sports: 0,
+  };
+}
+
+function buildDataEsQueryUrl(
+  communes: readonly string[],
+  config: DataEsSportsConfig,
+): string {
+  const where = `dep_code='${config.departmentCode}' and new_code in (${encodeQuotedList(communes)})`;
   const params = new URLSearchParams({
-    select: "com_arm_code,equipment_code,sum(ctvalue) as count",
-    group_by: "com_arm_code,equipment_code",
+    select: "new_code,equip_type_famille,count(*) as count",
+    group_by: "new_code,equip_type_famille",
     where,
     limit: String(config.maxRecords),
   });
-
   return `${config.apiBaseUrl}?${params.toString()}`;
 }
 
 async function fetchResponseToCache(
   fetchUrl: string,
-  config: BpeAmenitiesConfig,
+  config: DataEsSportsConfig,
   cachePath: string,
 ): Promise<void> {
   let attempt = 0;
@@ -129,12 +156,12 @@ async function fetchResponseToCache(
       if (!response.ok) {
         const body = await response.text();
         throw new Error(
-          `bpe request failed (${response.status}): ${body.slice(0, 200)}`,
+          `sports request failed (${response.status}): ${body.slice(0, 200)}`,
         );
       }
 
       if (!response.body) {
-        throw new Error("bpe response has no body");
+        throw new Error("sports response has no body");
       }
 
       const tempPath = `${cachePath}.tmp-${Date.now()}`;
@@ -161,9 +188,9 @@ async function fetchResponseToCache(
 }
 
 async function ensureResponsePath(
-  mode: BpeFetchMode,
+  mode: SportsFetchMode,
   fetchUrl: string,
-  config: BpeAmenitiesConfig,
+  config: DataEsSportsConfig,
 ): Promise<{
   responsePath: string;
   usedLegacyCacheWithoutQueryMarker: boolean;
@@ -184,7 +211,7 @@ async function ensureResponsePath(
 
       if (mode === "cache-only") {
         throw new Error(
-          `stale bpe cache in --offline mode: query changed. expected ${fetchUrl}`,
+          `stale sports cache in --offline mode: query changed. expected ${fetchUrl}`,
         );
       }
 
@@ -197,7 +224,6 @@ async function ensureResponsePath(
       const message = error instanceof Error ? error.message : String(error);
       const code = (error as { code?: string }).code;
       if (code === "ENOENT") {
-        // Backfill path for legacy caches that predate query markers.
         if (mode === "cache-only") {
           return {
             responsePath: cachePath,
@@ -212,10 +238,11 @@ async function ensureResponsePath(
         };
       }
 
-      if (mode === "cache-only") {
-        if (message.startsWith("stale bpe cache in --offline mode")) {
-          throw new Error(message);
-        }
+      if (
+        mode === "cache-only" &&
+        message.startsWith("stale sports cache in --offline mode")
+      ) {
+        throw new Error(message);
       }
 
       if (mode !== "cache-only") {
@@ -231,11 +258,11 @@ async function ensureResponsePath(
   } catch (error) {
     if (mode === "cache-only") {
       const message = error instanceof Error ? error.message : String(error);
-      if (message.startsWith("stale bpe cache in --offline mode")) {
+      if (message.startsWith("stale sports cache in --offline mode")) {
         throw new Error(message);
       }
       throw new Error(
-        `missing bpe cache in --offline mode: ${cachePath}. (${message})`,
+        `missing sports cache in --offline mode: ${cachePath}. (${message})`,
       );
     }
   }
@@ -273,26 +300,23 @@ function readNumberField(value: unknown): number | null {
   return null;
 }
 
-export async function buildAmenitiesFromBpe(options: {
+export async function buildSportsFromDataEs(options: {
   communes: readonly string[];
-  mode: BpeFetchMode;
-  config: BpeAmenitiesConfig;
-}): Promise<BuildAmenitiesFromBpeOutput> {
-  const fetchUrl = buildBpeQueryUrl(options.communes, options.config);
-  const response = await ensureResponsePath(
-    options.mode,
-    fetchUrl,
-    options.config,
-  );
+  areaByCommune: Map<string, number>;
+  populationByCommune: Map<string, number>;
+  mode: SportsFetchMode;
+  config: DataEsSportsConfig;
+}): Promise<BuildSportsFromDataEsOutput> {
+  const fetchUrl = buildDataEsQueryUrl(options.communes, options.config);
+  const response = await ensureResponsePath(options.mode, fetchUrl, options.config);
   const raw = await readFile(response.responsePath, "utf8");
 
   const parsed = JSON.parse(raw) as {
     total_count?: unknown;
     results?: unknown;
   };
-
   if (!Array.isArray(parsed.results)) {
-    throw new Error("invalid bpe response payload: missing results array");
+    throw new Error("invalid sports response payload: missing results array");
   }
 
   const totalCount = readNumberField(parsed.total_count);
@@ -302,106 +326,121 @@ export async function buildAmenitiesFromBpe(options: {
     totalCount > options.config.maxRecords
   ) {
     throw new Error(
-      `bpe response truncated: total_count ${totalCount} exceeds configured limit ${options.config.maxRecords}`,
+      `sports response truncated: total_count ${totalCount} exceeds configured limit ${options.config.maxRecords}`,
     );
   }
 
   const warnings: string[] = [];
   if (response.usedLegacyCacheWithoutQueryMarker) {
     warnings.push(
-      `bpe cache query marker missing (${getQueryMarkerPath(options.config.cachePath)}); accepted legacy cache in --offline mode. Refresh online with: bun run data:refresh --dimensions=amenities`,
+      `sports cache query marker missing (${getQueryMarkerPath(options.config.cachePath)}); accepted legacy cache in --offline mode. Refresh online with: bun run data:build`,
     );
   }
+
   const communeSet = new Set(options.communes);
-
-  const pharmacyCodes = new Set(options.config.equipmentCodes.pharmacies);
-  const doctorCodes = new Set(options.config.equipmentCodes.doctors);
-  const schoolCodes = new Set(options.config.equipmentCodes.schools);
-  const gymCodes = new Set(options.config.equipmentCodes.gyms);
-  const cinemaCodes = new Set(options.config.equipmentCodes.cinemas);
-
-  const aggregateByCommune = new Map<string, AmenitiesMetric>();
-  const byEquipmentByCommune = new Map<string, Map<string, number>>();
-  for (const commune of options.communes) {
-    aggregateByCommune.set(commune, {
-      pharmacies: 0,
-      doctors: 0,
-      schools: 0,
-      gyms: 0,
-      cinemas: 0,
-    });
-    byEquipmentByCommune.set(commune, new Map<string, number>());
+  const bucketByFamily = buildBucketByFamily(options.config.bucketMapping);
+  const byTypeByCommune = new Map<string, SportsMetric["by_type"]>();
+  for (const communeCode of options.communes) {
+    byTypeByCommune.set(communeCode, createZeroByType());
   }
 
   let matchedRows = 0;
   let skippedRows = 0;
+  let unmappedRows = 0;
+  let unmappedFacilities = 0;
+  const unmappedFamilies = new Map<string, number>();
 
-  for (const row of parsed.results as AggregatedBpeRow[]) {
-    const commune = readStringField(row.com_arm_code);
-    const equipmentCode = readStringField(row.equipment_code);
+  for (const row of parsed.results as AggregatedSportsRow[]) {
+    const communeCode = readStringField(row.new_code);
+    const familyLabel = readStringField(row.equip_type_famille);
     const count = readNumberField(row.count);
-
-    if (!commune || !equipmentCode || count == null || count < 0) {
+    if (!communeCode || !familyLabel || count == null || count < 0) {
       skippedRows += 1;
       continue;
     }
 
-    if (!communeSet.has(commune)) {
+    if (!communeSet.has(communeCode)) {
       continue;
     }
 
-    const aggregate = aggregateByCommune.get(commune);
-    if (!aggregate) continue;
-    const equipmentByCommune = byEquipmentByCommune.get(commune);
-    if (!equipmentByCommune) continue;
+    const bucket = bucketByFamily.get(normalizeLabel(familyLabel));
+    if (!bucket) {
+      unmappedRows += 1;
+      unmappedFacilities = round(unmappedFacilities + count, 2);
+      const previous = unmappedFamilies.get(familyLabel) ?? 0;
+      unmappedFamilies.set(familyLabel, round(previous + count, 2));
+      continue;
+    }
 
-    if (pharmacyCodes.has(equipmentCode)) {
-      aggregate.pharmacies = round(aggregate.pharmacies + count, 2);
+    const byType = byTypeByCommune.get(communeCode);
+    if (!byType) {
+      skippedRows += 1;
+      continue;
     }
-    if (doctorCodes.has(equipmentCode)) {
-      aggregate.doctors = round(aggregate.doctors + count, 2);
-    }
-    if (schoolCodes.has(equipmentCode)) {
-      aggregate.schools = round(aggregate.schools + count, 2);
-    }
-    if (gymCodes.has(equipmentCode)) {
-      aggregate.gyms = round(aggregate.gyms + count, 2);
-    }
-    if (cinemaCodes.has(equipmentCode)) {
-      aggregate.cinemas = round(aggregate.cinemas + count, 2);
-    }
-    const previousEquipmentCount = equipmentByCommune.get(equipmentCode) ?? 0;
-    equipmentByCommune.set(
-      equipmentCode,
-      round(previousEquipmentCount + count, 2),
-    );
 
+    byType[bucket] = round(byType[bucket] + count, 2);
     matchedRows += 1;
   }
 
   if (skippedRows > 0) {
-    warnings.push(`bpe rows skipped due invalid fields: ${skippedRows}`);
+    warnings.push(`sports rows skipped due invalid fields: ${skippedRows}`);
+  }
+  if (unmappedRows > 0) {
+    const topFamilies = [...unmappedFamilies.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([family, count]) => `${family}:${count}`)
+      .join(", ");
+    warnings.push(
+      `sports rows with unmapped equipment family: ${unmappedRows} rows (${unmappedFacilities} facilities). Top unmapped: ${topFamilies}`,
+    );
   }
 
-  const byCommune = new Map<string, AmenitiesMetric>();
-  for (const commune of options.communes) {
-    const aggregate = aggregateByCommune.get(commune);
-    if (!aggregate) continue;
-    byCommune.set(commune, aggregate);
+  const byCommune = new Map<string, SportsMetric>();
+  for (const communeCode of options.communes) {
+    const byType = byTypeByCommune.get(communeCode) ?? createZeroByType();
+    const facilitiesTotal = round(
+      Object.values(byType).reduce((sum, value) => sum + value, 0),
+      2,
+    );
+
+    const areaKm2 = options.areaByCommune.get(communeCode);
+    if (!areaKm2 || !Number.isFinite(areaKm2) || areaKm2 <= 0) {
+      throw new Error(
+        `missing or invalid area for sports metric: ${communeCode}`,
+      );
+    }
+
+    const population = options.populationByCommune.get(communeCode);
+    if (!population || !Number.isFinite(population) || population <= 0) {
+      throw new Error(
+        `missing or invalid population for sports metric: ${communeCode}`,
+      );
+    }
+
+    byCommune.set(communeCode, {
+      facilities_total: facilitiesTotal,
+      facilities_per_km2: round(facilitiesTotal / areaKm2, 2),
+      facilities_per_10k_residents: round(
+        (facilitiesTotal / population) * 10_000,
+        2,
+      ),
+      by_type: byType,
+    });
   }
 
   return {
     byCommune,
-    byEquipmentByCommune,
     sourceRowCounts: {
-      bpe_rows_total: parsed.results.length,
-      bpe_rows_matched: matchedRows,
+      sports_rows_total: parsed.results.length,
+      sports_rows_matched: matchedRows,
+      sports_rows_unmapped_family: unmappedRows,
     },
     sourceChecksums: {
-      bpe: sha256(raw),
+      sports: sha256(raw),
     },
     sourceUrls: {
-      bpe: fetchUrl,
+      sports: fetchUrl,
     },
     warnings,
   };

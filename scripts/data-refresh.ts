@@ -5,6 +5,7 @@ import {
   PARIS_ARRONDISSEMENT_COMMUNES,
   getEnabledSireneBuckets,
 } from "./data-config";
+import { buildAmenitiesFromBpe } from "./sources/amenities";
 import { fetchSireneNightlifeSnapshot } from "./sources/sirene";
 
 type RefreshOptions = {
@@ -14,6 +15,18 @@ type RefreshOptions = {
   offline: boolean;
   outPath: string;
 };
+
+function logInfo(message: string): void {
+  console.log(`[data:refresh] ${message}`);
+}
+
+function logWarn(message: string): void {
+  console.warn(`[data:refresh][warn] ${message}`);
+}
+
+function logError(message: string): void {
+  console.error(`[data:refresh][error] ${message}`);
+}
 
 function parseOptions(argv: string[]): RefreshOptions {
   let dimensions: string[] = [];
@@ -78,6 +91,10 @@ async function refreshNightlife(options: RefreshOptions): Promise<void> {
   const buckets = getEnabledSireneBuckets();
   const mode = options.offline ? "cache-only" : "network-first";
   const accessToken = process.env.SIRENE_API_TOKEN ?? "";
+  logInfo(
+    `nightlife refresh start (mode=${mode}, communes=${communes.length}, source=${DATA_CONFIG.sources.sirene.baseUrl})`,
+  );
+  logInfo(`nightlife buckets: ${buckets.join(", ")}`);
 
   if (mode === "network-first" && accessToken.length === 0) {
     throw new Error(
@@ -87,6 +104,7 @@ async function refreshNightlife(options: RefreshOptions): Promise<void> {
 
   const snapshots = [];
   for (const communeCode of communes) {
+    logInfo(`nightlife fetch commune=${communeCode}`);
     const snapshot = await fetchSireneNightlifeSnapshot({
       communeCode,
       accessToken,
@@ -94,6 +112,9 @@ async function refreshNightlife(options: RefreshOptions): Promise<void> {
       mode,
       expectedNomenclatures: DATA_CONFIG.sources.sirene.expectedNomenclatures,
     });
+    logInfo(
+      `nightlife fetched commune=${communeCode} pages=${snapshot.stats.pageCount} processed=${snapshot.stats.processedEtablissements} matched=${snapshot.stats.matchedByApeCount} unmatched=${snapshot.stats.unmatchedApeCount}`,
+    );
     snapshots.push(snapshot);
   }
 
@@ -109,23 +130,81 @@ async function refreshNightlife(options: RefreshOptions): Promise<void> {
 
   await mkdir(path.dirname(options.outPath), { recursive: true });
   await writeFile(options.outPath, JSON.stringify(payload, null, 2));
+  logInfo(`wrote nightlife snapshots: ${options.outPath}`);
+}
 
-  console.log(`wrote nightlife snapshots: ${options.outPath}`);
+async function refreshBpe(options: RefreshOptions): Promise<void> {
+  const mode = options.offline ? "cache-only" : "network-first";
+  logInfo(
+    `bpe refresh start (mode=${mode}, source=${DATA_CONFIG.sources.bpe.sourceUrl}, cache=${DATA_CONFIG.sources.bpe.cachePath})`,
+  );
+  const refreshed = await buildAmenitiesFromBpe({
+    communes: PARIS_ARRONDISSEMENT_COMMUNES,
+    mode,
+    config: DATA_CONFIG.sources.bpe,
+  });
+
+  const cultureByType = Object.fromEntries(
+    Object.entries(DATA_CONFIG.sources.bpe.cultureCodebook.byType).map(
+      ([type, codes]) => {
+        let total = 0;
+        for (const communeCode of PARIS_ARRONDISSEMENT_COMMUNES) {
+          const equipmentByCommune =
+            refreshed.byEquipmentByCommune.get(communeCode);
+          if (!equipmentByCommune) continue;
+          total += codes.reduce(
+            (sum, code) => sum + (equipmentByCommune.get(code) ?? 0),
+            0,
+          );
+        }
+        return [type, Number(total.toFixed(2))];
+      },
+    ),
+  );
+
+  logInfo(`refreshed bpe cache: ${DATA_CONFIG.sources.bpe.cachePath}`);
+  logInfo(
+    `bpe rows total=${refreshed.sourceRowCounts.bpe_rows_total ?? 0} matched=${refreshed.sourceRowCounts.bpe_rows_matched ?? 0}`,
+  );
+  logInfo(`culture totals by type: ${JSON.stringify(cultureByType)}`);
+  for (const warning of refreshed.warnings) {
+    logWarn(warning);
+  }
 }
 
 async function main(): Promise<void> {
   const options = parseOptions(process.argv.slice(2));
   const dimensions = resolveDimensions(options.dimensions);
+  logInfo(
+    `starting refresh (mode=${options.offline ? "cache-only" : "network-first"}, requestedDimensions=${options.dimensions.length > 0 ? options.dimensions.join(", ") : "from enabledDimensions"})`,
+  );
+  const shouldRefreshNightlife = dimensions.has("nightlife");
+  const shouldRefreshBpe =
+    dimensions.has("amenities") ||
+    dimensions.has("culture") ||
+    dimensions.has("bpe");
 
-  if (!dimensions.has("nightlife")) {
-    console.log("nothing to do: nightlife not in --dimensions");
+  if (!shouldRefreshNightlife && !shouldRefreshBpe) {
+    logInfo(
+      "nothing to do: supported refresh dimensions are nightlife, amenities, culture",
+    );
     return;
   }
 
-  await refreshNightlife(options);
+  if (shouldRefreshNightlife) {
+    await refreshNightlife(options);
+  }
+
+  if (shouldRefreshBpe) {
+    await refreshBpe(options);
+  }
 }
 
 main().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error));
+  const message = error instanceof Error ? error.message : String(error);
+  logError(message);
+  if (error instanceof Error && error.stack) {
+    logError(error.stack);
+  }
   process.exit(1);
 });

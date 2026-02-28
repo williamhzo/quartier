@@ -33,6 +33,10 @@ import {
   type NightlifeMetric,
 } from "./sources/sirene";
 import { buildSireneNightlifeSearchParams } from "./sources/sirene-query";
+import {
+  buildSportsFromDataEs,
+  type SportsMetric,
+} from "./sources/sports";
 
 type BuildOptions = {
   offline: boolean;
@@ -68,6 +72,7 @@ type ArrondissementDimensions = {
   noise: NoiseMetric | null;
   amenities: AmenitiesMetric | null;
   culture: CultureMetric | null;
+  sports: SportsMetric | null;
 };
 type ArrondissementScores = Record<DataDimension, number | null>;
 
@@ -139,6 +144,69 @@ const BOUNDARIES_PATH = path.join(
 const SIRENE_CACHE_ROOT = path.join(process.cwd(), "data", "raw", "sirene");
 const ROW_COUNT_DRIFT_WARN_THRESHOLD_PCT = 15;
 const METRIC_DRIFT_WARN_THRESHOLD_PCT = 20;
+
+function logInfo(message: string): void {
+  console.log(`[data:build] ${message}`);
+}
+
+function logWarn(message: string): void {
+  console.warn(`[data:build][warn] ${message}`);
+}
+
+function logError(message: string): void {
+  console.error(`[data:build][error] ${message}`);
+}
+
+function describeDimensionSource(dimension: DataDimension): string {
+  if (dimension === "housing") {
+    return `source=${DATA_CONFIG.sourceUrls.dvf_current} + ${DATA_CONFIG.sourceUrls.dvf_prior}, cache=${DATA_CONFIG.sources.dvf.cacheDir}`;
+  }
+  if (dimension === "income") {
+    return `source=${DATA_CONFIG.sources.filosofi.sourceUrl}, cache=${DATA_CONFIG.sources.filosofi.cachePath}`;
+  }
+  if (dimension === "safety") {
+    return `source=${DATA_CONFIG.sources.safety.sourceUrl}, cache=${DATA_CONFIG.sources.safety.cachePath}`;
+  }
+  if (dimension === "transport") {
+    return `source=${DATA_CONFIG.sources.transport.sourceUrl}, cache=${DATA_CONFIG.sources.transport.cachePath}`;
+  }
+  if (dimension === "nightlife") {
+    return `source=${DATA_CONFIG.sources.sirene.baseUrl}, cache=${path.relative(process.cwd(), SIRENE_CACHE_ROOT)}`;
+  }
+  if (dimension === "greenSpace") {
+    return `source=${DATA_CONFIG.sources.greenSpace.sourceUrl}, cache=${DATA_CONFIG.sources.greenSpace.cachePath}`;
+  }
+  if (dimension === "noise") {
+    return `source=${DATA_CONFIG.sources.noise.sourceUrl}, cache=${DATA_CONFIG.sources.noise.cachePath}`;
+  }
+  if (dimension === "amenities" || dimension === "culture") {
+    return `source=${DATA_CONFIG.sources.bpe.sourceUrl}, cache=${DATA_CONFIG.sources.bpe.cachePath}`;
+  }
+  if (dimension === "sports") {
+    return `source=${DATA_CONFIG.sources.sports.sourceUrl}, cache=${DATA_CONFIG.sources.sports.cachePath}`;
+  }
+  return "source=unknown";
+}
+
+function logContributionSummary(
+  label: string,
+  contribution: BuildSourceContributions,
+): void {
+  const rowCountSummary = Object.entries(contribution.sourceRowCounts)
+    .map(([key, value]) => `${key}=${value}`)
+    .join(", ");
+  if (rowCountSummary.length > 0) {
+    logInfo(`${label}: ${rowCountSummary}`);
+  } else {
+    logInfo(`${label}: no source row-count updates`);
+  }
+
+  if (contribution.warnings.length === 0) {
+    return;
+  }
+
+  logWarn(`${label}: emitted ${contribution.warnings.length} warning(s)`);
+}
 
 function parseOptions(argv: string[]): BuildOptions {
   return {
@@ -231,6 +299,7 @@ function createNullDimensions(): ArrondissementDimensions {
     noise: null,
     amenities: null,
     culture: null,
+    sports: null,
   };
 }
 
@@ -245,6 +314,7 @@ function createNullScores(): ArrondissementScores {
     noise: null,
     amenities: null,
     culture: null,
+    sports: null,
   };
 }
 
@@ -901,6 +971,46 @@ async function applyAmenitiesDimension(
   };
 }
 
+async function applySportsDimension(
+  rows: ArrondissementRow[],
+  mode: "network-first" | "cache-only",
+): Promise<BuildSourceContributions> {
+  if (!DATA_CONFIG.enabledDimensions.includes("sports")) {
+    return {
+      sourceRowCounts: {},
+      sourceChecksums: {},
+      sourceUrls: {},
+      warnings: [],
+    };
+  }
+
+  const areaByCommune = new Map(rows.map((row) => [row.code, row.area_km2]));
+  const populationByCommune = new Map(
+    rows.map((row) => [row.code, row.population]),
+  );
+  const sports = await buildSportsFromDataEs({
+    communes: PARIS_ARRONDISSEMENT_COMMUNES,
+    areaByCommune,
+    populationByCommune,
+    mode,
+    config: DATA_CONFIG.sources.sports,
+  });
+
+  const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
+  for (const [code, metric] of sports.byCommune) {
+    const row = rowByCode.get(code);
+    if (!row) continue;
+    row.dimensions.sports = metric;
+  }
+
+  return {
+    sourceRowCounts: sports.sourceRowCounts,
+    sourceChecksums: sports.sourceChecksums,
+    sourceUrls: sports.sourceUrls,
+    warnings: sports.warnings,
+  };
+}
+
 function applyIncomeDimension(
   rows: ArrondissementRow[],
   incomeByCommune: Map<string, IncomeMetric>,
@@ -964,6 +1074,9 @@ function getRawMetricForDimension(
   }
   if (dimension === "culture") {
     return row.dimensions.culture?.cultural_buildings_per_km2 ?? null;
+  }
+  if (dimension === "sports") {
+    return row.dimensions.sports?.facilities_per_km2 ?? null;
   }
 
   return null;
@@ -1170,6 +1283,7 @@ function enrichBoundaries(
           score_noise: row.scores.noise,
           score_amenities: row.scores.amenities,
           score_culture: row.scores.culture,
+          score_sports: row.scores.sports,
         },
       };
     }),
@@ -1183,6 +1297,12 @@ function sha256(input: string): string {
 async function main(): Promise<void> {
   const options = parseOptions(process.argv.slice(2));
   const mode = options.offline ? "cache-only" : "network-first";
+  logInfo(
+    `starting build (mode=${mode}, enabledDimensions=${DATA_CONFIG.enabledDimensions.join(", ")})`,
+  );
+  for (const dimension of DATA_CONFIG.enabledDimensions) {
+    logInfo(`dimension "${dimension}": ${describeDimensionSource(dimension)}`);
+  }
   await validateBuildPreconditions(mode);
   const generatedAt = new Date().toISOString();
   const driftBaseline = await loadDriftBaseline();
@@ -1192,11 +1312,17 @@ async function main(): Promise<void> {
   if (!Array.isArray(boundaries.features)) {
     throw new Error("invalid boundaries file: missing features");
   }
+  logInfo(`loaded boundaries: features=${boundaries.features.length}`);
   const sharedIncomePopulation = await loadIncomePopulationFromFilosofi({
     mode,
     communes: PARIS_ARRONDISSEMENT_COMMUNES,
     config: DATA_CONFIG.sources.filosofi,
   });
+  logInfo(
+    `loaded shared income/population: communes=${sharedIncomePopulation.populationByCommune.size}, sourceRows=${Object.values(sharedIncomePopulation.sourceRowCounts)
+      .map(String)
+      .join(",")}`,
+  );
 
   const rows = buildRows(
     boundaries,
@@ -1216,18 +1342,23 @@ async function main(): Promise<void> {
   const warnings: string[] = [...sharedIncomePopulation.warnings];
   warnings.push(...driftBaseline.warnings);
 
+  logInfo("running housing step");
   const housingContribution = await applyHousingDimension(rows, mode);
   Object.assign(sourceRowCounts, housingContribution.sourceRowCounts);
   Object.assign(sourceChecksums, housingContribution.sourceChecksums);
   Object.assign(sourceUrls, housingContribution.sourceUrls);
   warnings.push(...housingContribution.warnings);
+  logContributionSummary("housing", housingContribution);
 
+  logInfo("running safety step");
   const safetyContribution = await applySafetyDimension(rows, mode);
   Object.assign(sourceRowCounts, safetyContribution.sourceRowCounts);
   Object.assign(sourceChecksums, safetyContribution.sourceChecksums);
   Object.assign(sourceUrls, safetyContribution.sourceUrls);
   warnings.push(...safetyContribution.warnings);
+  logContributionSummary("safety", safetyContribution);
 
+  logInfo("running transport step");
   const transportContribution = await applyTransportDimension(
     rows,
     boundaries,
@@ -1237,13 +1368,17 @@ async function main(): Promise<void> {
   Object.assign(sourceChecksums, transportContribution.sourceChecksums);
   Object.assign(sourceUrls, transportContribution.sourceUrls);
   warnings.push(...transportContribution.warnings);
+  logContributionSummary("transport", transportContribution);
 
+  logInfo("running nightlife step");
   const nightlifeContribution = await applyNightlifeDimension(rows, mode);
   Object.assign(sourceRowCounts, nightlifeContribution.sourceRowCounts);
   Object.assign(sourceChecksums, nightlifeContribution.sourceChecksums);
   Object.assign(sourceUrls, nightlifeContribution.sourceUrls);
   warnings.push(...nightlifeContribution.warnings);
+  logContributionSummary("nightlife", nightlifeContribution);
 
+  logInfo("running green-space step");
   const greenSpaceContribution = await applyGreenSpaceDimension(
     rows,
     boundaries,
@@ -1253,18 +1388,31 @@ async function main(): Promise<void> {
   Object.assign(sourceChecksums, greenSpaceContribution.sourceChecksums);
   Object.assign(sourceUrls, greenSpaceContribution.sourceUrls);
   warnings.push(...greenSpaceContribution.warnings);
+  logContributionSummary("greenSpace", greenSpaceContribution);
 
+  logInfo("running noise step");
   const noiseContribution = await applyNoiseDimension(rows, mode);
   Object.assign(sourceRowCounts, noiseContribution.sourceRowCounts);
   Object.assign(sourceChecksums, noiseContribution.sourceChecksums);
   Object.assign(sourceUrls, noiseContribution.sourceUrls);
   warnings.push(...noiseContribution.warnings);
+  logContributionSummary("noise", noiseContribution);
 
+  logInfo("running amenities/culture step");
   const amenitiesContribution = await applyAmenitiesDimension(rows, mode);
   Object.assign(sourceRowCounts, amenitiesContribution.sourceRowCounts);
   Object.assign(sourceChecksums, amenitiesContribution.sourceChecksums);
   Object.assign(sourceUrls, amenitiesContribution.sourceUrls);
   warnings.push(...amenitiesContribution.warnings);
+  logContributionSummary("amenities+culture", amenitiesContribution);
+
+  logInfo("running sports step");
+  const sportsContribution = await applySportsDimension(rows, mode);
+  Object.assign(sourceRowCounts, sportsContribution.sourceRowCounts);
+  Object.assign(sourceChecksums, sportsContribution.sourceChecksums);
+  Object.assign(sourceUrls, sportsContribution.sourceUrls);
+  warnings.push(...sportsContribution.warnings);
+  logContributionSummary("sports", sportsContribution);
 
   warnings.push(
     ...collectRowCountDriftWarnings(sourceRowCounts, driftBaseline.metadata),
@@ -1273,6 +1421,9 @@ async function main(): Promise<void> {
 
   normalizeEnabledDimensionScores(rows);
   const quality = evaluateQuality(rows, warnings);
+  logInfo(
+    `quality summary: hardFailPassed=${quality.hard_fail_checks_passed}, warnings=${quality.warnings.length}`,
+  );
 
   const metadata: DataMetadata = {
     generated_at: generatedAt,
@@ -1298,13 +1449,20 @@ async function main(): Promise<void> {
     );
   }
 
-  console.log(`wrote ${ARRONDISSEMENTS_PATH}`);
-  console.log(`wrote ${METADATA_PATH}`);
-  console.log(`updated ${BOUNDARIES_PATH}`);
-  console.log(`warnings: ${quality.warnings.length}`);
+  logInfo(`wrote ${ARRONDISSEMENTS_PATH}`);
+  logInfo(`wrote ${METADATA_PATH}`);
+  logInfo(`updated ${BOUNDARIES_PATH}`);
+  logInfo(`warnings: ${quality.warnings.length}`);
+  for (const warning of quality.warnings) {
+    logWarn(warning);
+  }
 }
 
 main().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error));
+  const message = error instanceof Error ? error.message : String(error);
+  logError(message);
+  if (error instanceof Error && error.stack) {
+    logError(error.stack);
+  }
   process.exit(1);
 });
