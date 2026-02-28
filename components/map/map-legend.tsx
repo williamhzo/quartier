@@ -29,13 +29,13 @@ export function MapLegend({ dimension }: Props) {
   );
 
   return (
-    <div className="absolute bottom-4 left-4 z-10 rounded-lg bg-white/90 px-3 py-2 shadow-sm backdrop-blur-sm">
-      <p className="mb-1 text-xs font-medium text-slate-700">{label}</p>
+    <div className="absolute bottom-4 left-4 z-10 rounded-lg bg-background/90 px-3 py-2 shadow-sm backdrop-blur-sm">
+      <p className="text-foreground mb-1 text-xs font-medium">{label}</p>
       <div
         className="h-2.5 w-36 rounded-sm"
         style={{ background: gradient }}
       />
-      <div className="mt-0.5 flex justify-between text-[10px] text-slate-500">
+      <div className="text-muted-foreground mt-0.5 flex justify-between text-[10px]">
         <span>0</span>
         <span>100</span>
       </div>
