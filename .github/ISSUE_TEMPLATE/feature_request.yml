@@ -1,0 +1,16 @@
+name: Feature request
+description: Suggest a new feature or data dimension
+labels: [enhancement]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What would you like?
+      placeholder: Describe the feature or improvement
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      placeholder: Why is this useful? Link to a data source if proposing a new dimension.

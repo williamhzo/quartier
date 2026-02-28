@@ -1,8 +1,14 @@
 {
   "name": "quartier",
+  "description": "Paris arrondissement comparator built on French open data",
   "author": "williamhzo",
   "version": "0.1.0",
-  "private": true,
+  "license": "MIT",
+  "homepage": "https://quartier.sh",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/williamhzo/quartier.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
