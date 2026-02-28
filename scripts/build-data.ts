@@ -5,6 +5,7 @@ import {
   DATA_CONFIG,
   DIMENSION_KEYS,
   PARIS_ARRONDISSEMENT_COMMUNES,
+  getEnabledSireneBuckets,
   type DataDimension,
 } from "./data-config";
 import { buildHousingFromDvf, type HousingMetric } from "./sources/dvf";
@@ -22,6 +23,14 @@ import {
   buildAmenitiesFromBpe,
   type AmenitiesMetric,
 } from "./sources/amenities";
+import {
+  buildGreenSpaceFromParisOpenData,
+  type GreenSpaceMetric,
+} from "./sources/green-space";
+import {
+  buildNightlifeFromSirene,
+  type NightlifeMetric,
+} from "./sources/sirene";
 
 type BuildOptions = {
   offline: boolean;
@@ -52,8 +61,8 @@ type ArrondissementDimensions = {
   income: IncomeMetric | null;
   safety: SafetyMetric | null;
   transport: TransportMetric | null;
-  nightlife: null;
-  greenSpace: null;
+  nightlife: NightlifeMetric | null;
+  greenSpace: GreenSpaceMetric | null;
   noise: NoiseMetric | null;
   amenities: AmenitiesMetric | null;
 };
@@ -547,6 +556,103 @@ async function applyNoiseDimension(
   };
 }
 
+async function applyGreenSpaceDimension(
+  rows: ArrondissementRow[],
+  boundaries: BoundaryCollection,
+  mode: "network-first" | "cache-only",
+): Promise<BuildSourceContributions> {
+  if (!DATA_CONFIG.enabledDimensions.includes("greenSpace")) {
+    return {
+      sourceRowCounts: {},
+      sourceChecksums: {},
+      sourceUrls: {},
+      warnings: [],
+    };
+  }
+
+  const geometryByCode = new Map<string, unknown>();
+  for (const feature of boundaries.features) {
+    const props = feature.properties ?? {};
+    const rawCode = props.c_arinsee;
+    if (rawCode == null) continue;
+    geometryByCode.set(assertParisCode(rawCode), feature.geometry);
+  }
+
+  const boundariesForParser = rows.map((row) => {
+    const geometry = geometryByCode.get(row.code);
+    if (!geometry) {
+      throw new Error(`missing boundary geometry for green-space: ${row.code}`);
+    }
+
+    return {
+      code: row.code,
+      geometry,
+    };
+  });
+
+  const populationByCommune = new Map(
+    rows.map((row) => [row.code, row.population] as const),
+  );
+  const greenSpace = await buildGreenSpaceFromParisOpenData({
+    boundaries: boundariesForParser,
+    populationByCommune,
+    mode,
+    config: DATA_CONFIG.sources.greenSpace,
+  });
+
+  const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
+  for (const [code, metric] of greenSpace.byCommune) {
+    const row = rowByCode.get(code);
+    if (!row) continue;
+    row.dimensions.greenSpace = metric;
+  }
+
+  return {
+    sourceRowCounts: greenSpace.sourceRowCounts,
+    sourceChecksums: greenSpace.sourceChecksums,
+    sourceUrls: greenSpace.sourceUrls,
+    warnings: greenSpace.warnings,
+  };
+}
+
+async function applyNightlifeDimension(
+  rows: ArrondissementRow[],
+  mode: "network-first" | "cache-only",
+): Promise<BuildSourceContributions> {
+  if (!DATA_CONFIG.enabledDimensions.includes("nightlife")) {
+    return {
+      sourceRowCounts: {},
+      sourceChecksums: {},
+      sourceUrls: {},
+      warnings: [],
+    };
+  }
+
+  const areaByCommune = new Map(rows.map((row) => [row.code, row.area_km2]));
+  const nightlife = await buildNightlifeFromSirene({
+    communes: PARIS_ARRONDISSEMENT_COMMUNES,
+    areaByCommune,
+    buckets: getEnabledSireneBuckets(),
+    mode,
+    accessToken: process.env.SIRENE_API_TOKEN ?? "",
+    expectedNomenclatures: DATA_CONFIG.sources.sirene.expectedNomenclatures,
+  });
+
+  const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
+  for (const [code, metric] of nightlife.byCommune) {
+    const row = rowByCode.get(code);
+    if (!row) continue;
+    row.dimensions.nightlife = metric;
+  }
+
+  return {
+    sourceRowCounts: nightlife.sourceRowCounts,
+    sourceChecksums: nightlife.sourceChecksums,
+    sourceUrls: nightlife.sourceUrls,
+    warnings: nightlife.warnings,
+  };
+}
+
 async function applyAmenitiesDimension(
   rows: ArrondissementRow[],
   mode: "network-first" | "cache-only",
@@ -612,6 +718,16 @@ function getRawMetricForDimension(
   }
   if (dimension === "transport") {
     return row.dimensions.transport?.stations_per_km2 ?? null;
+  }
+  if (dimension === "nightlife") {
+    if (!row.dimensions.nightlife) return null;
+    return (
+      row.dimensions.nightlife.restaurants_per_km2 +
+      row.dimensions.nightlife.bars_per_km2
+    );
+  }
+  if (dimension === "greenSpace") {
+    return row.dimensions.greenSpace?.m2_per_resident ?? null;
   }
   if (dimension === "noise") {
     return row.dimensions.noise?.pct_above_lden_threshold ?? null;
@@ -902,6 +1018,22 @@ async function main(): Promise<void> {
   Object.assign(sourceChecksums, transportContribution.sourceChecksums);
   Object.assign(sourceUrls, transportContribution.sourceUrls);
   warnings.push(...transportContribution.warnings);
+
+  const nightlifeContribution = await applyNightlifeDimension(rows, mode);
+  Object.assign(sourceRowCounts, nightlifeContribution.sourceRowCounts);
+  Object.assign(sourceChecksums, nightlifeContribution.sourceChecksums);
+  Object.assign(sourceUrls, nightlifeContribution.sourceUrls);
+  warnings.push(...nightlifeContribution.warnings);
+
+  const greenSpaceContribution = await applyGreenSpaceDimension(
+    rows,
+    boundaries,
+    mode,
+  );
+  Object.assign(sourceRowCounts, greenSpaceContribution.sourceRowCounts);
+  Object.assign(sourceChecksums, greenSpaceContribution.sourceChecksums);
+  Object.assign(sourceUrls, greenSpaceContribution.sourceUrls);
+  warnings.push(...greenSpaceContribution.warnings);
 
   const noiseContribution = await applyNoiseDimension(rows, mode);
   Object.assign(sourceRowCounts, noiseContribution.sourceRowCounts);
