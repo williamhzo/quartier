@@ -262,7 +262,7 @@ export function ParisMap({
 
   return (
     <div className="relative h-[calc(100dvh-3.5rem)]">
-      <div className="absolute top-3 left-3 z-10 space-y-2">
+      <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 rounded-lg bg-background/90 p-1.5 shadow-sm ring-1 ring-border/40 backdrop-blur-sm">
         <PersonaSelector value={persona} onChange={setPersona} />
         <DimensionSelect value={dimension} onChange={setDimension} />
       </div>
@@ -389,7 +389,7 @@ export function ParisMap({
       >
         <div className="bg-popover text-popover-foreground rounded-md border px-3 py-2 shadow-md">
           <p className="text-sm font-medium" data-name />
-          <p className="text-muted-foreground text-xs" data-score />
+          <p className="text-muted-foreground font-mono text-xs" data-score />
         </div>
       </div>
 
