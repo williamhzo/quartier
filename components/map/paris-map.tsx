@@ -19,6 +19,7 @@ import { formatArrondissement } from "@/lib/arrondissements";
 import { PersonaSelector } from "@/components/scoring/persona-selector";
 import { DimensionSelect } from "@/components/scoring/dimension-select";
 import { MapPanel } from "./map-panel";
+import { MapLegend } from "./map-legend";
 
 const PARIS_CENTER = { longitude: 2.3488, latitude: 48.8566 };
 const INITIAL_ZOOM = 11.5;
@@ -344,6 +345,8 @@ export function ParisMap({ arrondissements, boundaries }: Props) {
           <p className="text-muted-foreground text-xs" data-score />
         </div>
       </div>
+
+      <MapLegend dimension={dimension} />
 
       {selectedArrondissement && (
         <MapPanel
