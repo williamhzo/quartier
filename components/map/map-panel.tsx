@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 import { ShareButton } from "@/components/share-button";
 import { ScoreBar } from "@/components/detail/score-bar";
+import { ScoreRadar } from "@/components/detail/score-radar";
 import { DimensionSection } from "@/components/detail/dimension-section";
 import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
@@ -93,6 +94,13 @@ function PanelContent({
           label={t("dimensions.composite")}
           score={Math.round(composite)}
         />
+      </div>
+
+      <div className="mb-4">
+        <h3 className="text-muted-foreground mb-2 text-sm font-medium">
+          {t("detail.scoreOverview")}
+        </h3>
+        <ScoreRadar scores={arrondissement.scores} />
       </div>
 
       <div className="space-y-3">

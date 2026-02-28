@@ -58,6 +58,9 @@
       "medianHousehold": "Median household income",
       "povertyRate": "Poverty rate"
     },
+    "scoreOverview": "Score overview",
+    "crimeBreakdown": "Crime by type",
+    "cases": "cases",
     "safety": {
       "crimeRate": "Crimes per 1,000 residents"
     },

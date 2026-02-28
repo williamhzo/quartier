@@ -58,6 +58,9 @@
       "medianHousehold": "Revenu médian",
       "povertyRate": "Taux de pauvreté"
     },
+    "scoreOverview": "Vue d'ensemble",
+    "crimeBreakdown": "Infractions par type",
+    "cases": "cas",
     "safety": {
       "crimeRate": "Délits pour 1 000 hab."
     },

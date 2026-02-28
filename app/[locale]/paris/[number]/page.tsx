@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { DimensionSection } from "@/components/detail/dimension-section";
 import { MiniMap } from "@/components/detail/mini-map";
 import { Link } from "@/i18n/navigation";
+import { ScoreRadar } from "@/components/detail/score-radar";
 import { ShareButton } from "@/components/share-button";
 import { ArrowLeft } from "lucide-react";
 
@@ -116,6 +117,12 @@ export default async function DetailPage({ params }: Props) {
           highlightNumber={arrondissement.number}
           center={center}
         />
+      </div>
+      <div className="mt-6">
+        <h2 className="text-muted-foreground mb-2 text-sm font-medium">
+          {t("detail.scoreOverview")}
+        </h2>
+        <ScoreRadar scores={arrondissement.scores} />
       </div>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {DIMENSION_KEYS.map((key) => (

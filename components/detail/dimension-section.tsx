@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ScoreBar } from "./score-bar";
+import { CrimeChart } from "./crime-chart";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
 
 type Props = {
@@ -26,7 +27,18 @@ export function DimensionSection({ dimensionKey, arrondissement }: Props) {
       <CardContent className="space-y-4">
         <ScoreBar score={score} label={t("detail.scores")} />
         {dim ? (
-          <RawValues dimensionKey={dimensionKey} data={dim} />
+          <>
+            <RawValues dimensionKey={dimensionKey} data={dim} />
+            {dimensionKey === "safety" &&
+              "categories" in dim &&
+              dim.categories && (
+                <CrimeChart
+                  categories={
+                    (dim as { categories: Record<string, number> }).categories
+                  }
+                />
+              )}
+          </>
         ) : (
           <p className="text-muted-foreground text-sm">{t("common.noData")}</p>
         )}
