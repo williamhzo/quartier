@@ -1,13 +1,14 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { X } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/share-button";
 import { ScoreBar } from "@/components/detail/score-bar";
 import { ScoreRadar } from "@/components/detail/score-radar";
 import { DimensionSection } from "@/components/detail/dimension-section";
 import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
+import { Link } from "@/i18n/navigation";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
 
 type Props = {
@@ -109,6 +110,15 @@ function PanelContent({
             arrondissement={arrondissement}
           />
         ))}
+      </div>
+
+      <div className="mt-4 border-t pt-4">
+        <Button asChild variant="outline" className="w-full">
+          <Link href={`/paris/${num}`}>
+            {t("detail.viewFull")}
+            <ArrowRight className="ml-2 size-4" />
+          </Link>
+        </Button>
       </div>
     </div>
   );

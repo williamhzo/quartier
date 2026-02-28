@@ -170,6 +170,7 @@ At any intermediate milestone, missing dimensions are represented as `null` in d
 - `bun run data:build --offline` -- same build, but fail if cached INSEE dossier-complet archive or enabled-dimension raw snapshots are missing
 - `bun run data:refresh --dimensions=nightlife --all` -- refresh SIRENE nightlife raw snapshots for all arrondissements
 - `bun run data:refresh --dimensions=nightlife --offline --all` -- rebuild nightlife raw snapshots from cache only
+- Offline guard: if `nightlife` is enabled, `data:build --offline` hard-fails when `data/raw/sirene/` has no cached pages
 
 ### Dependencies for build script
 
@@ -329,8 +330,7 @@ type DataMetadata = {
 ### `/{locale}` -- Home / Map View
 
 - Full-screen interactive map of Paris (MapLibre)
-- IDF context layer (surrounding departments as subtle fill, no outlines) for geographic context
-- Opaque mask layer between IDF context and choropleth prevents bleed-through
+- IDF context layer (surrounding departments as subtle outlines on white background) for geographic context
 - Arrondissements rendered as colored choropleth polygons
 - Color intensity = currently selected dimension's score (or composite score)
 - Dimension selector dropdown in toolbar to change what the map shows
@@ -339,6 +339,7 @@ type DataMetadata = {
 - Click arrondissement: wider drawer slides in (desktop: 384-448px) / taller bottom sheet slides up (mobile: 85vh)
   - URL updates to `?arr=N` via nuqs (`useQueryState` with `history: 'push'`)
   - Shows composite score bar + all 8 dimension cards with scores and raw values (reuses `DimensionSection` component)
+  - "View full details" link at bottom navigates to `/paris/{number}` detail page
   - Escape key or close button dismisses the drawer and removes `?arr` from URL
   - Direct visit to `/?arr=9` hydrates from URL and opens drawer immediately
   - Browser back/forward navigates between selections
