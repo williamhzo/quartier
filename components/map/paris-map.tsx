@@ -24,6 +24,17 @@ import { choroplethFillColor } from "./map-colors";
 
 const PARIS_CENTER = { longitude: 2.3488, latitude: 48.8566 };
 const INITIAL_ZOOM = 11.5;
+const MAP_STYLE: maplibregl.StyleSpecification = {
+  version: 8,
+  sources: {},
+  layers: [
+    {
+      id: "background",
+      type: "background",
+      paint: { "background-color": "#fafafa" },
+    },
+  ],
+};
 
 type Props = {
   arrondissements: Arrondissement[];
@@ -53,7 +64,7 @@ export function ParisMap({
 
   const closePanel = useCallback(() => {
     setSelectedNumber(null);
-  }, [selectedNumber, setSelectedNumber]);
+  }, [setSelectedNumber]);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -200,14 +211,11 @@ export function ParisMap({
       if (e.features && e.features.length > 0) {
         const num = e.features[0].properties?.number;
         setSelectedNumber(num ?? null);
-        if (num != null) {
-          const a = ranked.find((r) => r.number === num);
-        }
       } else {
         setSelectedNumber(null);
       }
     },
-    [setSelectedNumber, ranked, persona, dimension],
+    [setSelectedNumber],
   );
 
   // Memoize paint expressions so they only change when selectedNumber changes,
@@ -276,17 +284,7 @@ export function ParisMap({
         minZoom={11}
         maxZoom={15}
         style={{ width: "100%", height: "100%" }}
-        mapStyle={{
-          version: 8,
-          sources: {},
-          layers: [
-            {
-              id: "background",
-              type: "background",
-              paint: { "background-color": "#fafafa" },
-            },
-          ],
-        }}
+        mapStyle={MAP_STYLE}
         interactiveLayerIds={["arrondissements-fill"]}
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
