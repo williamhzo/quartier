@@ -44,3 +44,6 @@ next-env.d.ts
 # claude code
 .claude/
 .claude/settings.local.json
+
+# spec (local only)
+spec.md
