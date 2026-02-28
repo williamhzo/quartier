@@ -281,7 +281,8 @@ export function ParisMap({
           ...PARIS_CENTER,
           zoom: INITIAL_ZOOM,
         }}
-        minZoom={10.5}
+        minZoom={11}
+        maxZoom={15}
         style={{ width: "100%", height: "100%" }}
         mapStyle={{
           version: 8,
