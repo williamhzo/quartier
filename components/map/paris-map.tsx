@@ -407,6 +407,7 @@ export function ParisMap({
       {selectedArrondissement && (
         <MapPanel
           arrondissement={selectedArrondissement}
+          allArrondissements={arrondissements}
           composite={selectedArrondissement.composite}
           rank={selectedArrondissement.rank}
           onClose={closePanel}

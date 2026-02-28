@@ -5,7 +5,7 @@ import { ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/share-button";
 import { ScoreBar } from "@/components/detail/score-bar";
-import { ScoreRadar } from "@/components/detail/score-radar";
+import { ScoreOverview } from "@/components/detail/score-overview";
 import { DimensionSection } from "@/components/detail/dimension-section";
 import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
 import { Link } from "@/i18n/navigation";
@@ -13,12 +13,13 @@ import type { Arrondissement, DimensionKey } from "@/lib/types";
 
 type Props = {
   arrondissement: Arrondissement & { composite: number; rank: number };
+  allArrondissements: Arrondissement[];
   composite: number;
   rank: number;
   onClose: () => void;
 };
 
-export function MapPanel({ arrondissement, composite, rank, onClose }: Props) {
+export function MapPanel({ arrondissement, allArrondissements, composite, rank, onClose }: Props) {
   const num = arrondissement.number;
   const label = formatArrondissement(num);
 
@@ -32,6 +33,7 @@ export function MapPanel({ arrondissement, composite, rank, onClose }: Props) {
           composite={composite}
           rank={rank}
           arrondissement={arrondissement}
+          allArrondissements={allArrondissements}
           onClose={onClose}
         />
       </div>
@@ -47,6 +49,7 @@ export function MapPanel({ arrondissement, composite, rank, onClose }: Props) {
           composite={composite}
           rank={rank}
           arrondissement={arrondissement}
+          allArrondissements={allArrondissements}
           onClose={onClose}
         />
       </div>
@@ -60,6 +63,7 @@ function PanelContent({
   composite,
   rank,
   arrondissement,
+  allArrondissements,
   onClose,
 }: {
   label: string;
@@ -67,6 +71,7 @@ function PanelContent({
   composite: number;
   rank: number;
   arrondissement: Arrondissement;
+  allArrondissements: Arrondissement[];
   onClose: () => void;
 }) {
   const t = useTranslations();
@@ -99,7 +104,11 @@ function PanelContent({
         <h3 className="text-muted-foreground mb-2 text-sm font-medium">
           {t("detail.scoreOverview")}
         </h3>
-        <ScoreRadar scores={arrondissement.scores} />
+        <ScoreOverview
+          allArrondissements={allArrondissements}
+          currentNumber={arrondissement.number}
+          scores={arrondissement.scores}
+        />
       </div>
 
       <div className="space-y-3">
