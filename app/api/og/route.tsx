@@ -75,7 +75,7 @@ export async function GET() {
             letterSpacing: "0.01em",
           }}
         >
-          {"Data-driven comparison of all 20 arrondissements"}
+          {"Explore the data behind Paris's 20 arrondissements"}
         </span>
       </div>
     </div>,
