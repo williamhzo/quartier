@@ -12,6 +12,7 @@ const size = { width: 1200, height: 630 };
 const fontsDir = join(process.cwd(), "assets/fonts");
 const fontRegularData = readFile(join(fontsDir, "Geist-Regular.ttf"));
 const fontSemiBoldData = readFile(join(fontsDir, "Geist-SemiBold.ttf"));
+const fontMonoSemiBoldData = readFile(join(fontsDir, "GeistMono-SemiBold.ttf"));
 
 export async function GET(
   _req: Request,
@@ -24,9 +25,10 @@ export async function GET(
     return new Response("Not found", { status: 404 });
   }
 
-  const [fontRegular, fontSemiBold, data] = await Promise.all([
+  const [fontRegular, fontSemiBold, fontMonoSemiBold, data] = await Promise.all([
     fontRegularData,
     fontSemiBoldData,
+    fontMonoSemiBoldData,
     loadArrondissements(),
   ]);
 
@@ -75,6 +77,7 @@ export async function GET(
         <span
           style={{
             fontSize: 17,
+            fontFamily: "GeistMono",
             fontWeight: 400,
             letterSpacing: "0.03em",
             color: "#0a0a0a",
@@ -85,6 +88,7 @@ export async function GET(
         <span
           style={{
             fontSize: 17,
+            fontFamily: "GeistMono",
             fontWeight: 400,
             letterSpacing: "0.03em",
             color: "#c8c8c8",
@@ -201,6 +205,12 @@ export async function GET(
         {
           name: "Geist",
           data: fontSemiBold,
+          style: "normal" as const,
+          weight: 600 as const,
+        },
+        {
+          name: "GeistMono",
+          data: fontMonoSemiBold,
           style: "normal" as const,
           weight: 600 as const,
         },
