@@ -26,6 +26,11 @@ export function arrondissementName(n: number, locale: string = "fr"): string {
   return formatArrondissement(n, "en");
 }
 
+export function ordinalLabel(n: number, locale: string = "fr"): string {
+  if (locale === "fr") return formatArrondissement(n, "fr");
+  return `${n}${ordinalSuffixEn(n).toLowerCase()}`;
+}
+
 export const ARRONDISSEMENT_CODES: Record<number, string> = {
   1: "75101",
   2: "75102",
