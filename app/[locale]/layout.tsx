@@ -88,6 +88,8 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   setRequestLocale(locale);
 
+  const t = await getTranslations({ locale, namespace: "metadata" });
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -95,10 +97,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     name: "quartier",
     url: localizeUrl("/", locale),
     inLanguage: locale === "fr" ? "fr-FR" : "en-US",
-    description:
-      locale === "fr"
-        ? "Comparez les 20 arrondissements de Paris : logement, revenus, sécurité, transports, vie nocturne, espaces verts, bruit, équipements, culture et sport."
-        : "Compare all 20 Paris arrondissements across housing, income, safety, transport, nightlife, green space, noise, amenities, culture, and sports.",
+    description: t("description"),
   };
 
   return (
