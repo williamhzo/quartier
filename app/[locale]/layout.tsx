@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
@@ -112,6 +113,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <main>{children}</main>
           </NuqsAdapter>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
