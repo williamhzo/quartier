@@ -14,13 +14,6 @@ function toLocalePath(pathname: string, locale: string) {
   return pathname === "/" ? `/${locale}` : `/${locale}${pathname}`;
 }
 
-function getCountryCode(request: NextRequest) {
-  const country =
-    request.headers.get("x-vercel-ip-country") ??
-    request.headers.get("cf-ipcountry");
-  return country?.toUpperCase() ?? null;
-}
-
 export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -43,12 +36,6 @@ export default function proxy(request: NextRequest) {
     }
 
     return intlMiddleware(request);
-  }
-
-  if (pathname === "/" && getCountryCode(request) === "FR") {
-    const url = request.nextUrl.clone();
-    url.pathname = toLocalePath(pathname, "fr");
-    return NextResponse.redirect(url);
   }
 
   return intlMiddleware(request);
