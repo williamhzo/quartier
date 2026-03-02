@@ -35,7 +35,9 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const { locale, number } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata" });
   const label = formatArrondissement(Number(number), locale);
+  const description = t("detailDescription", { label });
   const ogImage = `/api/og/${number}`;
 
   const languages: Record<string, string> = Object.fromEntries(
@@ -45,18 +47,23 @@ export async function generateMetadata({ params }: Props) {
 
   return {
     title: label,
+    description,
     alternates: {
       canonical: `https://quartier.sh/${locale}/paris/${number}`,
       languages,
     },
     openGraph: {
       title: `${label} - quartier`,
+      description,
       url: `https://quartier.sh/${locale}/paris/${number}`,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+      siteName: "quartier",
       images: [{ url: ogImage, width: 1200, height: 630 }],
     },
     twitter: {
       card: "summary_large_image" as const,
       title: `${label} - quartier`,
+      description,
       images: [ogImage],
     },
   };

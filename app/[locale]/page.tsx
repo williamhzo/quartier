@@ -32,11 +32,14 @@ export async function generateMetadata({ params, searchParams }: Props) {
         title,
         description: t("description"),
         url: `https://quartier.sh/${locale}`,
+        locale: locale === "fr" ? "fr_FR" : "en_US",
+        siteName: "quartier",
         images: [{ url: `/api/og/${arr}`, width: 1200, height: 630 }],
       },
       twitter: {
         card: "summary_large_image" as const,
         title,
+        description: t("description"),
         images: [`/api/og/${arr}`],
       },
     };
@@ -52,6 +55,7 @@ export default async function MapPage({ params, searchParams }: Props) {
   setRequestLocale(locale);
   await searchParamsCache.parse(searchParams);
 
+  const t = await getTranslations({ locale, namespace: "map" });
   const [arrondissements, boundaries, contextBoundaries, seine] =
     await Promise.all([
       loadArrondissements(),
@@ -61,11 +65,14 @@ export default async function MapPage({ params, searchParams }: Props) {
     ]);
 
   return (
-    <ParisMap
-      arrondissements={arrondissements}
-      boundaries={boundaries}
-      contextBoundaries={contextBoundaries}
-      seine={seine}
-    />
+    <>
+      <h1 className="sr-only">{t("h1")}</h1>
+      <ParisMap
+        arrondissements={arrondissements}
+        boundaries={boundaries}
+        contextBoundaries={contextBoundaries}
+        seine={seine}
+      />
+    </>
   );
 }

@@ -28,11 +28,14 @@ export async function generateMetadata({ params }: Props) {
       title: `${t("title")} - quartier`,
       description: t("description"),
       url: `https://quartier.sh/${locale}/leaderboard`,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+      siteName: "quartier",
       images: [{ url: "/api/og", width: 1200, height: 630 }],
     },
     twitter: {
       card: "summary_large_image" as const,
       title: `${t("title")} - quartier`,
+      description: t("description"),
       images: ["/api/og"],
     },
   };

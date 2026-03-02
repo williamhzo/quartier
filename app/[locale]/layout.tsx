@@ -58,6 +58,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: t("title"),
+      description: t("description"),
       images: ["/api/og"],
     },
   };
@@ -73,7 +74,8 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
+    "@type": "WebApplication",
+    applicationCategory: "Reference",
     name: "quartier",
     url: `https://quartier.sh/${locale}`,
     inLanguage: locale === "fr" ? "fr-FR" : "en-US",
