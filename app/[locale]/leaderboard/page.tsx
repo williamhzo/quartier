@@ -11,6 +11,8 @@ type Props = {
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "leaderboard" });
+  const mt = await getTranslations({ locale, namespace: "metadata" });
+  const description = mt("leaderboardDescription");
 
   const languages: Record<string, string> = Object.fromEntries(
     routing.locales.map((l) => [l, `https://quartier.sh/${l}/leaderboard`]),
@@ -19,14 +21,14 @@ export async function generateMetadata({ params }: Props) {
 
   return {
     title: t("title"),
-    description: t("description"),
+    description,
     alternates: {
       canonical: `https://quartier.sh/${locale}/leaderboard`,
       languages,
     },
     openGraph: {
       title: `${t("title")} - quartier`,
-      description: t("description"),
+      description,
       url: `https://quartier.sh/${locale}/leaderboard`,
       locale: locale === "fr" ? "fr_FR" : "en_US",
       siteName: "quartier",
@@ -35,7 +37,7 @@ export async function generateMetadata({ params }: Props) {
     twitter: {
       card: "summary_large_image" as const,
       title: `${t("title")} - quartier`,
-      description: t("description"),
+      description,
       images: ["/api/og"],
     },
   };
