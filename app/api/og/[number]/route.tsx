@@ -72,7 +72,7 @@ export async function GET(
             fontSize: 17,
             fontWeight: 400,
             letterSpacing: "0.03em",
-            color: "#b0b0b0",
+            color: "#c8c8c8",
           }}
         >
           .sh
