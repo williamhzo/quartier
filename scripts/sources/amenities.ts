@@ -24,10 +24,6 @@ type BpeAmenitiesConfig = {
     gyms: string[];
     cinemas: string[];
   };
-  cultureCodebook: {
-    version: string;
-    byType: Record<string, string[]>;
-  };
 };
 
 export type AmenitiesMetric = {
@@ -87,8 +83,7 @@ function buildBpeQueryUrl(
   config: BpeAmenitiesConfig,
 ): string {
   const amenityCodes = Object.values(config.equipmentCodes).flat();
-  const cultureCodes = Object.values(config.cultureCodebook.byType).flat();
-  const equipmentCodes = [...new Set([...amenityCodes, ...cultureCodes])];
+  const equipmentCodes = [...new Set(amenityCodes)];
   const where = `year=date'${config.year}' and com_arm_code in (${encodeQuotedList(communes)}) and equipment_code in (${encodeQuotedList(equipmentCodes)})`;
 
   const params = new URLSearchParams({
@@ -139,9 +134,8 @@ async function fetchResponseToCache(
 
       const tempPath = `${cachePath}.tmp-${Date.now()}`;
       await mkdir(path.dirname(cachePath), { recursive: true });
-      const responseBody = response.body as unknown as NodeReadableStream<
-        Uint8Array
-      >;
+      const responseBody =
+        response.body as unknown as NodeReadableStream<Uint8Array>;
       await pipeline(
         Readable.fromWeb(responseBody),
         createWriteStream(tempPath),

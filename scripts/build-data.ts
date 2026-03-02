@@ -33,10 +33,11 @@ import {
   type NightlifeMetric,
 } from "./sources/sirene";
 import { buildSireneNightlifeSearchParams } from "./sources/sirene-query";
+import { buildSportsFromDataEs, type SportsMetric } from "./sources/sports";
 import {
-  buildSportsFromDataEs,
-  type SportsMetric,
-} from "./sources/sports";
+  buildCultureFromBasilic,
+  type CultureByType,
+} from "./sources/culture-basilic";
 
 type BuildOptions = {
   offline: boolean;
@@ -80,14 +81,7 @@ type CultureMetric = {
   cultural_buildings_total: number;
   cultural_buildings_per_km2: number;
   cultural_buildings_per_10k_residents: number;
-  by_type: {
-    cinemas: number;
-    libraries: number;
-    heritage: number;
-    livePerformanceVenues: number;
-    archives: number;
-    museums: number;
-  };
+  by_type: CultureByType;
 };
 
 type ArrondissementRow = {
@@ -179,8 +173,11 @@ function describeDimensionSource(dimension: DataDimension): string {
   if (dimension === "noise") {
     return `source=${DATA_CONFIG.sources.noise.sourceUrl}, cache=${DATA_CONFIG.sources.noise.cachePath}`;
   }
-  if (dimension === "amenities" || dimension === "culture") {
+  if (dimension === "amenities") {
     return `source=${DATA_CONFIG.sources.bpe.sourceUrl}, cache=${DATA_CONFIG.sources.bpe.cachePath}`;
+  }
+  if (dimension === "culture") {
+    return `source=${DATA_CONFIG.sources.culture.sourceUrl}, cache=${DATA_CONFIG.sources.culture.cachePath}`;
   }
   if (dimension === "sports") {
     return `source=${DATA_CONFIG.sources.sports.sourceUrl}, cache=${DATA_CONFIG.sources.sports.cachePath}`;
@@ -255,7 +252,8 @@ async function validateNightlifeOfflineCacheReadiness(): Promise<void> {
 
   const previewLimit = 8;
   const preview = missingCommunes.slice(0, previewLimit).join(", ");
-  const remainder = missingCommunes.length - Math.min(missingCommunes.length, previewLimit);
+  const remainder =
+    missingCommunes.length - Math.min(missingCommunes.length, previewLimit);
   const suffix = remainder > 0 ? ` (+${remainder} more)` : "";
 
   throw new Error(
@@ -805,70 +803,6 @@ async function applyNightlifeDimension(
   };
 }
 
-const EXPECTED_CULTURE_BPE_CODEBOOK = {
-  cinemas: ["F303"],
-  libraries: ["F305"],
-  heritage: ["F307"],
-  livePerformanceVenues: ["F312"],
-  archives: ["F314"],
-  museums: ["F315"],
-} as const;
-
-type CultureTypeKey = keyof typeof EXPECTED_CULTURE_BPE_CODEBOOK;
-
-function assertPinnedCultureCodebook(): void {
-  const configuredCodebook = DATA_CONFIG.sources.bpe.cultureCodebook?.byType;
-  if (!configuredCodebook) {
-    throw new Error("missing bpe cultureCodebook config");
-  }
-
-  const configuredTypes = Object.keys(configuredCodebook).sort();
-  const expectedTypes = Object.keys(EXPECTED_CULTURE_BPE_CODEBOOK).sort();
-
-  if (configuredTypes.join(",") !== expectedTypes.join(",")) {
-    throw new Error(
-      `bpe culture codebook drift: expected types [${expectedTypes.join(", ")}], got [${configuredTypes.join(", ")}]`,
-    );
-  }
-
-  for (const type of expectedTypes as CultureTypeKey[]) {
-    const configuredCodes = [...(configuredCodebook[type] ?? [])].sort();
-    const expectedCodes = [...EXPECTED_CULTURE_BPE_CODEBOOK[type]].sort();
-    if (configuredCodes.join(",") !== expectedCodes.join(",")) {
-      throw new Error(
-        `bpe culture codebook drift for "${type}": expected [${expectedCodes.join(", ")}], got [${configuredCodes.join(", ")}]`,
-      );
-    }
-  }
-
-  const expectedCinemas = [...EXPECTED_CULTURE_BPE_CODEBOOK.cinemas].sort();
-  const amenitiesCinemaCodes = [...DATA_CONFIG.sources.bpe.equipmentCodes.cinemas]
-    .sort();
-  if (amenitiesCinemaCodes.join(",") !== expectedCinemas.join(",")) {
-    throw new Error(
-      `bpe culture codebook drift: amenities cinema codes must match pinned culture codes [${expectedCinemas.join(", ")}]`,
-    );
-  }
-}
-
-function buildCultureByType(
-  equipmentByCommune: Map<string, number>,
-): CultureMetric["by_type"] {
-  const byType = Object.fromEntries(
-    (Object.entries(EXPECTED_CULTURE_BPE_CODEBOOK) as Array<
-      [CultureTypeKey, readonly string[]]
-    >).map(([type, codes]) => {
-      const totalForType = codes.reduce(
-        (sum, code) => sum + (equipmentByCommune.get(code) ?? 0),
-        0,
-      );
-      return [type, round(totalForType, 2)];
-    }),
-  ) as CultureMetric["by_type"];
-
-  return byType;
-}
-
 function toCultureMetric(
   byType: CultureMetric["by_type"],
   areaKm2: number,
@@ -890,7 +824,10 @@ function toCultureMetric(
   return {
     cultural_buildings_total: round(total, 2),
     cultural_buildings_per_km2: round(total / areaKm2, 2),
-    cultural_buildings_per_10k_residents: round((total / population) * 10_000, 2),
+    cultural_buildings_per_10k_residents: round(
+      (total / population) * 10_000,
+      2,
+    ),
     by_type: byType,
   };
 }
@@ -899,9 +836,7 @@ async function applyAmenitiesDimension(
   rows: ArrondissementRow[],
   mode: "network-first" | "cache-only",
 ): Promise<BuildSourceContributions> {
-  const amenitiesEnabled = DATA_CONFIG.enabledDimensions.includes("amenities");
-  const cultureEnabled = DATA_CONFIG.enabledDimensions.includes("culture");
-  if (!amenitiesEnabled && !cultureEnabled) {
+  if (!DATA_CONFIG.enabledDimensions.includes("amenities")) {
     return {
       sourceRowCounts: {},
       sourceChecksums: {},
@@ -910,64 +845,62 @@ async function applyAmenitiesDimension(
     };
   }
 
-  if (cultureEnabled) {
-    assertPinnedCultureCodebook();
-  }
-
   const amenities = await buildAmenitiesFromBpe({
     communes: PARIS_ARRONDISSEMENT_COMMUNES,
     mode,
     config: DATA_CONFIG.sources.bpe,
   });
 
-  const cultureWarnings: string[] = [];
-  if (cultureEnabled) {
-    for (const [type, codes] of Object.entries(
-      EXPECTED_CULTURE_BPE_CODEBOOK,
-    ) as Array<[CultureTypeKey, readonly string[]]>) {
-      let total = 0;
-      for (const communeCode of PARIS_ARRONDISSEMENT_COMMUNES) {
-        const equipmentByCommune = amenities.byEquipmentByCommune.get(communeCode);
-        if (!equipmentByCommune) continue;
-        total += codes.reduce(
-          (sum, code) => sum + (equipmentByCommune.get(code) ?? 0),
-          0,
-        );
-      }
-
-      if (total <= 0) {
-        cultureWarnings.push(
-          `culture codebook bucket "${type}" has zero count across all arrondissements for the cached BPE payload`,
-        );
-      }
-    }
-  }
-
   const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
   for (const [code, metric] of amenities.byCommune) {
     const row = rowByCode.get(code);
     if (!row) continue;
-    const equipmentByCommune =
-      amenities.byEquipmentByCommune.get(code) ?? new Map<string, number>();
-
-    if (amenitiesEnabled) {
-      row.dimensions.amenities = metric;
-    }
-    if (cultureEnabled) {
-      const byType = buildCultureByType(equipmentByCommune);
-      row.dimensions.culture = toCultureMetric(
-        byType,
-        row.area_km2,
-        row.population,
-      );
-    }
+    row.dimensions.amenities = metric;
   }
 
   return {
     sourceRowCounts: amenities.sourceRowCounts,
     sourceChecksums: amenities.sourceChecksums,
     sourceUrls: amenities.sourceUrls,
-    warnings: [...amenities.warnings, ...cultureWarnings],
+    warnings: amenities.warnings,
+  };
+}
+
+async function applyCultureDimension(
+  rows: ArrondissementRow[],
+  mode: "network-first" | "cache-only",
+): Promise<BuildSourceContributions> {
+  if (!DATA_CONFIG.enabledDimensions.includes("culture")) {
+    return {
+      sourceRowCounts: {},
+      sourceChecksums: {},
+      sourceUrls: {},
+      warnings: [],
+    };
+  }
+
+  const culture = await buildCultureFromBasilic({
+    communes: PARIS_ARRONDISSEMENT_COMMUNES,
+    mode,
+    config: DATA_CONFIG.sources.culture,
+  });
+
+  const rowByCode = new Map(rows.map((row) => [row.code, row] as const));
+  for (const [code, byType] of culture.byCommune) {
+    const row = rowByCode.get(code);
+    if (!row) continue;
+    row.dimensions.culture = toCultureMetric(
+      byType,
+      row.area_km2,
+      row.population,
+    );
+  }
+
+  return {
+    sourceRowCounts: culture.sourceRowCounts,
+    sourceChecksums: culture.sourceChecksums,
+    sourceUrls: culture.sourceUrls,
+    warnings: culture.warnings,
   };
 }
 
@@ -1230,6 +1163,15 @@ function evaluateQuality(
 
   for (const key of DATA_CONFIG.enabledDimensions) {
     const count = coverage[key];
+    if (key === "culture") {
+      if (count < PARIS_ARRONDISSEMENT_COMMUNES.length) {
+        hardFailErrors.push(
+          `coverage too low for enabled dimension "culture": ${count}/20 (requires 20/20)`,
+        );
+      }
+      continue;
+    }
+
     if (count < 18) {
       hardFailErrors.push(
         `coverage too low for enabled dimension "${key}": ${count}/20`,
@@ -1238,6 +1180,67 @@ function evaluateQuality(
     }
     if (count < 20) {
       warnings.push(`partial coverage for "${key}": ${count}/20`);
+    }
+  }
+
+  if (DATA_CONFIG.enabledDimensions.includes("culture")) {
+    const cityTotals: CultureByType = {
+      cinemas: 0,
+      libraries: 0,
+      heritage: 0,
+      livePerformanceVenues: 0,
+      archives: 0,
+      museums: 0,
+    };
+
+    for (const row of rows) {
+      const byType = row.dimensions.culture?.by_type;
+      if (!byType) continue;
+      cityTotals.cinemas = round(cityTotals.cinemas + byType.cinemas, 2);
+      cityTotals.libraries = round(cityTotals.libraries + byType.libraries, 2);
+      cityTotals.heritage = round(cityTotals.heritage + byType.heritage, 2);
+      cityTotals.livePerformanceVenues = round(
+        cityTotals.livePerformanceVenues + byType.livePerformanceVenues,
+        2,
+      );
+      cityTotals.archives = round(cityTotals.archives + byType.archives, 2);
+      cityTotals.museums = round(cityTotals.museums + byType.museums, 2);
+    }
+
+    const total = round(
+      cityTotals.cinemas +
+        cityTotals.libraries +
+        cityTotals.heritage +
+        cityTotals.livePerformanceVenues +
+        cityTotals.archives +
+        cityTotals.museums,
+      2,
+    );
+    if (total <= 0) {
+      hardFailErrors.push(
+        "culture citywide total is zero across all arrondissements",
+      );
+    }
+
+    const nonCinemaTotal = round(
+      cityTotals.libraries +
+        cityTotals.heritage +
+        cityTotals.livePerformanceVenues +
+        cityTotals.archives +
+        cityTotals.museums,
+      2,
+    );
+    if (nonCinemaTotal <= 0) {
+      hardFailErrors.push(
+        "culture non-cinema citywide total is zero across all arrondissements",
+      );
+    }
+
+    for (const [bucket, count] of Object.entries(cityTotals)) {
+      if (count > 0) continue;
+      warnings.push(
+        `culture bucket "${bucket}" has zero citywide total in Basilic snapshot`,
+      );
     }
   }
 
@@ -1319,7 +1322,9 @@ async function main(): Promise<void> {
     config: DATA_CONFIG.sources.filosofi,
   });
   logInfo(
-    `loaded shared income/population: communes=${sharedIncomePopulation.populationByCommune.size}, sourceRows=${Object.values(sharedIncomePopulation.sourceRowCounts)
+    `loaded shared income/population: communes=${sharedIncomePopulation.populationByCommune.size}, sourceRows=${Object.values(
+      sharedIncomePopulation.sourceRowCounts,
+    )
       .map(String)
       .join(",")}`,
   );
@@ -1398,13 +1403,21 @@ async function main(): Promise<void> {
   warnings.push(...noiseContribution.warnings);
   logContributionSummary("noise", noiseContribution);
 
-  logInfo("running amenities/culture step");
+  logInfo("running amenities step");
   const amenitiesContribution = await applyAmenitiesDimension(rows, mode);
   Object.assign(sourceRowCounts, amenitiesContribution.sourceRowCounts);
   Object.assign(sourceChecksums, amenitiesContribution.sourceChecksums);
   Object.assign(sourceUrls, amenitiesContribution.sourceUrls);
   warnings.push(...amenitiesContribution.warnings);
-  logContributionSummary("amenities+culture", amenitiesContribution);
+  logContributionSummary("amenities", amenitiesContribution);
+
+  logInfo("running culture step");
+  const cultureContribution = await applyCultureDimension(rows, mode);
+  Object.assign(sourceRowCounts, cultureContribution.sourceRowCounts);
+  Object.assign(sourceChecksums, cultureContribution.sourceChecksums);
+  Object.assign(sourceUrls, cultureContribution.sourceUrls);
+  warnings.push(...cultureContribution.warnings);
+  logContributionSummary("culture", cultureContribution);
 
   logInfo("running sports step");
   const sportsContribution = await applySportsDimension(rows, mode);

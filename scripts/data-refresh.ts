@@ -6,6 +6,10 @@ import {
   getEnabledSireneBuckets,
 } from "./data-config";
 import { buildAmenitiesFromBpe } from "./sources/amenities";
+import {
+  buildCultureFromBasilic,
+  type CultureByType,
+} from "./sources/culture-basilic";
 import { fetchSireneNightlifeSnapshot } from "./sources/sirene";
 
 type RefreshOptions = {
@@ -144,29 +148,57 @@ async function refreshBpe(options: RefreshOptions): Promise<void> {
     config: DATA_CONFIG.sources.bpe,
   });
 
-  const cultureByType = Object.fromEntries(
-    Object.entries(DATA_CONFIG.sources.bpe.cultureCodebook.byType).map(
-      ([type, codes]) => {
-        let total = 0;
-        for (const communeCode of PARIS_ARRONDISSEMENT_COMMUNES) {
-          const equipmentByCommune =
-            refreshed.byEquipmentByCommune.get(communeCode);
-          if (!equipmentByCommune) continue;
-          total += codes.reduce(
-            (sum, code) => sum + (equipmentByCommune.get(code) ?? 0),
-            0,
-          );
-        }
-        return [type, Number(total.toFixed(2))];
-      },
-    ),
-  );
-
   logInfo(`refreshed bpe cache: ${DATA_CONFIG.sources.bpe.cachePath}`);
   logInfo(
     `bpe rows total=${refreshed.sourceRowCounts.bpe_rows_total ?? 0} matched=${refreshed.sourceRowCounts.bpe_rows_matched ?? 0}`,
   );
-  logInfo(`culture totals by type: ${JSON.stringify(cultureByType)}`);
+  for (const warning of refreshed.warnings) {
+    logWarn(warning);
+  }
+}
+
+function round(value: number, decimals: number): number {
+  const factor = 10 ** decimals;
+  return Math.round(value * factor) / factor;
+}
+
+async function refreshCulture(options: RefreshOptions): Promise<void> {
+  const mode = options.offline ? "cache-only" : "network-first";
+  logInfo(
+    `culture refresh start (mode=${mode}, source=${DATA_CONFIG.sources.culture.sourceUrl}, cache=${DATA_CONFIG.sources.culture.cachePath})`,
+  );
+
+  const refreshed = await buildCultureFromBasilic({
+    communes: PARIS_ARRONDISSEMENT_COMMUNES,
+    mode,
+    config: DATA_CONFIG.sources.culture,
+  });
+
+  const cityTotals: CultureByType = {
+    cinemas: 0,
+    libraries: 0,
+    heritage: 0,
+    livePerformanceVenues: 0,
+    archives: 0,
+    museums: 0,
+  };
+  for (const byType of refreshed.byCommune.values()) {
+    cityTotals.cinemas = round(cityTotals.cinemas + byType.cinemas, 2);
+    cityTotals.libraries = round(cityTotals.libraries + byType.libraries, 2);
+    cityTotals.heritage = round(cityTotals.heritage + byType.heritage, 2);
+    cityTotals.livePerformanceVenues = round(
+      cityTotals.livePerformanceVenues + byType.livePerformanceVenues,
+      2,
+    );
+    cityTotals.archives = round(cityTotals.archives + byType.archives, 2);
+    cityTotals.museums = round(cityTotals.museums + byType.museums, 2);
+  }
+
+  logInfo(`refreshed culture cache: ${DATA_CONFIG.sources.culture.cachePath}`);
+  logInfo(
+    `culture rows total=${refreshed.sourceRowCounts.culture_rows_total ?? 0} matched=${refreshed.sourceRowCounts.culture_rows_matched ?? 0} deduplicated=${refreshed.sourceRowCounts.culture_rows_deduplicated ?? 0} unmapped=${refreshed.sourceRowCounts.culture_rows_unmapped_type ?? 0}`,
+  );
+  logInfo(`culture totals by type: ${JSON.stringify(cityTotals)}`);
   for (const warning of refreshed.warnings) {
     logWarn(warning);
   }
@@ -179,12 +211,10 @@ async function main(): Promise<void> {
     `starting refresh (mode=${options.offline ? "cache-only" : "network-first"}, requestedDimensions=${options.dimensions.length > 0 ? options.dimensions.join(", ") : "from enabledDimensions"})`,
   );
   const shouldRefreshNightlife = dimensions.has("nightlife");
-  const shouldRefreshBpe =
-    dimensions.has("amenities") ||
-    dimensions.has("culture") ||
-    dimensions.has("bpe");
+  const shouldRefreshBpe = dimensions.has("amenities") || dimensions.has("bpe");
+  const shouldRefreshCulture = dimensions.has("culture");
 
-  if (!shouldRefreshNightlife && !shouldRefreshBpe) {
+  if (!shouldRefreshNightlife && !shouldRefreshBpe && !shouldRefreshCulture) {
     logInfo(
       "nothing to do: supported refresh dimensions are nightlife, amenities, culture",
     );
@@ -197,6 +227,10 @@ async function main(): Promise<void> {
 
   if (shouldRefreshBpe) {
     await refreshBpe(options);
+  }
+
+  if (shouldRefreshCulture) {
+    await refreshCulture(options);
   }
 }
 

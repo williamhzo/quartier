@@ -63,7 +63,7 @@ export const DATA_CONFIG = {
     greenSpace: "opendata-paris-espaces-verts-export-2026-02-28",
     noise: "ville-paris-bruit-routier-cnossos-2022",
     bpe: "buildingref-france-bpe-all-millesime-2016",
-    bpe_culture_codebook: "bpe-culture-v2",
+    culture: "basilic-2026-02-18",
     sirene: "V3.11",
     sports: "data-es-open-daily-v1",
   },
@@ -84,6 +84,8 @@ export const DATA_CONFIG = {
     noise:
       "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/bruit-exposition-des-parisien-ne-s-aux-depassements-des-seuils-nocturne-ou-journ/exports/csv",
     bpe: "https://public.opendatasoft.com/explore/dataset/buildingref-france-bpe-all-millesime/",
+    culture:
+      "https://data.culture.gouv.fr/explore/dataset/base-des-lieux-et-des-equipements-culturels/",
     sirene: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
     sports:
       "https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records",
@@ -192,16 +194,36 @@ export const DATA_CONFIG = {
         gyms: ["F120", "F121"],
         cinemas: ["F303"],
       },
-      cultureCodebook: {
-        version: "bpe-culture-v2",
-        byType: {
-          cinemas: ["F303"],
-          libraries: ["F305"],
-          heritage: ["F307"],
-          livePerformanceVenues: ["F312"],
-          archives: ["F314"],
-          museums: ["F315"],
-        },
+    },
+    culture: {
+      apiBaseUrl:
+        "https://data.culture.gouv.fr/api/explore/v2.1/catalog/datasets/base-des-lieux-et-des-equipements-culturels/exports/json",
+      sourceUrl:
+        "https://data.culture.gouv.fr/explore/dataset/base-des-lieux-et-des-equipements-culturels/",
+      cachePath: "data/raw/culture/basilic-paris.json",
+      timeoutMs: 180_000,
+      maxRetries: 3,
+      initialRetryDelayMs: 500,
+      maxRecords: 10_000,
+      typeMapping: {
+        cinemas: ["Cinéma"],
+        libraries: ["Bibliothèque"],
+        heritage: [
+          "Monument",
+          "Lieu de mémoire",
+          "Lieu archéologique",
+          "Espace protégé",
+        ],
+        livePerformanceVenues: [
+          "Théâtre",
+          "Opéra",
+          "Scène",
+          "Conservatoire",
+          "Centre de création artistique",
+          "Centre de création musicale",
+        ],
+        archives: ["Service d'archives"],
+        museums: ["Musée", "Centre d'art"],
       },
     },
     sirene: {
@@ -258,7 +280,12 @@ export const DATA_CONFIG = {
           "Site d'activités aériennes",
           "Pas de tir",
         ],
-        combat: ["Salles de combat", "Salle de combat", "Sports de combat", "Dojos"],
+        combat: [
+          "Salles de combat",
+          "Salle de combat",
+          "Sports de combat",
+          "Dojos",
+        ],
         athletics: [
           "Equipements d'athletisme",
           "Equipement d'athlétisme",
