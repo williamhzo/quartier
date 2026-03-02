@@ -30,7 +30,12 @@ export default function proxy(request: NextRequest) {
 
   const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
 
-  if (cookieLocale && hasLocale(routing.locales, cookieLocale)) {
+  // Keep deep links stable: only negotiate locale at the unprefixed homepage.
+  if (
+    pathname === "/" &&
+    cookieLocale &&
+    hasLocale(routing.locales, cookieLocale)
+  ) {
     if (cookieLocale !== routing.defaultLocale) {
       const url = request.nextUrl.clone();
       url.pathname = toLocalePath(pathname, cookieLocale);
@@ -40,7 +45,7 @@ export default function proxy(request: NextRequest) {
     return intlMiddleware(request);
   }
 
-  if (getCountryCode(request) === "FR") {
+  if (pathname === "/" && getCountryCode(request) === "FR") {
     const url = request.nextUrl.clone();
     url.pathname = toLocalePath(pathname, "fr");
     return NextResponse.redirect(url);
