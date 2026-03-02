@@ -4,7 +4,7 @@
     "description": "Compare all 20 Paris arrondissements with open data. Explore scores for housing, income, safety, transport, green space, noise, amenities, culture, and sports.",
     "leaderboardTitle": "Paris Arrondissement Rankings: All 20 Compared",
     "leaderboardDescription": "Ranking of all 20 Paris arrondissements by score. Compare housing prices, income, safety, transport, green space, noise, amenities, culture, and sports.",
-    "detailTitle": "Paris {ordinal} Arrondissement: Scores & Ranking",
+    "detailTitle": "Paris {ordinal} Arrondissement: Score",
     "detailDescription": "Scores, ranking, and data for Paris's {ordinal} Arrondissement. Explore housing, income, safety, transport, green space, noise, amenities, culture, and sports."
   },
   "nav": {

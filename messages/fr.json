@@ -4,7 +4,7 @@
     "description": "Comparez les 20 arrondissements de Paris : logement, revenus, sécurité, transports, vie nocturne, espaces verts, bruit, équipements, culture et sport.",
     "leaderboardTitle": "Classement des 20 arrondissements de Paris",
     "leaderboardDescription": "Classement des 20 arrondissements de Paris par score. Comparez logement, revenus, sécurité, transports, espaces verts, bruit, équipements, culture et sport.",
-    "detailTitle": "{ordinal} arrondissement de Paris : scores et classement",
+    "detailTitle": "{ordinal} arrondissement de Paris : score",
     "detailDescription": "Scores et classement du {ordinal} arrondissement de Paris. Explorez les données logement, revenus, sécurité, transports, espaces verts, bruit, culture et sport."
   },
   "nav": {
