@@ -66,16 +66,16 @@
         "cinemas": 1
       },
       "culture": {
-        "cultural_buildings_total": 2,
-        "cultural_buildings_per_km2": 1.1,
-        "cultural_buildings_per_10k_residents": 1.34,
+        "cultural_buildings_total": 273,
+        "cultural_buildings_per_km2": 149.62,
+        "cultural_buildings_per_10k_residents": 182.67,
         "by_type": {
           "cinemas": 1,
           "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "heritage": 252,
+          "livePerformanceVenues": 7,
+          "archives": 9,
+          "museums": 3
         }
       },
       "sports": {
@@ -102,7 +102,7 @@
       "greenSpace": 1.91,
       "noise": 64.49,
       "amenities": 26.27,
-      "culture": 13.41,
+      "culture": 84.24,
       "sports": 15.35
     }
   },
@@ -170,15 +170,15 @@
         "cinemas": 3
       },
       "culture": {
-        "cultural_buildings_total": 3,
-        "cultural_buildings_per_km2": 3.03,
-        "cultural_buildings_per_10k_residents": 1.55,
+        "cultural_buildings_total": 130,
+        "cultural_buildings_per_km2": 131.16,
+        "cultural_buildings_per_10k_residents": 66.99,
         "by_type": {
-          "cinemas": 3,
-          "libraries": 0,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
+          "cinemas": 2,
+          "libraries": 2,
+          "heritage": 115,
+          "livePerformanceVenues": 8,
+          "archives": 3,
           "museums": 0
         }
       },
@@ -206,7 +206,7 @@
       "greenSpace": 0,
       "noise": 64.49,
       "amenities": 59.98,
-      "culture": 39.81,
+      "culture": 73.55,
       "sports": 49.66
     }
   },
@@ -273,16 +273,16 @@
         "cinemas": 1
       },
       "culture": {
-        "cultural_buildings_total": 1,
-        "cultural_buildings_per_km2": 0.85,
-        "cultural_buildings_per_10k_residents": 0.33,
+        "cultural_buildings_total": 159,
+        "cultural_buildings_per_km2": 135.79,
+        "cultural_buildings_per_10k_residents": 52.36,
         "by_type": {
           "cinemas": 1,
-          "libraries": 0,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "libraries": 2,
+          "heritage": 144,
+          "livePerformanceVenues": 2,
+          "archives": 4,
+          "museums": 6
         }
       },
       "sports": {
@@ -309,7 +309,7 @@
       "greenSpace": 0.82,
       "noise": 64.49,
       "amenities": 74.83,
-      "culture": 9.99,
+      "culture": 76.23,
       "sports": 28.83
     }
   },
@@ -377,16 +377,16 @@
         "cinemas": 1
       },
       "culture": {
-        "cultural_buildings_total": 1,
-        "cultural_buildings_per_km2": 0.62,
-        "cultural_buildings_per_10k_residents": 0.41,
+        "cultural_buildings_total": 283,
+        "cultural_buildings_per_km2": 176.81,
+        "cultural_buildings_per_10k_residents": 117.07,
         "by_type": {
           "cinemas": 1,
-          "libraries": 0,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "libraries": 4,
+          "heritage": 265,
+          "livePerformanceVenues": 6,
+          "archives": 3,
+          "museums": 4
         }
       },
       "sports": {
@@ -413,7 +413,7 @@
       "greenSpace": 3.34,
       "noise": 64.49,
       "amenities": 63.34,
-      "culture": 6.84,
+      "culture": 100,
       "sports": 68.23
     }
   },
@@ -480,16 +480,16 @@
         "cinemas": 12
       },
       "culture": {
-        "cultural_buildings_total": 13,
-        "cultural_buildings_per_km2": 5.12,
-        "cultural_buildings_per_10k_residents": 2.87,
+        "cultural_buildings_total": 149,
+        "cultural_buildings_per_km2": 58.68,
+        "cultural_buildings_per_10k_residents": 32.93,
         "by_type": {
-          "cinemas": 12,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "cinemas": 10,
+          "libraries": 5,
+          "heritage": 113,
+          "livePerformanceVenues": 6,
+          "archives": 8,
+          "museums": 7
         }
       },
       "sports": {
@@ -516,7 +516,7 @@
       "greenSpace": 2.16,
       "noise": 62.09,
       "amenities": 90.6,
-      "culture": 68.4,
+      "culture": 31.55,
       "sports": 60.56
     }
   },
@@ -582,16 +582,16 @@
         "cinemas": 15
       },
       "culture": {
-        "cultural_buildings_total": 16,
-        "cultural_buildings_per_km2": 7.43,
-        "cultural_buildings_per_10k_residents": 5.18,
+        "cultural_buildings_total": 239,
+        "cultural_buildings_per_km2": 111,
+        "cultural_buildings_per_10k_residents": 77.44,
         "by_type": {
-          "cinemas": 15,
+          "cinemas": 14,
           "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "heritage": 200,
+          "livePerformanceVenues": 8,
+          "archives": 10,
+          "museums": 6
         }
       },
       "sports": {
@@ -618,7 +618,7 @@
       "greenSpace": 0.98,
       "noise": 58.37,
       "amenities": 100,
-      "culture": 100,
+      "culture": 61.87,
       "sports": 66.68
     }
   },
@@ -685,16 +685,16 @@
         "cinemas": 1
       },
       "culture": {
-        "cultural_buildings_total": 2,
-        "cultural_buildings_per_km2": 0.49,
-        "cultural_buildings_per_10k_residents": 0.44,
+        "cultural_buildings_total": 178,
+        "cultural_buildings_per_km2": 43.52,
+        "cultural_buildings_per_10k_residents": 39.3,
         "by_type": {
-          "cinemas": 1,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "cinemas": 0,
+          "libraries": 2,
+          "heritage": 150,
+          "livePerformanceVenues": 2,
+          "archives": 18,
+          "museums": 6
         }
       },
       "sports": {
@@ -721,7 +721,7 @@
       "greenSpace": 9.7,
       "noise": 92.72,
       "amenities": 50.64,
-      "culture": 5.06,
+      "culture": 22.77,
       "sports": 0
     }
   },
@@ -792,16 +792,16 @@
         "cinemas": 9
       },
       "culture": {
-        "cultural_buildings_total": 11,
-        "cultural_buildings_per_km2": 2.84,
-        "cultural_buildings_per_10k_residents": 3,
+        "cultural_buildings_total": 145,
+        "cultural_buildings_per_km2": 37.37,
+        "cultural_buildings_per_10k_residents": 39.58,
         "by_type": {
-          "cinemas": 9,
+          "cinemas": 6,
           "libraries": 2,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "heritage": 119,
+          "livePerformanceVenues": 11,
+          "archives": 3,
+          "museums": 4
         }
       },
       "sports": {
@@ -828,7 +828,7 @@
       "greenSpace": 7.36,
       "noise": 0,
       "amenities": 75.75,
-      "culture": 37.21,
+      "culture": 19.2,
       "sports": 8.91
     }
   },
@@ -900,16 +900,16 @@
         "cinemas": 5
       },
       "culture": {
-        "cultural_buildings_total": 6,
-        "cultural_buildings_per_km2": 2.75,
-        "cultural_buildings_per_10k_residents": 1.1,
+        "cultural_buildings_total": 162,
+        "cultural_buildings_per_km2": 74.37,
+        "cultural_buildings_per_10k_residents": 29.59,
         "by_type": {
-          "cinemas": 5,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "cinemas": 3,
+          "libraries": 3,
+          "heritage": 133,
+          "livePerformanceVenues": 16,
+          "archives": 4,
+          "museums": 3
         }
       },
       "sports": {
@@ -936,7 +936,7 @@
       "greenSpace": 0.22,
       "noise": 47.63,
       "amenities": 83.41,
-      "culture": 35.98,
+      "culture": 40.64,
       "sports": 65.37
     }
   },
@@ -1009,14 +1009,14 @@
         "cinemas": 3
       },
       "culture": {
-        "cultural_buildings_total": 4,
-        "cultural_buildings_per_km2": 1.38,
-        "cultural_buildings_per_10k_residents": 0.48,
+        "cultural_buildings_total": 72,
+        "cultural_buildings_per_km2": 24.9,
+        "cultural_buildings_per_10k_residents": 8.69,
         "by_type": {
           "cinemas": 3,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
+          "libraries": 4,
+          "heritage": 56,
+          "livePerformanceVenues": 9,
           "archives": 0,
           "museums": 0
         }
@@ -1045,7 +1045,7 @@
       "greenSpace": 0.74,
       "noise": 28.39,
       "amenities": 44.06,
-      "culture": 17.24,
+      "culture": 11.98,
       "sports": 42.59
     }
   },
@@ -1114,14 +1114,14 @@
         "cinemas": 3
       },
       "culture": {
-        "cultural_buildings_total": 4,
-        "cultural_buildings_per_km2": 1.09,
-        "cultural_buildings_per_10k_residents": 0.3,
+        "cultural_buildings_total": 66,
+        "cultural_buildings_per_km2": 18.01,
+        "cultural_buildings_per_10k_residents": 4.91,
         "by_type": {
           "cinemas": 3,
           "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
+          "heritage": 48,
+          "livePerformanceVenues": 14,
           "archives": 0,
           "museums": 0
         }
@@ -1150,7 +1150,7 @@
       "greenSpace": 0.74,
       "noise": 83.94,
       "amenities": 78.13,
-      "culture": 13.27,
+      "culture": 7.98,
       "sports": 100
     }
   },
@@ -1221,16 +1221,16 @@
         "cinemas": 3
       },
       "culture": {
-        "cultural_buildings_total": 4,
-        "cultural_buildings_per_km2": 0.25,
-        "cultural_buildings_per_10k_residents": 0.31,
+        "cultural_buildings_total": 69,
+        "cultural_buildings_per_km2": 4.23,
+        "cultural_buildings_per_10k_residents": 5.36,
         "by_type": {
           "cinemas": 3,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "libraries": 3,
+          "heritage": 40,
+          "livePerformanceVenues": 13,
+          "archives": 7,
+          "museums": 3
         }
       },
       "sports": {
@@ -1257,7 +1257,7 @@
       "greenSpace": 100,
       "noise": 95,
       "amenities": 0,
-      "culture": 1.78,
+      "culture": 0,
       "sports": 31.38
     }
   },
@@ -1326,16 +1326,16 @@
         "cinemas": 5
       },
       "culture": {
-        "cultural_buildings_total": 6,
-        "cultural_buildings_per_km2": 0.84,
-        "cultural_buildings_per_10k_residents": 0.36,
+        "cultural_buildings_total": 62,
+        "cultural_buildings_per_km2": 8.67,
+        "cultural_buildings_per_10k_residents": 3.74,
         "by_type": {
           "cinemas": 5,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "libraries": 4,
+          "heritage": 40,
+          "livePerformanceVenues": 4,
+          "archives": 8,
+          "museums": 1
         }
       },
       "sports": {
@@ -1362,7 +1362,7 @@
       "greenSpace": 2.78,
       "noise": 100,
       "amenities": 52.9,
-      "culture": 9.85,
+      "culture": 2.57,
       "sports": 73.05
     }
   },
@@ -1429,16 +1429,16 @@
         "cinemas": 6
       },
       "culture": {
-        "cultural_buildings_total": 7,
-        "cultural_buildings_per_km2": 1.25,
-        "cultural_buildings_per_10k_residents": 0.59,
+        "cultural_buildings_total": 92,
+        "cultural_buildings_per_km2": 16.39,
+        "cultural_buildings_per_10k_residents": 7.82,
         "by_type": {
           "cinemas": 6,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "libraries": 3,
+          "heritage": 67,
+          "livePerformanceVenues": 8,
+          "archives": 6,
+          "museums": 2
         }
       },
       "sports": {
@@ -1465,7 +1465,7 @@
       "greenSpace": 6.17,
       "noise": 85.11,
       "amenities": 47.85,
-      "culture": 15.46,
+      "culture": 7.05,
       "sports": 70.5
     }
   },
@@ -1534,16 +1534,16 @@
         "cinemas": 3
       },
       "culture": {
-        "cultural_buildings_total": 4,
-        "cultural_buildings_per_km2": 0.47,
-        "cultural_buildings_per_10k_residents": 0.19,
+        "cultural_buildings_total": 67,
+        "cultural_buildings_per_km2": 7.89,
+        "cultural_buildings_per_10k_residents": 3.18,
         "by_type": {
-          "cinemas": 3,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "cinemas": 4,
+          "libraries": 5,
+          "heritage": 41,
+          "livePerformanceVenues": 4,
+          "archives": 9,
+          "museums": 4
         }
       },
       "sports": {
@@ -1570,7 +1570,7 @@
       "greenSpace": 4.08,
       "noise": 88.36,
       "amenities": 44.64,
-      "culture": 4.79,
+      "culture": 2.12,
       "sports": 62.82
     }
   },
@@ -1639,16 +1639,16 @@
         "cinemas": 1
       },
       "culture": {
-        "cultural_buildings_total": 2,
-        "cultural_buildings_per_km2": 0.12,
-        "cultural_buildings_per_10k_residents": 0.13,
+        "cultural_buildings_total": 107,
+        "cultural_buildings_per_km2": 6.54,
+        "cultural_buildings_per_10k_residents": 6.9,
         "by_type": {
           "cinemas": 1,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "libraries": 3,
+          "heritage": 83,
+          "livePerformanceVenues": 4,
+          "archives": 7,
+          "museums": 9
         }
       },
       "sports": {
@@ -1675,7 +1675,7 @@
       "greenSpace": 72.78,
       "noise": 75.49,
       "amenities": 15.85,
-      "culture": 0,
+      "culture": 1.34,
       "sports": 54.19
     }
   },
@@ -1746,16 +1746,16 @@
         "cinemas": 4
       },
       "culture": {
-        "cultural_buildings_total": 5,
-        "cultural_buildings_per_km2": 0.88,
-        "cultural_buildings_per_10k_residents": 0.33,
+        "cultural_buildings_total": 42,
+        "cultural_buildings_per_km2": 7.41,
+        "cultural_buildings_per_10k_residents": 2.74,
         "by_type": {
-          "cinemas": 4,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
+          "cinemas": 5,
+          "libraries": 3,
+          "heritage": 30,
+          "livePerformanceVenues": 2,
           "archives": 0,
-          "museums": 0
+          "museums": 2
         }
       },
       "sports": {
@@ -1782,7 +1782,7 @@
       "greenSpace": 3.4,
       "noise": 77.72,
       "amenities": 59.52,
-      "culture": 10.4,
+      "culture": 1.84,
       "sports": 59.39
     }
   },
@@ -1849,16 +1849,16 @@
         "cinemas": 2
       },
       "culture": {
-        "cultural_buildings_total": 3,
-        "cultural_buildings_per_km2": 0.5,
-        "cultural_buildings_per_10k_residents": 0.19,
+        "cultural_buildings_total": 59,
+        "cultural_buildings_per_km2": 9.84,
+        "cultural_buildings_per_10k_residents": 3.73,
         "by_type": {
           "cinemas": 2,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "libraries": 6,
+          "heritage": 34,
+          "livePerformanceVenues": 12,
+          "archives": 2,
+          "museums": 3
         }
       },
       "sports": {
@@ -1885,7 +1885,7 @@
       "greenSpace": 3.93,
       "noise": 63.42,
       "amenities": 26.58,
-      "culture": 5.2,
+      "culture": 3.25,
       "sports": 44.75
     }
   },
@@ -1954,16 +1954,16 @@
         "cinemas": 5
       },
       "culture": {
-        "cultural_buildings_total": 6,
-        "cultural_buildings_per_km2": 0.88,
-        "cultural_buildings_per_10k_residents": 0.36,
+        "cultural_buildings_total": 67,
+        "cultural_buildings_per_km2": 9.86,
+        "cultural_buildings_per_10k_residents": 3.98,
         "by_type": {
           "cinemas": 5,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "libraries": 7,
+          "heritage": 33,
+          "livePerformanceVenues": 11,
+          "archives": 9,
+          "museums": 2
         }
       },
       "sports": {
@@ -1990,7 +1990,7 @@
       "greenSpace": 4.75,
       "noise": 97.13,
       "amenities": 32.11,
-      "culture": 10.4,
+      "culture": 3.26,
       "sports": 42.87
     }
   },
@@ -2059,16 +2059,16 @@
         "cinemas": 2
       },
       "culture": {
-        "cultural_buildings_total": 3,
-        "cultural_buildings_per_km2": 0.5,
-        "cultural_buildings_per_10k_residents": 0.17,
+        "cultural_buildings_total": 44,
+        "cultural_buildings_per_km2": 7.35,
+        "cultural_buildings_per_10k_residents": 2.42,
         "by_type": {
           "cinemas": 2,
-          "libraries": 1,
-          "heritage": 0,
-          "livePerformanceVenues": 0,
-          "archives": 0,
-          "museums": 0
+          "libraries": 8,
+          "heritage": 21,
+          "livePerformanceVenues": 9,
+          "archives": 2,
+          "museums": 2
         }
       },
       "sports": {
@@ -2095,7 +2095,7 @@
       "greenSpace": 5.92,
       "noise": 75.39,
       "amenities": 27.57,
-      "culture": 5.2,
+      "culture": 1.81,
       "sports": 81.61
     }
   }
