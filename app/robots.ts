@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/api/", "/ingest/"],
+      disallow: ["/api/"],
     },
     sitemap: "https://quartier.sh/sitemap.xml",
   };
