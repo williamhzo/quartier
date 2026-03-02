@@ -4,21 +4,7 @@ import { join } from "node:path";
 import { loadArrondissements } from "@/lib/data";
 import { EQUAL_WEIGHTS } from "@/lib/personas";
 import { computeComposite, rankByComposite } from "@/lib/scoring";
-import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
-import type { DimensionKey } from "@/lib/types";
-
-const DIMENSION_LABELS: Record<DimensionKey, string> = {
-  housing: "Housing",
-  income: "Income",
-  safety: "Safety",
-  transport: "Transport",
-  nightlife: "Nightlife",
-  greenSpace: "Green Space",
-  noise: "Noise",
-  amenities: "Amenities",
-  culture: "Culture",
-  sports: "Sports",
-};
+import { arrondissementSuffix } from "@/lib/arrondissements";
 
 const size = { width: 1200, height: 630 };
 
@@ -44,25 +30,15 @@ export async function GET(
   ]);
 
   const arr = data.find((a) => a.number === num);
-  const label = formatArrondissement(num);
+  const suffix = arrondissementSuffix(num, "en");
 
   let composite = 0;
   let rank = 0;
-  let topDimensions: { key: DimensionKey; label: string; score: number }[] = [];
 
   if (arr) {
     composite = Math.round(computeComposite(arr.scores, EQUAL_WEIGHTS));
     const ranked = rankByComposite(data, EQUAL_WEIGHTS);
     rank = ranked.find((a) => a.number === num)?.rank ?? 0;
-
-    topDimensions = DIMENSION_KEYS.map((k) => ({
-      key: k as DimensionKey,
-      label: DIMENSION_LABELS[k as DimensionKey],
-      score: arr.scores[k as DimensionKey] ?? -1,
-    }))
-      .filter((d) => d.score >= 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3);
   }
 
   return new ImageResponse(
@@ -75,20 +51,31 @@ export async function GET(
         backgroundColor: "#fafafa",
         fontFamily: "Geist",
         padding: "48px 64px",
-        justifyContent: "space-between",
+        position: "relative",
+        justifyContent: "center",
       }}
     >
-      {/* Top: brand */}
-      <div style={{ display: "flex" }}>
+      {/* Top: bicolor brand */}
+      <div style={{ display: "flex", position: "absolute", top: 48, left: 64 }}>
         <span
           style={{
             fontSize: 17,
             fontWeight: 400,
-            color: "#a3a3a3",
             letterSpacing: "0.03em",
+            color: "#0a0a0a",
           }}
         >
-          quartier.sh
+          quartier
+        </span>
+        <span
+          style={{
+            fontSize: 17,
+            fontWeight: 400,
+            letterSpacing: "0.03em",
+            color: "#a3a3a3",
+          }}
+        >
+          .sh
         </span>
       </div>
 
@@ -96,23 +83,37 @@ export async function GET(
       <div
         style={{
           display: "flex",
+          width: "100%",
           alignItems: "flex-end",
           justifyContent: "space-between",
         }}
       >
         {/* Left: arrondissement name */}
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <span
-            style={{
-              fontSize: 140,
-              fontWeight: 600,
-              color: "#0a0a0a",
-              lineHeight: 0.9,
-              letterSpacing: "-0.04em",
-            }}
-          >
-            {label}
-          </span>
+          <div style={{ display: "flex", alignItems: "flex-start" }}>
+            <span
+              style={{
+                fontSize: 140,
+                fontWeight: 600,
+                color: "#0a0a0a",
+                lineHeight: 0.9,
+                letterSpacing: "-0.04em",
+              }}
+            >
+              {num}
+            </span>
+            <span
+              style={{
+                fontSize: 48,
+                fontWeight: 600,
+                color: "#0a0a0a",
+                lineHeight: 1,
+                marginTop: 4,
+              }}
+            >
+              {suffix}
+            </span>
+          </div>
           <span
             style={{
               fontSize: 30,
@@ -133,26 +134,25 @@ export async function GET(
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-end",
-              paddingBottom: 6,
             }}
           >
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <span
                 style={{
-                  fontSize: 88,
+                  fontSize: 140,
                   fontWeight: 600,
                   color: "#0a0a0a",
-                  lineHeight: 1,
-                  letterSpacing: "-0.03em",
+                  lineHeight: 0.9,
+                  letterSpacing: "-0.04em",
                 }}
               >
                 {composite}
               </span>
               <span
                 style={{
-                  fontSize: 26,
+                  fontSize: 36,
                   fontWeight: 400,
-                  color: "#d4d4d4",
+                  color: "#a3a3a3",
                   marginLeft: 4,
                 }}
               >
@@ -161,46 +161,16 @@ export async function GET(
             </div>
             <span
               style={{
-                fontSize: 20,
+                fontSize: 30,
                 fontWeight: 400,
                 color: "#a3a3a3",
-                marginTop: 4,
+                marginTop: 8,
+                letterSpacing: "0.01em",
               }}
             >
               #{rank} of 20
             </span>
           </div>
-        )}
-      </div>
-
-      {/* Bottom: dimension pills */}
-      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-        {topDimensions.length > 0 &&
-          topDimensions.map((d) => (
-            <div
-              key={d.key}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                backgroundColor: "#ebebeb",
-                borderRadius: 8,
-                padding: "10px 18px",
-              }}
-            >
-              <span style={{ fontSize: 15, fontWeight: 400, color: "#737373" }}>
-                {d.label}
-              </span>
-              <span style={{ fontSize: 18, fontWeight: 600, color: "#262626" }}>
-                {Math.round(d.score)}
-              </span>
-            </div>
-          ))}
-
-        {topDimensions.length === 0 && (
-          <span style={{ fontSize: 16, fontWeight: 400, color: "#a3a3a3" }}>
-            Data coming soon
-          </span>
         )}
       </div>
     </div>,
