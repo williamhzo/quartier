@@ -2,7 +2,11 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { loadArrondissements } from "@/lib/data";
 import { loadBoundaries, loadSeine } from "@/lib/geo";
-import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
+import {
+  DIMENSION_KEYS,
+  formatArrondissement,
+  ordinalLabel,
+} from "@/lib/arrondissements";
 import { ArrondissementLabel } from "@/components/arrondissement-label";
 import { EQUAL_WEIGHTS } from "@/lib/personas";
 import {
@@ -33,8 +37,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { locale, number } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
-  const label = formatArrondissement(Number(number), locale);
-  const description = t("detailDescription", { label });
+  const ordinal = ordinalLabel(Number(number), locale);
+  const title = t("detailTitle", { ordinal });
+  const description = t("detailDescription", { ordinal });
   const ogImage = `/api/og/${number}`;
   const pathname = `/paris/${number}`;
   const languages = localeAlternates(pathname);
@@ -42,14 +47,14 @@ export async function generateMetadata({ params }: Props) {
   const canonicalUrl = localizeUrl(pathname, locale);
 
   return {
-    title: label,
+    title,
     description,
     alternates: {
       canonical: canonicalUrl,
       languages,
     },
     openGraph: {
-      title: `${label} - quartier`,
+      title: `${title} - quartier`,
       description,
       url: canonicalUrl,
       locale: locale === "fr" ? "fr_FR" : "en_US",
@@ -58,7 +63,7 @@ export async function generateMetadata({ params }: Props) {
     },
     twitter: {
       card: "summary_large_image" as const,
-      title: `${label} - quartier`,
+      title: `${title} - quartier`,
       description,
       images: [ogImage],
     },
