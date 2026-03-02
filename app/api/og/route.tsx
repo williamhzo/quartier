@@ -24,36 +24,34 @@ export async function GET() {
         backgroundColor: "#fafafa",
         fontFamily: "Geist",
         padding: "48px 64px",
-        justifyContent: "space-between",
+        justifyContent: "center",
       }}
     >
-      {/* Top: brand */}
-      <div style={{ display: "flex" }}>
-        <span
-          style={{
-            fontSize: 17,
-            fontWeight: 400,
-            color: "#a3a3a3",
-            letterSpacing: "0.03em",
-          }}
-        >
-          quartier.sh
-        </span>
-      </div>
-
-      {/* Center: hero */}
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <span
-          style={{
-            fontSize: 96,
-            fontWeight: 600,
-            color: "#0a0a0a",
-            lineHeight: 0.95,
-            letterSpacing: "-0.04em",
-          }}
-        >
-          quartier
-        </span>
+        <div style={{ display: "flex" }}>
+          <span
+            style={{
+              fontSize: 96,
+              fontWeight: 600,
+              color: "#0a0a0a",
+              lineHeight: 0.95,
+              letterSpacing: "-0.04em",
+            }}
+          >
+            quartier
+          </span>
+          <span
+            style={{
+              fontSize: 96,
+              fontWeight: 600,
+              color: "#a3a3a3",
+              lineHeight: 0.95,
+              letterSpacing: "-0.04em",
+            }}
+          >
+            .sh
+          </span>
+        </div>
         <span
           style={{
             fontSize: 32,
@@ -65,36 +63,6 @@ export async function GET() {
         >
           {"Compare Paris\u2019s 20 arrondissements"}
         </span>
-      </div>
-
-      {/* Bottom: dimension tags */}
-      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-        {[
-          "Housing",
-          "Income",
-          "Safety",
-          "Transport",
-          "Nightlife",
-          "Green Space",
-          "Noise",
-          "Amenities",
-          "Culture",
-          "Sports",
-        ].map((label) => (
-          <div
-            key={label}
-            style={{
-              display: "flex",
-              backgroundColor: "#ebebeb",
-              borderRadius: 8,
-              padding: "8px 16px",
-            }}
-          >
-            <span style={{ fontSize: 15, fontWeight: 400, color: "#737373" }}>
-              {label}
-            </span>
-          </div>
-        ))}
       </div>
     </div>,
     {
