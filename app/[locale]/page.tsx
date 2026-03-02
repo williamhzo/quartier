@@ -32,7 +32,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
         url: canonicalUrl,
         locale: locale === "fr" ? "fr_FR" : "en_US",
         siteName: "quartier",
-        images: [{ url: `/api/og/${arr}`, width: 1200, height: 630 }],
+        images: [{ url: `/api/og/${arr}`, width: 1200, height: 630, type: "image/png" }],
       },
       twitter: {
         card: "summary_large_image" as const,

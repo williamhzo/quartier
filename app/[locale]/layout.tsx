@@ -58,7 +58,7 @@ export async function generateMetadata({
       title: t("title"),
       description: t("description"),
       url: canonicalUrl,
-      images: [{ url: "/api/og", width: 1200, height: 630 }],
+      images: [{ url: "/api/og", width: 1200, height: 630, type: "image/png" }],
     },
     formatDetection: { telephone: false, email: false, address: false },
     robots: {
