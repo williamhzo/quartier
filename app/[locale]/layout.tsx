@@ -55,6 +55,17 @@ export async function generateMetadata({
       url: `https://quartier.sh/${locale}`,
       images: [{ url: "/api/og", width: 1200, height: 630 }],
     },
+    formatDetection: { telephone: false, email: false, address: false },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
