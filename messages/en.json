@@ -1,11 +1,11 @@
 {
   "metadata": {
     "title": "quartier.sh - Compare All 20 Paris Arrondissements",
-    "description": "Compare all 20 Paris arrondissements with open data. Explore scores for housing, income, safety, transport, green space, noise, amenities, culture, and sports.",
+    "description": "Find the best Paris neighborhood for you. Compare all 20 arrondissements on housing costs, safety, transport, green space, nightlife, and more, built on French open data.",
     "leaderboardTitle": "Paris Arrondissement Rankings: All 20 Compared",
-    "leaderboardDescription": "Ranking of all 20 Paris arrondissements by score. Compare housing prices, income, safety, transport, green space, noise, amenities, culture, and sports.",
-    "detailTitle": "Paris {ordinal} Arrondissement: Score",
-    "detailDescription": "Scores, ranking, and data for Paris's {ordinal} Arrondissement. Explore housing, income, safety, transport, green space, noise, amenities, culture, and sports."
+    "leaderboardDescription": "Which Paris arrondissement ranks best? Sort and compare all 20 by housing, safety, transport, green space, culture, and other livability factors.",
+    "detailTitle": "Paris {ordinal} Arrondissement",
+    "detailDescription": "How does Paris's {ordinal} stack up? See where it ranks among all 20 arrondissements for housing, safety, transport, nightlife, and more."
   },
   "nav": {
     "map": "map",

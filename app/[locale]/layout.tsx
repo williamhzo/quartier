@@ -108,7 +108,9 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className="bg-background text-foreground antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\u003c"),
+          }}
         />
         <NextIntlClientProvider>
           <NuqsAdapter>

@@ -141,7 +141,9 @@ export default async function DetailPage({ params }: Props) {
     <div className="mx-auto max-w-4xl px-4 pt-12 pb-10">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\u003c"),
+        }}
       />
       <Link
         href="/"
