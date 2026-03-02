@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props) {
   const canonicalUrl = localizeUrl(pathname, locale);
 
   return {
-    title: t("title"),
+    title: mt("leaderboardTitle"),
     description,
     alternates: {
       canonical: canonicalUrl,
