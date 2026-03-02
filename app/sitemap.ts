@@ -4,15 +4,16 @@ import { localeAlternates, localizeUrl } from "@/lib/i18n-url";
 
 const ARRONDISSEMENTS = Array.from({ length: 20 }, (_, i) => i + 1);
 
+const LAST_MODIFIED = new Date("2026-03-02");
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
 
   for (const locale of routing.locales) {
-    // home (map)
     const homePath = "/";
     entries.push({
       url: localizeUrl(homePath, locale),
-      lastModified: new Date(),
+      lastModified: LAST_MODIFIED,
       changeFrequency: "weekly",
       priority: 1,
       alternates: {
@@ -20,11 +21,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     });
 
-    // leaderboard
     const leaderboardPath = "/leaderboard";
     entries.push({
       url: localizeUrl(leaderboardPath, locale),
-      lastModified: new Date(),
+      lastModified: LAST_MODIFIED,
       changeFrequency: "weekly",
       priority: 0.8,
       alternates: {
@@ -32,12 +32,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     });
 
-    // arrondissement detail pages
     for (const num of ARRONDISSEMENTS) {
       const detailPath = `/paris/${num}`;
       entries.push({
         url: localizeUrl(detailPath, locale),
-        lastModified: new Date(),
+        lastModified: LAST_MODIFIED,
         changeFrequency: "monthly",
         priority: 0.6,
         alternates: {
