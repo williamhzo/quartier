@@ -18,6 +18,7 @@ import { rankByDimension, dimensionMedian } from "@/lib/scoring";
 import { Link } from "@/i18n/navigation";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Props = {
   arrondissement: Arrondissement & { composite: number; rank: number };
@@ -30,10 +31,11 @@ type Props = {
 
 export function MapPanel({ arrondissement, allArrondissements, composite, rank, open, onClose }: Props) {
   const num = arrondissement.number;
+  const isMobile = useIsMobile();
 
   return (
     <>
-      {/* Desktop: side panel */}
+      {/* Desktop: side panel (CSS-hidden on mobile for SSR) */}
       {open && (
         <div className="bg-background motion-safe:animate-in motion-safe:slide-in-from-right-full absolute top-0 right-0 z-20 hidden h-full overflow-y-auto border-l shadow-lg md:block md:w-[40vw] md:max-w-lg">
           <PanelContent
@@ -47,32 +49,34 @@ export function MapPanel({ arrondissement, allArrondissements, composite, rank, 
         </div>
       )}
 
-      {/* Mobile: vaul drawer with swipe-to-dismiss */}
-      <Drawer
-        open={open}
-        onOpenChange={(isOpen) => {
-          if (!isOpen) onClose();
-        }}
-        modal={false}
-      >
-        <DrawerContent className="max-h-[80vh] pb-[env(safe-area-inset-bottom)] md:hidden">
-          <VisuallyHidden>
-            <DrawerTitle>
-              <ArrondissementLabel number={num} locale="fr" />
-            </DrawerTitle>
-          </VisuallyHidden>
-          <div className="overflow-y-auto overscroll-contain">
-            <PanelContent
-              num={num}
-              composite={composite}
-              rank={rank}
-              arrondissement={arrondissement}
-              allArrondissements={allArrondissements}
-              onClose={onClose}
-            />
-          </div>
-        </DrawerContent>
-      </Drawer>
+      {/* Mobile: vaul drawer (only mounted on mobile to avoid Radix side effects on desktop) */}
+      {isMobile && (
+        <Drawer
+          open={open}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) onClose();
+          }}
+          modal={false}
+        >
+          <DrawerContent className="max-h-[80vh] pb-[env(safe-area-inset-bottom)] md:hidden">
+            <VisuallyHidden>
+              <DrawerTitle>
+                <ArrondissementLabel number={num} locale="fr" />
+              </DrawerTitle>
+            </VisuallyHidden>
+            <div className="overflow-y-auto overscroll-contain">
+              <PanelContent
+                num={num}
+                composite={composite}
+                rank={rank}
+                arrondissement={arrondissement}
+                allArrondissements={allArrondissements}
+                onClose={onClose}
+              />
+            </div>
+          </DrawerContent>
+        </Drawer>
+      )}
     </>
   );
 }
