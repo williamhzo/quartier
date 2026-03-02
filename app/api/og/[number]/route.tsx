@@ -5,6 +5,7 @@ import { loadArrondissements } from "@/lib/data";
 import { EQUAL_WEIGHTS } from "@/lib/personas";
 import { computeComposite, rankByComposite } from "@/lib/scoring";
 import { arrondissementSuffix } from "@/lib/arrondissements";
+import { FRANCE_DATA_URI } from "../_france";
 
 const size = { width: 1200, height: 630 };
 
@@ -55,6 +56,20 @@ export async function GET(
         justifyContent: "center",
       }}
     >
+      {/* France outline */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        alt=""
+        src={FRANCE_DATA_URI}
+        width={440}
+        height={430}
+        style={{
+          position: "absolute",
+          left: 380,
+          top: 100,
+        }}
+      />
+
       {/* Top: bicolor brand */}
       <div style={{ display: "flex", position: "absolute", top: 48, left: 64 }}>
         <span

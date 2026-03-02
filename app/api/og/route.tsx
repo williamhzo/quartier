@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { FRANCE_DATA_URI } from "./_france";
 
 const size = { width: 1200, height: 630 };
 
@@ -25,8 +26,21 @@ export async function GET() {
         fontFamily: "Geist",
         padding: "48px 64px",
         justifyContent: "center",
+        position: "relative",
       }}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        alt=""
+        src={FRANCE_DATA_URI}
+        width={512}
+        height={500}
+        style={{
+          position: "absolute",
+          right: 40,
+          top: 65,
+        }}
+      />
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex" }}>
           <span
@@ -61,7 +75,7 @@ export async function GET() {
             letterSpacing: "0.01em",
           }}
         >
-          {"Compare Paris\u2019s 20 arrondissements"}
+          {"Data-driven comparison of all 20 arrondissements"}
         </span>
       </div>
     </div>,

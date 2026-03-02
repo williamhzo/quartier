@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "quartier.sh - Comparez les arrondissements de Paris",
-    "description": "Quel est le meilleur arrondissement de Paris pour vous ? Comparez les 20 sur le logement, la sécurité, les transports, les espaces verts et plus encore grâce aux données ouvertes.",
+    "title": "quartier.sh - Comparaison des arrondissements de Paris par les données",
+    "description": "Comparez les 20 arrondissements de Paris sur 10 critères calculés à partir des données ouvertes : logement, sécurité, transports, espaces verts et plus.",
     "leaderboardTitle": "Classement des 20 arrondissements de Paris",
-    "leaderboardDescription": "Quel arrondissement de Paris arrive en tête ? Triez et comparez les 20 par logement, sécurité, transports, espaces verts, culture et autres critères.",
+    "leaderboardDescription": "Quel arrondissement arrive en tête ? Classez et comparez les 20 sur 10 critères : logement, sécurité, transports, espaces verts, culture et plus.",
     "detailTitle": "{ordinal} arrondissement de Paris",
-    "detailDescription": "Où se situe le {ordinal} arrondissement parmi les 20 ? Découvrez son classement pour le logement, la sécurité, les transports, la vie nocturne et plus encore."
+    "detailDescription": "Profil du {ordinal} arrondissement basé sur les données. Découvrez son score et classement parmi les 20 sur 10 dimensions."
   },
   "nav": {
     "map": "carte",
@@ -16,7 +16,7 @@
   "about": {
     "title": "À propos de quartier",
     "tagline": "Tout le monde a un avis sur le meilleur arrondissement de Paris. quartier remplace ces avis par des données (et après, on se dispute sur les données).",
-    "body": "Choisissez un profil et comparez les arrondissements sur les prix immobiliers, la criminalité, l'accès métro, les revenus, le bruit, les espaces verts, et le reste. Construit sur les données ouvertes de data.gouv.fr, l'INSEE et la Ville de Paris.",
+    "body": "Choisissez un profil et comparez les arrondissements sur 10 dimensions : logement, sécurité, accès métro, revenus, bruit, espaces verts et le reste. Scores calculés à partir des données ouvertes de data.gouv.fr, l'INSEE et la Ville de Paris.",
     "openSource": "Open source, contributions bienvenues sur"
   },
   "dimensions": {
