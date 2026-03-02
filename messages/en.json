@@ -1,7 +1,9 @@
 {
   "metadata": {
-    "title": "quartier - Compare Paris Arrondissements",
-    "description": "Compare all 20 Paris arrondissements across housing, income, safety, transport, nightlife, green space, noise, amenities, culture, and sports."
+    "title": "quartier.sh - Compare All 20 Paris Arrondissements",
+    "description": "Compare all 20 Paris arrondissements across housing, income, safety, transport, nightlife, green space, noise, amenities, culture, and sports.",
+    "detailDescription": "Scores and ranking for the {label}: housing, income, safety, transport, and 6 more dimensions.",
+    "leaderboardDescription": "Ranking of all 20 Paris arrondissements across 10 dimensions: housing, income, safety, transport, nightlife, green space, and more."
   },
   "nav": {
     "map": "map",
@@ -37,7 +39,8 @@
   },
   "map": {
     "title": "Paris Map",
-    "compositeScore": "Composite score"
+    "compositeScore": "Composite score",
+    "h1": "Paris Arrondissements Map"
   },
   "leaderboard": {
     "title": "Arrondissement Rankings",
