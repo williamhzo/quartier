@@ -1,12 +1,8 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
 import { loadArrondissements } from "@/lib/data";
 import { loadBoundaries, loadSeine } from "@/lib/geo";
-import {
-  DIMENSION_KEYS,
-  formatArrondissement,
-} from "@/lib/arrondissements";
+import { DIMENSION_KEYS, formatArrondissement } from "@/lib/arrondissements";
 import { ArrondissementLabel } from "@/components/arrondissement-label";
 import { EQUAL_WEIGHTS } from "@/lib/personas";
 import {
@@ -19,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { DimensionSection } from "@/components/detail/dimension-section";
 import { MiniMap } from "@/components/detail/mini-map";
 import { Link } from "@/i18n/navigation";
+import { localeAlternates, localizeUrl, xDefaultUrl } from "@/lib/i18n-url";
 import { ScoreOverview } from "@/components/detail/score-overview";
 import { ShareButton } from "@/components/share-button";
 import { ArrowLeft } from "lucide-react";
@@ -39,23 +36,22 @@ export async function generateMetadata({ params }: Props) {
   const label = formatArrondissement(Number(number), locale);
   const description = t("detailDescription", { label });
   const ogImage = `/api/og/${number}`;
-
-  const languages: Record<string, string> = Object.fromEntries(
-    routing.locales.map((l) => [l, `https://quartier.sh/${l}/paris/${number}`]),
-  );
-  languages["x-default"] = `https://quartier.sh/${routing.defaultLocale}/paris/${number}`;
+  const pathname = `/paris/${number}`;
+  const languages = localeAlternates(pathname);
+  languages["x-default"] = xDefaultUrl(pathname);
+  const canonicalUrl = localizeUrl(pathname, locale);
 
   return {
     title: label,
     description,
     alternates: {
-      canonical: `https://quartier.sh/${locale}/paris/${number}`,
+      canonical: canonicalUrl,
       languages,
     },
     openGraph: {
       title: `${label} - quartier`,
       description,
-      url: `https://quartier.sh/${locale}/paris/${number}`,
+      url: canonicalUrl,
       locale: locale === "fr" ? "fr_FR" : "en_US",
       siteName: "quartier",
       images: [{ url: ogImage, width: 1200, height: 630 }],
@@ -94,7 +90,7 @@ export default async function DetailPage({ params }: Props) {
           <ArrowLeft className="size-4" />
           {t("detail.backToMap")}
         </Link>
-        <h1 className="mt-4 text-balance text-2xl font-semibold">
+        <h1 className="mt-4 text-2xl font-semibold text-balance">
           <ArrondissementLabel number={Number(number)} locale={locale} />
         </h1>
         <p className="text-muted-foreground mt-2">{t("common.na")}</p>
@@ -125,13 +121,13 @@ export default async function DetailPage({ params }: Props) {
         "@type": "ListItem",
         position: 1,
         name: "quartier",
-        item: `https://quartier.sh/${locale}`,
+        item: localizeUrl("/", locale),
       },
       {
         "@type": "ListItem",
         position: 2,
         name: label,
-        item: `https://quartier.sh/${locale}/paris/${arrondissement.number}`,
+        item: localizeUrl(`/paris/${arrondissement.number}`, locale),
       },
     ],
   };
@@ -149,7 +145,7 @@ export default async function DetailPage({ params }: Props) {
         <ArrowLeft className="size-4" />
         {t("detail.backToMap")}
       </Link>
-      <h1 className="text-display mt-4 text-balance text-4xl sm:text-5xl">
+      <h1 className="text-display mt-4 text-4xl text-balance sm:text-5xl">
         <ArrondissementLabel number={arrondissement.number} locale={locale} />
       </h1>
       <div className="mt-3 flex items-center gap-3">
@@ -170,7 +166,7 @@ export default async function DetailPage({ params }: Props) {
         />
       </div>
       <div className="mt-12">
-        <h2 className="text-muted-foreground mb-3 text-xs font-medium uppercase tracking-widest">
+        <h2 className="text-muted-foreground mb-3 text-xs font-medium tracking-widest uppercase">
           {t("detail.scoreOverview")}
         </h2>
         <ScoreOverview

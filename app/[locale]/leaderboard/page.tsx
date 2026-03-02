@@ -1,6 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { useTranslations } from "next-intl";
-import { routing } from "@/i18n/routing";
+import { localeAlternates, localizeUrl, xDefaultUrl } from "@/lib/i18n-url";
 import { LeaderboardTable } from "@/components/leaderboard/leaderboard-table";
 import { loadArrondissements } from "@/lib/data";
 
@@ -13,23 +13,22 @@ export async function generateMetadata({ params }: Props) {
   const t = await getTranslations({ locale, namespace: "leaderboard" });
   const mt = await getTranslations({ locale, namespace: "metadata" });
   const description = mt("leaderboardDescription");
-
-  const languages: Record<string, string> = Object.fromEntries(
-    routing.locales.map((l) => [l, `https://quartier.sh/${l}/leaderboard`]),
-  );
-  languages["x-default"] = `https://quartier.sh/${routing.defaultLocale}/leaderboard`;
+  const pathname = "/leaderboard";
+  const languages = localeAlternates(pathname);
+  languages["x-default"] = xDefaultUrl(pathname);
+  const canonicalUrl = localizeUrl(pathname, locale);
 
   return {
     title: t("title"),
     description,
     alternates: {
-      canonical: `https://quartier.sh/${locale}/leaderboard`,
+      canonical: canonicalUrl,
       languages,
     },
     openGraph: {
       title: `${t("title")} - quartier`,
       description,
-      url: `https://quartier.sh/${locale}/leaderboard`,
+      url: canonicalUrl,
       locale: locale === "fr" ? "fr_FR" : "en_US",
       siteName: "quartier",
       images: [{ url: "/api/og", width: 1200, height: 630 }],
@@ -62,7 +61,7 @@ function LeaderboardPageContent({
   return (
     <div className="mx-auto max-w-7xl px-4 pt-12 pb-8">
       <div className="mb-10">
-        <h1 className="text-display text-balance text-4xl">{t("title")}</h1>
+        <h1 className="text-display text-4xl text-balance">{t("title")}</h1>
         <p className="text-muted-foreground mt-2 text-base tracking-wide text-pretty">
           {t("description")}
         </p>

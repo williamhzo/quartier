@@ -1,6 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { SearchParams } from "nuqs/server";
-import { routing } from "@/i18n/routing";
+import { localeAlternates, localizeUrl, xDefaultUrl } from "@/lib/i18n-url";
 import { searchParamsCache } from "@/lib/search-params";
 import { arrondissementName } from "@/lib/arrondissements";
 import { loadArrondissements } from "@/lib/data";
@@ -16,22 +16,20 @@ export async function generateMetadata({ params, searchParams }: Props) {
   const { locale } = await params;
   const { arr } = await searchParamsCache.parse(searchParams);
   const t = await getTranslations({ locale, namespace: "metadata" });
-
-  const languages: Record<string, string> = Object.fromEntries(
-    routing.locales.map((l) => [l, `https://quartier.sh/${l}`]),
-  );
-  languages["x-default"] = `https://quartier.sh/${routing.defaultLocale}`;
+  const languages = localeAlternates("/");
+  languages["x-default"] = xDefaultUrl("/");
+  const canonicalUrl = localizeUrl("/", locale);
 
   if (arr != null && arr >= 1 && arr <= 20) {
     const name = arrondissementName(arr, locale);
     const title = `${name} - quartier`;
     return {
       title: { absolute: title },
-      alternates: { canonical: `https://quartier.sh/${locale}`, languages },
+      alternates: { canonical: canonicalUrl, languages },
       openGraph: {
         title,
         description: t("description"),
-        url: `https://quartier.sh/${locale}`,
+        url: canonicalUrl,
         locale: locale === "fr" ? "fr_FR" : "en_US",
         siteName: "quartier",
         images: [{ url: `/api/og/${arr}`, width: 1200, height: 630 }],
@@ -46,7 +44,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
   }
 
   return {
-    alternates: { canonical: `https://quartier.sh/${locale}`, languages },
+    alternates: { canonical: canonicalUrl, languages },
   };
 }
 

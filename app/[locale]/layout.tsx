@@ -5,6 +5,12 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { notFound } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 import { routing } from "@/i18n/routing";
+import {
+  localeAlternates,
+  localizeUrl,
+  SITE_URL,
+  xDefaultUrl,
+} from "@/lib/i18n-url";
 import { Nav } from "@/components/layout/nav";
 import "../globals.css";
 
@@ -30,21 +36,19 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
-
-  const languages: Record<string, string> = Object.fromEntries(
-    routing.locales.map((l) => [l, `https://quartier.sh/${l}`]),
-  );
-  languages["x-default"] = `https://quartier.sh/${routing.defaultLocale}`;
+  const languages = localeAlternates("/");
+  languages["x-default"] = xDefaultUrl("/");
+  const canonicalUrl = localizeUrl("/", locale);
 
   return {
-    metadataBase: new URL("https://quartier.sh"),
+    metadataBase: new URL(SITE_URL),
     title: {
       default: t("title"),
       template: `%s - quartier`,
     },
     description: t("description"),
     alternates: {
-      canonical: `https://quartier.sh/${locale}`,
+      canonical: canonicalUrl,
       languages,
     },
     openGraph: {
@@ -53,7 +57,7 @@ export async function generateMetadata({
       locale: locale === "fr" ? "fr_FR" : "en_US",
       title: t("title"),
       description: t("description"),
-      url: `https://quartier.sh/${locale}`,
+      url: canonicalUrl,
       images: [{ url: "/api/og", width: 1200, height: 630 }],
     },
     formatDetection: { telephone: false, email: false, address: false },
@@ -89,7 +93,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     "@type": "WebApplication",
     applicationCategory: "Reference",
     name: "quartier",
-    url: `https://quartier.sh/${locale}`,
+    url: localizeUrl("/", locale),
     inLanguage: locale === "fr" ? "fr-FR" : "en-US",
     description:
       locale === "fr"
