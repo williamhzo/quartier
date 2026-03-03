@@ -5,7 +5,8 @@
     "leaderboardTitle": "Paris Arrondissement Rankings: All 20 Compared",
     "leaderboardDescription": "Which Paris arrondissement ranks best? Sort and compare all 20 across 10 data-driven dimensions: housing, safety, transport, green space, culture, and more.",
     "detailTitle": "Paris {ordinal} Arrondissement",
-    "detailDescription": "Data-driven profile of Paris's {ordinal}. See how it scores and ranks among all 20 arrondissements across 10 livability dimensions."
+    "detailDescription": "Data-driven profile of Paris's {ordinal}. See how it scores and ranks among all 20 arrondissements across 10 livability dimensions.",
+    "skipToContent": "Skip to content"
   },
   "nav": {
     "map": "map",
@@ -52,7 +53,8 @@
     "score": "Score",
     "viewDetails": "View details",
     "emptyTitle": "No data available",
-    "emptyDescription": "Arrondissement data has not been loaded yet."
+    "emptyDescription": "Arrondissement data has not been loaded yet.",
+    "tableLabel": "Paris arrondissement rankings by dimension"
   },
   "detail": {
     "backToMap": "Back to map",

@@ -5,7 +5,8 @@
     "leaderboardTitle": "Classement des 20 arrondissements de Paris",
     "leaderboardDescription": "Quel arrondissement arrive en tête ? Classez et comparez les 20 sur 10 critères : logement, sécurité, transports, espaces verts, culture et plus.",
     "detailTitle": "{ordinal} arrondissement de Paris",
-    "detailDescription": "Profil du {ordinal} arrondissement basé sur les données. Découvrez son score et classement parmi les 20 sur 10 dimensions."
+    "detailDescription": "Profil du {ordinal} arrondissement basé sur les données. Découvrez son score et classement parmi les 20 sur 10 dimensions.",
+    "skipToContent": "Aller au contenu"
   },
   "nav": {
     "map": "carte",
@@ -52,7 +53,8 @@
     "score": "Score",
     "viewDetails": "Voir le détail",
     "emptyTitle": "Aucune donnée disponible",
-    "emptyDescription": "Les données des arrondissements n'ont pas encore été chargées."
+    "emptyDescription": "Les données des arrondissements n'ont pas encore été chargées.",
+    "tableLabel": "Classement des arrondissements de Paris par dimension"
   },
   "detail": {
     "backToMap": "Retour à la carte",
