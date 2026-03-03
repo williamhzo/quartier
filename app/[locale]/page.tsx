@@ -5,7 +5,7 @@ import { searchParamsCache } from "@/lib/search-params";
 import { arrondissementName } from "@/lib/arrondissements";
 import { loadArrondissements } from "@/lib/data";
 import { loadBoundaries, loadContextBoundaries, loadSeine } from "@/lib/geo";
-import { ParisMap } from "@/components/map/paris-map";
+import { ParisMapDynamic as ParisMap } from "@/components/map/paris-map-dynamic";
 
 type Props = {
   params: Promise<{ locale: string }>;
