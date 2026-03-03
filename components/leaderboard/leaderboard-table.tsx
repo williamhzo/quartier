@@ -73,7 +73,7 @@ export function LeaderboardTable({ data }: Props) {
         <PersonaSelector value={persona} onChange={setPersona} />
       </div>
       <div className="overflow-clip rounded-lg border">
-        <Table>
+        <Table aria-label={t("leaderboard.tableLabel")}>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead className="bg-background sticky left-0 z-10 w-12 border-b text-center">
