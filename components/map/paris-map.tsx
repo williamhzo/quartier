@@ -396,6 +396,8 @@ export function ParisMap({
 
       <div
         ref={tooltipRef}
+        role="tooltip"
+        aria-live="polite"
         className="pointer-events-none absolute z-20"
         style={{ display: "none" }}
       >
