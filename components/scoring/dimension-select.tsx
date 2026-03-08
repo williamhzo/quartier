@@ -7,7 +7,6 @@ import {
   Wallet,
   Shield,
   TrainFront,
-  Moon,
   TreePine,
   Volume2,
   Store,
@@ -32,15 +31,12 @@ const DIMENSION_ICONS: Record<DimensionValue, LucideIcon> = {
   income: Wallet,
   safety: Shield,
   transport: TrainFront,
-  nightlife: Moon,
   greenSpace: TreePine,
   noise: Volume2,
   amenities: Store,
   culture: Palette,
   sports: Dumbbell,
 };
-
-const ALL_VALUES: DimensionValue[] = ["composite", ...DIMENSION_KEYS];
 
 type Props = {
   value: DimensionValue;

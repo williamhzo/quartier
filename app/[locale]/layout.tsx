@@ -3,7 +3,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { notFound } from "next/navigation";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { routing } from "@/i18n/routing";
 import {
   localeAlternates,
@@ -14,9 +14,28 @@ import {
 import { Nav } from "@/components/layout/nav";
 import "../globals.css";
 
-const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
+const geistSans = localFont({
+  src: [
+    {
+      path: "../../assets/fonts/Geist-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+  ],
+  display: "swap",
+  variable: "--font-geist-sans",
+});
+
+const geistMono = localFont({
+  src: "../../assets/fonts/GeistMono-SemiBold.ttf",
+  weight: "600",
+  style: "normal",
+  display: "swap",
   variable: "--font-geist-mono",
 });
 

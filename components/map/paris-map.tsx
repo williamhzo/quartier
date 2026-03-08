@@ -129,12 +129,16 @@ export function ParisMap({
     [ranked, selectedNumber],
   );
 
-  const lastArrondissementRef = useRef(selectedArrondissement);
-  if (selectedArrondissement) {
-    lastArrondissementRef.current = selectedArrondissement;
-  }
+  const [lastSelectedNumber, setLastSelectedNumber] = useState<number | null>(
+    selectedNumber,
+  );
+
   const displayArrondissement =
-    selectedArrondissement ?? lastArrondissementRef.current ?? ranked[0];
+    selectedArrondissement ??
+    (lastSelectedNumber != null
+      ? ranked.find((a) => a.number === lastSelectedNumber) ?? null
+      : null) ??
+    ranked[0];
 
   const updateTooltip = useCallback(
     (num: number | null, x: number, y: number) => {
@@ -224,6 +228,9 @@ export function ParisMap({
     (e: MapLayerMouseEvent) => {
       if (e.features && e.features.length > 0) {
         const num = e.features[0].properties?.number;
+        if (typeof num === "number") {
+          setLastSelectedNumber(num);
+        }
         setSelectedNumber(num ?? null);
       } else {
         setSelectedNumber(null);

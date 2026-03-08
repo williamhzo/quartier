@@ -7,7 +7,6 @@ const DEFAULT_DIMENSIONS: Arrondissement["dimensions"] = {
   income: null,
   safety: null,
   transport: null,
-  nightlife: null,
   greenSpace: null,
   noise: null,
   amenities: null,
@@ -20,7 +19,6 @@ const DEFAULT_SCORES: Arrondissement["scores"] = {
   income: null,
   safety: null,
   transport: null,
-  nightlife: null,
   greenSpace: null,
   noise: null,
   amenities: null,
@@ -36,8 +34,29 @@ type LoadedArrondissement = Omit<Arrondissement, "dimensions" | "scores"> & {
 function normalizeArrondissement(row: LoadedArrondissement): Arrondissement {
   return {
     ...row,
-    dimensions: { ...DEFAULT_DIMENSIONS, ...row.dimensions },
-    scores: { ...DEFAULT_SCORES, ...row.scores },
+    dimensions: {
+      housing: row.dimensions?.housing ?? DEFAULT_DIMENSIONS.housing,
+      income: row.dimensions?.income ?? DEFAULT_DIMENSIONS.income,
+      safety: row.dimensions?.safety ?? DEFAULT_DIMENSIONS.safety,
+      transport: row.dimensions?.transport ?? DEFAULT_DIMENSIONS.transport,
+      greenSpace:
+        row.dimensions?.greenSpace ?? DEFAULT_DIMENSIONS.greenSpace,
+      noise: row.dimensions?.noise ?? DEFAULT_DIMENSIONS.noise,
+      amenities: row.dimensions?.amenities ?? DEFAULT_DIMENSIONS.amenities,
+      culture: row.dimensions?.culture ?? DEFAULT_DIMENSIONS.culture,
+      sports: row.dimensions?.sports ?? DEFAULT_DIMENSIONS.sports,
+    },
+    scores: {
+      housing: row.scores?.housing ?? DEFAULT_SCORES.housing,
+      income: row.scores?.income ?? DEFAULT_SCORES.income,
+      safety: row.scores?.safety ?? DEFAULT_SCORES.safety,
+      transport: row.scores?.transport ?? DEFAULT_SCORES.transport,
+      greenSpace: row.scores?.greenSpace ?? DEFAULT_SCORES.greenSpace,
+      noise: row.scores?.noise ?? DEFAULT_SCORES.noise,
+      amenities: row.scores?.amenities ?? DEFAULT_SCORES.amenities,
+      culture: row.scores?.culture ?? DEFAULT_SCORES.culture,
+      sports: row.scores?.sports ?? DEFAULT_SCORES.sports,
+    },
   };
 }
 

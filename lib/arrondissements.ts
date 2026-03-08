@@ -59,7 +59,6 @@ export const DIMENSION_KEYS = [
   "income",
   "safety",
   "transport",
-  "nightlife",
   "greenSpace",
   "noise",
   "amenities",

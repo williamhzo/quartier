@@ -3,7 +3,6 @@ export type DimensionKey =
   | "income"
   | "safety"
   | "transport"
-  | "nightlife"
   | "greenSpace"
   | "noise"
   | "amenities"
@@ -29,12 +28,6 @@ export type SafetyData = {
 export type TransportData = {
   stations_per_km2: number;
   metro_lines: string[];
-};
-
-export type NightlifeData = {
-  restaurants_per_km2: number;
-  bars_per_km2: number;
-  cafes_per_km2: number;
 };
 
 export type GreenSpaceData = {
@@ -90,7 +83,6 @@ export type Dimensions = {
   income: IncomeData | null;
   safety: SafetyData | null;
   transport: TransportData | null;
-  nightlife: NightlifeData | null;
   greenSpace: GreenSpaceData | null;
   noise: NoiseData | null;
   amenities: AmenitiesData | null;

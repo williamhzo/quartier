@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { DIMENSION_KEYS } from "@/lib/arrondissements";
 import { rankByDimension, dimensionMedian } from "@/lib/scoring";
-import { cn } from "@/lib/utils";
 import type { Arrondissement, DimensionKey } from "@/lib/types";
 
 type Props = {
@@ -32,7 +31,6 @@ export function ScoreOverview({
         key,
         score: scores[key]!,
         rank: current?.rank ?? 0,
-        total: allScores.length,
         median,
         allScores,
       };
@@ -49,7 +47,6 @@ export function ScoreOverview({
           label={t(`dimensions.${row.key}`)}
           score={row.score}
           rank={row.rank}
-          total={row.total}
           median={row.median}
           allScores={row.allScores}
         />
@@ -62,14 +59,12 @@ function DotStripRow({
   label,
   score,
   rank,
-  total,
   median,
   allScores,
 }: {
   label: string;
   score: number;
   rank: number;
-  total: number;
   median: number | null;
   allScores: number[];
 }) {

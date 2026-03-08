@@ -2,7 +2,7 @@
 
 Paris has 20 arrondissements. Everyone who's ever lived there has opinions about which one is best. This app replaces those opinions with data (and then you can argue about the data instead).
 
-Pick a persona (young professional, family, tourist, business owner) and Quartier ranks all 20 arrondissements across 10 dimensions using French open data: housing prices, income, safety, transport, nightlife, green space, noise, amenities, culture, and sports facilities.
+Pick a persona (young professional, family, tourist, business owner) and Quartier ranks all 20 arrondissements across 9 dimensions using French open data: housing prices, income, safety, transport, green space, noise, amenities, culture, and sports facilities.
 
 Map-first. Mobile-first. French and English. No backend, just pre-computed static JSON.
 
@@ -16,19 +16,10 @@ Needs [Bun](https://bun.sh).
 git clone git@github.com:williamhzo/quartier.git
 cd quartier
 bun install
-```
-
-Grab a free [MapTiler key](https://cloud.maptiler.com/account/keys/) and drop it in `.env.local`:
-
-```
-NEXT_PUBLIC_MAPTILER_KEY=your_key_here
-```
-
-```bash
 bun dev
 ```
 
-Open [localhost:3000](http://localhost:3000). That's it.
+Open [localhost:3000](http://localhost:3000). No env vars required for the app.
 
 ## Commands
 
@@ -44,10 +35,14 @@ Open [localhost:3000](http://localhost:3000). That's it.
 
 1. Fork + clone
 2. `bun install`
-3. Get a [MapTiler key](https://cloud.maptiler.com/account/keys/) (free tier works)
-4. `bun dev`
+3. `bun dev`
 
 All source data is French open data, no paid APIs needed. Want to add a dimension? Look at `scripts/data-config.ts` for the pattern and `scripts/sources/` for existing parsers.
+
+## Current data coverage
+
+- Shipped in the app: housing, income, safety, transport, green space, noise, amenities, culture, sports
+- Not shipped in v1: nightlife. There is an experimental SIRENE-based pipeline in `scripts/`, but it is not part of the public scoring model yet.
 
 ## Stack
 
@@ -66,7 +61,7 @@ Everything is French government open data:
 - Amenities: [INSEE BPE](https://www.data.gouv.fr/fr/datasets/base-permanente-des-equipements-1/) (pharmacies, doctors, schools, gyms, cinemas). Parser source: [OpenDataSoft BPE](https://public.opendatasoft.com/explore/dataset/buildingref-france-bpe-all-millesime/)
 - Culture: [INSEE BPE](https://www.insee.fr/fr/statistiques/fichier/3232691/correspondance_sous_domaine_fonction_type_equipement_2023.htm) (cinemas, libraries, heritage, live performance venues, archives, museums)
 - Sports facilities: [Data ES](https://equipements.sports.gouv.fr/explore/assets/data-es/) (Ministry of Sports). [API](https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records), also on [data.gouv.fr](https://www.data.gouv.fr/datasets/recensement-des-equipements-sportifs-espaces-et-sites-de-pratiques)
-- Nightlife (pending): [INSEE SIRENE API](https://api.insee.fr/entreprises/sirene/V3.11) (restaurants, bars, cafes). Dataset on [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/)
+- Nightlife (not shipped in v1): [INSEE SIRENE API](https://api.insee.fr/entreprises/sirene/V3.11) / [Base SIRENE stock files](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/) for restaurants, bars, cafes
 - Arrondissement boundaries: [opendata.paris.fr](https://opendata.paris.fr/explore/dataset/arrondissements/)
 
 ## Contributing

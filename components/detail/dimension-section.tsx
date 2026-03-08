@@ -186,15 +186,6 @@ function getRawValueRows(
         [t("transport.stationsPerKm2"), data.stations_per_km2?.toFixed(1)],
         [t("transport.metroLines"), data.metro_lines?.join(", ") ?? "-"],
       ];
-    case "nightlife":
-      return [
-        [
-          t("nightlife.restaurantsPerKm2"),
-          data.restaurants_per_km2?.toFixed(1),
-        ],
-        [t("nightlife.barsPerKm2"), data.bars_per_km2?.toFixed(1)],
-        [t("nightlife.cafesPerKm2"), data.cafes_per_km2?.toFixed(1)],
-      ];
     case "greenSpace":
       return [
         [t("greenSpace.m2PerResident"), data.m2_per_resident?.toFixed(1)],

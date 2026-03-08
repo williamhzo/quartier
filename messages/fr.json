@@ -1,11 +1,11 @@
 {
   "metadata": {
     "title": "quartier.sh - Comparaison des arrondissements de Paris par les données",
-    "description": "Comparez les 20 arrondissements de Paris sur 10 critères calculés à partir des données ouvertes : logement, sécurité, transports, espaces verts et plus.",
+    "description": "Comparez les 20 arrondissements de Paris sur 9 critères calculés à partir des données ouvertes : logement, sécurité, transports, espaces verts, culture et plus.",
     "leaderboardTitle": "Classement des 20 arrondissements de Paris",
-    "leaderboardDescription": "Quel arrondissement arrive en tête ? Classez et comparez les 20 sur 10 critères : logement, sécurité, transports, espaces verts, culture et plus.",
+    "leaderboardDescription": "Quel arrondissement arrive en tête ? Classez et comparez les 20 sur 9 critères : logement, sécurité, transports, espaces verts, culture et plus.",
     "detailTitle": "{ordinal} arrondissement de Paris",
-    "detailDescription": "Profil du {ordinal} arrondissement basé sur les données. Découvrez son score et classement parmi les 20 sur 10 dimensions.",
+    "detailDescription": "Profil du {ordinal} arrondissement basé sur les données. Découvrez son score et classement parmi les 20 sur 9 dimensions.",
     "skipToContent": "Aller au contenu"
   },
   "nav": {
@@ -17,7 +17,7 @@
   "about": {
     "title": "À propos de quartier",
     "tagline": "Tout le monde a un avis sur le meilleur arrondissement de Paris. quartier remplace ces avis par des données (et après, on se dispute sur les données).",
-    "body": "Choisissez un profil et comparez les arrondissements sur 10 dimensions : logement, sécurité, accès métro, revenus, bruit, espaces verts et le reste. Scores calculés à partir des données ouvertes de data.gouv.fr, l'INSEE et la Ville de Paris.",
+    "body": "Choisissez un profil et comparez les arrondissements sur 9 dimensions : logement, sécurité, accès métro, revenus, bruit, espaces verts et le reste. Scores calculés à partir des données ouvertes de data.gouv.fr, l'INSEE et la Ville de Paris.",
     "openSource": "Open source, contributions bienvenues sur"
   },
   "dimensions": {
@@ -25,7 +25,6 @@
     "income": "Revenus",
     "safety": "Sécurité",
     "transport": "Transports",
-    "nightlife": "Vie nocturne",
     "greenSpace": "Espaces verts",
     "noise": "Bruit",
     "amenities": "Équipements",
@@ -87,11 +86,6 @@
     "transport": {
       "stationsPerKm2": "Stations par km²",
       "metroLines": "Lignes de métro"
-    },
-    "nightlife": {
-      "restaurantsPerKm2": "Restaurants par km²",
-      "barsPerKm2": "Bars par km²",
-      "cafesPerKm2": "Cafés par km²"
     },
     "greenSpace": {
       "m2PerResident": "m² par habitant",

@@ -1,11 +1,11 @@
 {
   "metadata": {
     "title": "quartier.sh - Data-Driven Paris Arrondissement Comparison",
-    "description": "Compare all 20 Paris arrondissements across 10 dimensions scored from French open data: housing, safety, transport, green space, nightlife, and more.",
+    "description": "Compare all 20 Paris arrondissements across 9 dimensions scored from French open data: housing, safety, transport, green space, culture, and more.",
     "leaderboardTitle": "Paris Arrondissement Rankings: All 20 Compared",
-    "leaderboardDescription": "Which Paris arrondissement ranks best? Sort and compare all 20 across 10 data-driven dimensions: housing, safety, transport, green space, culture, and more.",
+    "leaderboardDescription": "Which Paris arrondissement ranks best? Sort and compare all 20 across 9 data-driven dimensions: housing, safety, transport, green space, culture, and more.",
     "detailTitle": "Paris {ordinal} Arrondissement",
-    "detailDescription": "Data-driven profile of Paris's {ordinal}. See how it scores and ranks among all 20 arrondissements across 10 livability dimensions.",
+    "detailDescription": "Data-driven profile of Paris's {ordinal}. See how it scores and ranks among all 20 arrondissements across 9 livability dimensions.",
     "skipToContent": "Skip to content"
   },
   "nav": {
@@ -17,7 +17,7 @@
   "about": {
     "title": "About quartier",
     "tagline": "Everyone who's lived in Paris has opinions about which arrondissement is best. quartier replaces those opinions with data (and then you argue about the data instead).",
-    "body": "Pick a profile and see how each arrondissement scores across 10 dimensions: housing, crime, metro access, income, noise, green space, and more. All scores derived from open data by data.gouv.fr, INSEE, and the City of Paris.",
+    "body": "Pick a profile and see how each arrondissement scores across 9 dimensions: housing, crime, metro access, income, noise, green space, and more. All scores derived from open data by data.gouv.fr, INSEE, and the City of Paris.",
     "openSource": "Open source, contributions welcome on"
   },
   "dimensions": {
@@ -25,7 +25,6 @@
     "income": "Income",
     "safety": "Safety",
     "transport": "Transport",
-    "nightlife": "Nightlife",
     "greenSpace": "Green space",
     "noise": "Noise",
     "amenities": "Amenities",
@@ -87,11 +86,6 @@
     "transport": {
       "stationsPerKm2": "Stations per km²",
       "metroLines": "Metro lines"
-    },
-    "nightlife": {
-      "restaurantsPerKm2": "Restaurants per km²",
-      "barsPerKm2": "Bars per km²",
-      "cafesPerKm2": "Cafés per km²"
     },
     "greenSpace": {
       "m2PerResident": "m² per resident",
