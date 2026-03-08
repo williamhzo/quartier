@@ -37,6 +37,7 @@ export function AboutDialog({ children }: { children: React.ReactNode }) {
 
         <div className="text-muted-foreground space-y-3 text-sm">
           <p>{t("body")}</p>
+          <p>{t("note")}</p>
           <p>
             {t("openSource")}{" "}
             <a

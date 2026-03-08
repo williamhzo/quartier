@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Quartier",
     short_name: "Quartier",
     description:
-      "Compare all 20 Paris arrondissements across housing, income, safety, transport, nightlife, green space, noise, amenities, culture, and sports.",
+      "Compare all 20 Paris arrondissements across housing, income, crime, transport, nightlife, green space, noise, amenities, culture, and sports.",
     start_url: "/",
     display: "browser",
     background_color: "#fafafa",
