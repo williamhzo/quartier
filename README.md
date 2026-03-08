@@ -1,10 +1,10 @@
-# Quartier
+# Quartier.sh: a liveability map of all 20 Paris arrondissements
 
-Paris has 20 arrondissements. Everyone who's ever lived there has opinions about which one is best. This app replaces those opinions with data (and then you can argue about the data instead).
+People in Paris love to argue about which arrondissement is the best.
 
-Pick a persona (young professional, family, tourist, business owner) and Quartier ranks all 20 arrondissements across 10 dimensions using French open data: housing prices, income, safety, transport, nightlife, green space, noise, amenities, culture, and sports facilities.
+Pick a persona and Quartier ranks all 20 arrondissements across 10 dimensions using French open data: housing, safety, transport, nightlife, green space, culture, etc. Now people can argue over data instead.
 
-Map-first. Mobile-first. French and English. No backend, just pre-computed static JSON.
+Available in both French and English.
 
 **[quartier.sh](https://quartier.sh)**
 
@@ -23,14 +23,14 @@ Open [localhost:3000](http://localhost:3000). No env vars required for the app.
 
 ## Commands
 
-| Command              | What it does                      |
-| -------------------- | --------------------------------- |
-| `bun dev`            | Dev server                        |
-| `bun run build`      | Production build                  |
-| `bun run lint`       | ESLint                            |
-| `bun run format`     | Prettier                          |
+| Command                                             | What it does                                                                           |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `bun dev`                                           | Dev server                                                                             |
+| `bun run build`                                     | Production build                                                                       |
+| `bun run lint`                                      | ESLint                                                                                 |
+| `bun run format`                                    | Prettier                                                                               |
 | `bun run data:refresh --dimensions=nightlife --all` | Optional maintainer command: refresh nightlife from a newer local SIRENE stock parquet |
-| `bun run data:build` | Rebuild data from source datasets |
+| `bun run data:build`                                | Rebuild data from source datasets                                                      |
 
 ## Fork it
 
@@ -54,7 +54,7 @@ Next.js 16 · TypeScript · Tailwind CSS 4 · shadcn/ui · MapLibre GL · react-
 
 ## Where the data comes from
 
-Everything is French government open data:
+Everything is French government's open data:
 
 - Housing prices: [DVF](https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres/) (actual transaction records, not asking prices). Geo-split CSVs from [files.data.gouv.fr](https://files.data.gouv.fr/geo-dvf/latest/csv/)
 - Income & poverty: [INSEE Filosofi](https://www.insee.fr/fr/statistiques/5359146) (dossier complet)
