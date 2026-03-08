@@ -256,28 +256,14 @@ export function ParisMap({
 
   const lineWidth = useMemo(
     () =>
-      [
-        "case",
-        ["==", ["get", "number"], selectedNumber ?? -1],
-        2.25,
-        ["boolean", ["feature-state", "hover"], false],
-        1.2,
-        0.36,
-      ] as maplibregl.ExpressionSpecification,
-    [selectedNumber],
+      0.36 as maplibregl.ExpressionSpecification,
+    [],
   );
 
   const lineOpacity = useMemo(
     () =>
-      [
-        "case",
-        ["==", ["get", "number"], selectedNumber ?? -1],
-        0.9,
-        ["boolean", ["feature-state", "hover"], false],
-        0.8,
-        0.58,
-      ] as maplibregl.ExpressionSpecification,
-    [selectedNumber],
+      0.58 as maplibregl.ExpressionSpecification,
+    [],
   );
 
   const glowOpacity = useMemo(
