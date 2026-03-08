@@ -311,6 +311,7 @@ export function ParisMap({
         onMouseLeave={onMouseLeave}
         onClick={onClick}
         cursor="grab"
+        attributionControl={false}
       >
         <Source id="idf-context" type="geojson" data={contextBoundaries}>
           <Layer
