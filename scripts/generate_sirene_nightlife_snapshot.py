@@ -106,6 +106,13 @@ def round2(value: float) -> float:
     return round(value + 1e-12, 2)
 
 
+def to_public_stock_path(stock_path: Path) -> str:
+    try:
+        return stock_path.resolve().relative_to(Path.cwd().resolve()).as_posix()
+    except ValueError:
+        return stock_path.name
+
+
 def build_snapshot(
     stock_path: Path,
     arrondissement_contexts: list[ArrondissementContext],
@@ -195,7 +202,7 @@ def build_snapshot(
             "source": {
                 "type": "sirene_stock_parquet",
                 "source_url": "https://object.files.data.gouv.fr/data-pipeline-open/siren/stock/StockEtablissement_utf8.parquet",
-                "stock_path": stock_path.as_posix(),
+                "stock_path": to_public_stock_path(stock_path),
                 "stock_size_bytes": stock_path.stat().st_size,
                 "nomenclature": "NAFRev2",
             },
