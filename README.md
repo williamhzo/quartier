@@ -44,6 +44,7 @@ All source data is French open data, no paid APIs needed. Want to add a dimensio
 
 - Shipped in the app: housing, income, safety, transport, nightlife, green space, noise, amenities, culture, sports
 - Nightlife source: a tracked arrondissement snapshot derived from the local SIRENE stock parquet in `data/raw/sirene/`
+- To regenerate nightlife locally: install DuckDB for Python with `python3 -m pip install -r scripts/requirements-sirene.txt`, place `StockEtablissement_utf8.parquet` in `data/raw/sirene/`, then run `bun run data:refresh --dimensions=nightlife --all`
 
 ## Stack
 
