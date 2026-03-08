@@ -16,9 +16,12 @@ export function Nav() {
   ];
 
   return (
-    <nav className="flex h-14 items-center justify-between border-b border-border/40 px-3 md:px-4">
+    <nav className="border-border/40 flex h-14 items-center justify-between border-b px-3 md:px-4">
       <div className="flex items-center gap-3 md:gap-6">
-        <Link href="/" className="flex items-baseline gap-0.5 text-lg font-semibold tracking-[-0.04em]">
+        <Link
+          href="/"
+          className="flex items-baseline text-lg font-semibold tracking-[-0.04em]"
+        >
           {t("title")}
           <span className="text-muted-foreground font-mono text-sm">.sh</span>
         </Link>
