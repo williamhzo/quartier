@@ -69,8 +69,13 @@ export function LeaderboardTable({ data }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3">
-        <PersonaSelector value={persona} onChange={setPersona} />
+      <div className="space-y-1">
+        <p className="text-muted-foreground px-1 text-xs">
+          {t("personas.label")}
+        </p>
+        <div className="flex items-center gap-3">
+          <PersonaSelector value={persona} onChange={setPersona} />
+        </div>
       </div>
       <div className="overflow-clip rounded-lg border">
         <Table aria-label={t("leaderboard.tableLabel")}>
