@@ -1,4 +1,6 @@
-# Quartier.sh: a liveability map of all 20 Paris arrondissements
+# Quartier
+
+A liveability map of all 20 Paris arrondissements.
 
 People in Paris love to argue about which arrondissement is the best.
 
