@@ -64,7 +64,7 @@ export const DATA_CONFIG = {
     noise: "ville-paris-bruit-routier-cnossos-2022",
     bpe: "buildingref-france-bpe-all-millesime-2016",
     culture: "basilic-2026-02-18",
-    sirene: "V3.11",
+    sirene: "stock-etablissement-2026-03-08",
     sports: "data-es-open-daily-v1",
   },
   sourceUrls: {
@@ -86,7 +86,8 @@ export const DATA_CONFIG = {
     bpe: "https://public.opendatasoft.com/explore/dataset/buildingref-france-bpe-all-millesime/",
     culture:
       "https://data.culture.gouv.fr/explore/dataset/base-des-lieux-et-des-equipements-culturels/",
-    sirene: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
+    sirene:
+      "https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/",
     sports:
       "https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/data-es/records",
   },
@@ -227,8 +228,11 @@ export const DATA_CONFIG = {
       },
     },
     sirene: {
-      apiVersion: "V3.11",
-      baseUrl: "https://api.insee.fr/entreprises/sirene/V3.11/siret",
+      sourceUrl:
+        "https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/",
+      stockPath: "data/raw/sirene/StockEtablissement_utf8.parquet",
+      snapshotPath: "data/nightlife-snapshot.json",
+      generatorScriptPath: "scripts/generate_sirene_nightlife_snapshot.py",
       enabledNightlifeBuckets: DEFAULT_SIRENE_NIGHTLIFE_BUCKETS,
       includeNightlifeExtension: false,
       expectedNomenclatures: ["NAFRev2"] as const,

@@ -1,4 +1,3 @@
-import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   DATA_CONFIG,
@@ -10,7 +9,10 @@ import {
   buildCultureFromBasilic,
   type CultureByType,
 } from "./sources/culture-basilic";
-import { fetchSireneNightlifeSnapshot } from "./sources/sirene";
+import {
+  readSireneNightlifeSnapshot,
+  refreshSireneNightlifeSnapshot,
+} from "./sources/sirene";
 
 type RefreshOptions = {
   dimensions: string[];
@@ -37,13 +39,7 @@ function parseOptions(argv: string[]): RefreshOptions {
   let commune: string | null = null;
   let all = false;
   let offline = false;
-  let outPath = path.join(
-    process.cwd(),
-    "data",
-    "raw",
-    "sirene",
-    "nightlife-snapshots.json",
-  );
+  let outPath = path.join(process.cwd(), DATA_CONFIG.sources.sirene.snapshotPath);
 
   for (const arg of argv) {
     if (arg.startsWith("--dimensions=")) {
@@ -84,57 +80,33 @@ function resolveDimensions(input: string[]): Set<string> {
   return new Set(DATA_CONFIG.enabledDimensions);
 }
 
-function resolveCommunes(options: RefreshOptions): string[] {
-  if (options.commune) return [options.commune];
-  if (options.all) return [...PARIS_ARRONDISSEMENT_COMMUNES];
-  return ["75111"];
-}
-
 async function refreshNightlife(options: RefreshOptions): Promise<void> {
-  const communes = resolveCommunes(options);
   const buckets = getEnabledSireneBuckets();
-  const mode = options.offline ? "cache-only" : "network-first";
-  const accessToken = process.env.SIRENE_API_TOKEN ?? "";
   logInfo(
-    `nightlife refresh start (mode=${mode}, communes=${communes.length}, source=${DATA_CONFIG.sources.sirene.baseUrl})`,
+    `nightlife refresh start (source=${DATA_CONFIG.sources.sirene.sourceUrl}, stock=${DATA_CONFIG.sources.sirene.stockPath})`,
   );
   logInfo(`nightlife buckets: ${buckets.join(", ")}`);
 
-  if (mode === "network-first" && accessToken.length === 0) {
-    throw new Error(
-      "SIRENE_API_TOKEN is required for online nightlife refresh",
+  if (options.commune || !options.all) {
+    logWarn(
+      "nightlife refresh always rebuilds the full Paris snapshot; --commune and default single-commune mode are ignored",
+    );
+  }
+  if (options.offline) {
+    logWarn(
+      "nightlife refresh no longer uses network/API mode; --offline has no effect",
     );
   }
 
-  const snapshots = [];
-  for (const communeCode of communes) {
-    logInfo(`nightlife fetch commune=${communeCode}`);
-    const snapshot = await fetchSireneNightlifeSnapshot({
-      communeCode,
-      accessToken,
-      buckets,
-      mode,
-      expectedNomenclatures: DATA_CONFIG.sources.sirene.expectedNomenclatures,
-    });
-    logInfo(
-      `nightlife fetched commune=${communeCode} pages=${snapshot.stats.pageCount} processed=${snapshot.stats.processedEtablissements} matched=${snapshot.stats.matchedByApeCount} unmatched=${snapshot.stats.unmatchedApeCount}`,
-    );
-    snapshots.push(snapshot);
-  }
-
-  const payload = {
-    generatedAt: new Date().toISOString(),
-    mode,
-    dimensions: ["nightlife"],
-    communes,
-    buckets,
-    expectedNomenclatures: DATA_CONFIG.sources.sirene.expectedNomenclatures,
-    snapshots,
-  };
-
-  await mkdir(path.dirname(options.outPath), { recursive: true });
-  await writeFile(options.outPath, JSON.stringify(payload, null, 2));
-  logInfo(`wrote nightlife snapshots: ${options.outPath}`);
+  await refreshSireneNightlifeSnapshot({
+    outPath: options.outPath,
+    stockPath: DATA_CONFIG.sources.sirene.stockPath,
+  });
+  const snapshot = await readSireneNightlifeSnapshot(options.outPath);
+  logInfo(`wrote nightlife snapshot: ${options.outPath}`);
+  logInfo(
+    `nightlife snapshot communes=${snapshot.stats.commune_count} restaurants=${snapshot.stats.restaurants_count_total} bars_cafes=${snapshot.stats.bars_cafes_count_total} extension=${snapshot.stats.nightlife_extension_count_total}`,
+  );
 }
 
 async function refreshBpe(options: RefreshOptions): Promise<void> {
@@ -208,7 +180,7 @@ async function main(): Promise<void> {
   const options = parseOptions(process.argv.slice(2));
   const dimensions = resolveDimensions(options.dimensions);
   logInfo(
-    `starting refresh (mode=${options.offline ? "cache-only" : "network-first"}, requestedDimensions=${options.dimensions.length > 0 ? options.dimensions.join(", ") : "from enabledDimensions"})`,
+    `starting refresh (requestedDimensions=${options.dimensions.length > 0 ? options.dimensions.join(", ") : "from enabledDimensions"})`,
   );
   const shouldRefreshNightlife = dimensions.has("nightlife");
   const shouldRefreshBpe = dimensions.has("amenities") || dimensions.has("bpe");

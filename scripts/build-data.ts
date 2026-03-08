@@ -28,11 +28,10 @@ import {
   type GreenSpaceMetric,
 } from "./sources/green-space";
 import {
-  buildNightlifeFromSirene,
-  buildSireneNightlifeCachePagePath,
+  buildNightlifeFromSnapshot,
+  readSireneNightlifeSnapshot,
   type NightlifeMetric,
 } from "./sources/sirene";
-import { buildSireneNightlifeSearchParams } from "./sources/sirene-query";
 import { buildSportsFromDataEs, type SportsMetric } from "./sources/sports";
 import {
   buildCultureFromBasilic,
@@ -135,7 +134,6 @@ const BOUNDARIES_PATH = path.join(
   "data",
   "arrondissements.geojson",
 );
-const SIRENE_CACHE_ROOT = path.join(process.cwd(), "data", "raw", "sirene");
 const ROW_COUNT_DRIFT_WARN_THRESHOLD_PCT = 15;
 const METRIC_DRIFT_WARN_THRESHOLD_PCT = 20;
 
@@ -165,7 +163,7 @@ function describeDimensionSource(dimension: DataDimension): string {
     return `source=${DATA_CONFIG.sources.transport.sourceUrl}, cache=${DATA_CONFIG.sources.transport.cachePath}`;
   }
   if (dimension === "nightlife") {
-    return `source=${DATA_CONFIG.sources.sirene.baseUrl}, cache=${path.relative(process.cwd(), SIRENE_CACHE_ROOT)}`;
+    return `source=${DATA_CONFIG.sources.sirene.sourceUrl}, snapshot=${DATA_CONFIG.sources.sirene.snapshotPath}`;
   }
   if (dimension === "greenSpace") {
     return `source=${DATA_CONFIG.sources.greenSpace.sourceUrl}, cache=${DATA_CONFIG.sources.greenSpace.cachePath}`;
@@ -211,54 +209,24 @@ function parseOptions(argv: string[]): BuildOptions {
   };
 }
 
-function isMissingFileError(error: unknown): boolean {
-  const code = (error as { code?: string }).code;
-  return code === "ENOENT" || String(error).includes("ENOENT");
-}
+async function validateNightlifeSnapshotReadiness(): Promise<void> {
+  const snapshot = await readSireneNightlifeSnapshot();
+  const codes = snapshot.arrondissements.map((row) => row.code).sort();
+  const expected = [...PARIS_ARRONDISSEMENT_COMMUNES];
 
-async function validateNightlifeOfflineCacheReadiness(): Promise<void> {
-  const buckets = getEnabledSireneBuckets();
-  const missingCommunes: string[] = [];
-
-  for (const communeCode of PARIS_ARRONDISSEMENT_COMMUNES) {
-    const query = buildSireneNightlifeSearchParams(communeCode, buckets).get(
-      "q",
+  if (codes.length !== expected.length) {
+    throw new Error(
+      `nightlife snapshot is incomplete: expected ${expected.length} communes, found ${codes.length}. Regenerate with: bun run data:refresh --dimensions=nightlife --all`,
     );
-    if (!query) {
-      throw new Error(`failed to build nightlife query for ${communeCode}`);
-    }
-
-    const firstPagePath = buildSireneNightlifeCachePagePath({
-      cacheDir: SIRENE_CACHE_ROOT,
-      communeCode,
-      query,
-      pageOffset: 0,
-    });
-
-    try {
-      await readFile(firstPagePath, "utf8");
-    } catch (error) {
-      if (isMissingFileError(error)) {
-        missingCommunes.push(communeCode);
-        continue;
-      }
-      throw error;
-    }
   }
 
-  if (missingCommunes.length === 0) {
-    return;
+  for (const [index, code] of expected.entries()) {
+    if (codes[index] !== code) {
+      throw new Error(
+        `nightlife snapshot is incomplete or invalid. Missing or misordered commune ${code}. Regenerate with: bun run data:refresh --dimensions=nightlife --all`,
+      );
+    }
   }
-
-  const previewLimit = 8;
-  const preview = missingCommunes.slice(0, previewLimit).join(", ");
-  const remainder =
-    missingCommunes.length - Math.min(missingCommunes.length, previewLimit);
-  const suffix = remainder > 0 ? ` (+${remainder} more)` : "";
-
-  throw new Error(
-    `nightlife is enabled but offline SIRENE cache is incomplete: missing first page for ${missingCommunes.length}/${PARIS_ARRONDISSEMENT_COMMUNES.length} communes (${preview}${suffix}). In --offline mode prewarm cache with: bun run data:refresh --dimensions=nightlife --all`,
-  );
 }
 
 async function validateBuildPreconditions(
@@ -271,7 +239,7 @@ async function validateBuildPreconditions(
     return;
   }
 
-  await validateNightlifeOfflineCacheReadiness();
+  await validateNightlifeSnapshotReadiness();
 }
 
 function assertParisCode(value: unknown): string {
@@ -767,7 +735,6 @@ async function applyGreenSpaceDimension(
 
 async function applyNightlifeDimension(
   rows: ArrondissementRow[],
-  mode: "network-first" | "cache-only",
 ): Promise<BuildSourceContributions> {
   if (!DATA_CONFIG.enabledDimensions.includes("nightlife")) {
     return {
@@ -779,12 +746,10 @@ async function applyNightlifeDimension(
   }
 
   const areaByCommune = new Map(rows.map((row) => [row.code, row.area_km2]));
-  const nightlife = await buildNightlifeFromSirene({
+  const nightlife = await buildNightlifeFromSnapshot({
     communes: PARIS_ARRONDISSEMENT_COMMUNES,
     areaByCommune,
     buckets: getEnabledSireneBuckets(),
-    mode,
-    accessToken: process.env.SIRENE_API_TOKEN ?? "",
     expectedNomenclatures: DATA_CONFIG.sources.sirene.expectedNomenclatures,
   });
 
@@ -1376,7 +1341,7 @@ async function main(): Promise<void> {
   logContributionSummary("transport", transportContribution);
 
   logInfo("running nightlife step");
-  const nightlifeContribution = await applyNightlifeDimension(rows, mode);
+  const nightlifeContribution = await applyNightlifeDimension(rows);
   Object.assign(sourceRowCounts, nightlifeContribution.sourceRowCounts);
   Object.assign(sourceChecksums, nightlifeContribution.sourceChecksums);
   Object.assign(sourceUrls, nightlifeContribution.sourceUrls);

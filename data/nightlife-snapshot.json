@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-03-08T10:37:02.579652+00:00",
+  "generated_at": "2026-03-08T10:43:45.832429+00:00",
   "source": {
     "type": "sirene_stock_parquet",
     "source_url": "https://object.files.data.gouv.fr/data-pipeline-open/siren/stock/StockEtablissement_utf8.parquet",
-    "stock_path": "data/raw/sirene/StockEtablissement_utf8.parquet",
+    "stock_path": "/Users/wh/code/quartier/data/raw/sirene/StockEtablissement_utf8.parquet",
     "stock_size_bytes": 2153824735,
     "nomenclature": "NAFRev2"
   },
