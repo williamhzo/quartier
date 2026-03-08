@@ -43,8 +43,10 @@ yarn-error.log*
 next-env.d.ts
 
 # claude code
-.claude/settings.local.json
+.claude/
 
 # local-only docs
+AGENTS.md
+CLAUDE.md
 spec.md
 ideas.md
