@@ -16,6 +16,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "data:build": "bun scripts/build-data.ts",
+    "data:generate:nightlife-snapshot": "python3 scripts/generate_sirene_nightlife_snapshot.py",
     "data:validate:sirene-naf": "bun scripts/validate-sirene-naf.ts",
     "data:refresh": "bun scripts/data-refresh.ts",
     "data:dry-run:sirene:one": "bun scripts/dry-run-sirene-queries.ts --commune=75111",

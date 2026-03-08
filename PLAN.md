@@ -84,3 +84,17 @@ Definition of done:
 - The repo passes lint/build.
 - The product promise matches shipped data.
 - The launch path has no known correctness or credibility blockers.
+
+## 6. P1 Nightlife Restoration
+
+Goal: restore nightlife as a real shipped dimension using the downloaded SIRENE stock parquet, not the live API.
+
+[x] Step 1. Generate a tracked arrondissement nightlife snapshot from the stock parquet.
+[ ] Step 2. Rewire refresh/build to consume the snapshot instead of API page cache.
+[ ] Step 3. Re-enable nightlife in config, scoring, and generated data outputs.
+[ ] Step 4. Restore nightlife in the UI and validate it end to end.
+
+Acceptance criteria:
+- Snapshot covers all 20 Paris arrondissements.
+- Build path does not require `SIRENE_API_TOKEN`.
+- `data/arrondissements.json`, `data/metadata.json`, and UI all expose the same nightlife story.

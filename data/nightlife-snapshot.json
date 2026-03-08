@@ -1,0 +1,297 @@
+{
+  "generated_at": "2026-03-08T10:37:02.579652+00:00",
+  "source": {
+    "type": "sirene_stock_parquet",
+    "source_url": "https://object.files.data.gouv.fr/data-pipeline-open/siren/stock/StockEtablissement_utf8.parquet",
+    "stock_path": "data/raw/sirene/StockEtablissement_utf8.parquet",
+    "stock_size_bytes": 2153824735,
+    "nomenclature": "NAFRev2"
+  },
+  "buckets": {
+    "restaurants": [
+      "56.10A",
+      "56.10B",
+      "56.10C"
+    ],
+    "bars_cafes": [
+      "56.30Z"
+    ],
+    "nightlife_extension": [
+      "93.29Z"
+    ]
+  },
+  "stats": {
+    "commune_count": 20,
+    "active_establishments_total": 1340878,
+    "restaurants_count_total": 30333,
+    "bars_cafes_count_total": 3262,
+    "nightlife_extension_count_total": 6590
+  },
+  "notes": [
+    "Counts include only active SIRENE establishments in Paris arrondissements with nomenclatureActivitePrincipaleEtablissement = NAFRev2.",
+    "cafes_per_km2 mirrors bars_per_km2 because SIRENE groups cafes with debits de boissons under NAF 56.30Z.",
+    "nightlife_extension_count is provided for reference but is not part of the default nightlife score."
+  ],
+  "arrondissements": [
+    {
+      "code": "75101",
+      "number": 1,
+      "name": "1er arrondissement",
+      "area_km2": 1.824613,
+      "active_establishments_total": 42295,
+      "restaurants_count": 1236,
+      "bars_cafes_count": 124,
+      "nightlife_extension_count": 125,
+      "restaurants_per_km2": 677.4,
+      "bars_per_km2": 67.96,
+      "cafes_per_km2": 67.96
+    },
+    {
+      "code": "75102",
+      "number": 2,
+      "name": "2e arrondissement",
+      "area_km2": 0.991154,
+      "active_establishments_total": 38988,
+      "restaurants_count": 1312,
+      "bars_cafes_count": 132,
+      "nightlife_extension_count": 194,
+      "restaurants_per_km2": 1323.71,
+      "bars_per_km2": 133.18,
+      "cafes_per_km2": 133.18
+    },
+    {
+      "code": "75103",
+      "number": 3,
+      "name": "3e arrondissement",
+      "area_km2": 1.170883,
+      "active_establishments_total": 29658,
+      "restaurants_count": 889,
+      "bars_cafes_count": 90,
+      "nightlife_extension_count": 140,
+      "restaurants_per_km2": 759.26,
+      "bars_per_km2": 76.87,
+      "cafes_per_km2": 76.87
+    },
+    {
+      "code": "75104",
+      "number": 4,
+      "name": "4e arrondissement",
+      "area_km2": 1.600586,
+      "active_establishments_total": 22901,
+      "restaurants_count": 825,
+      "bars_cafes_count": 115,
+      "nightlife_extension_count": 117,
+      "restaurants_per_km2": 515.44,
+      "bars_per_km2": 71.85,
+      "cafes_per_km2": 71.85
+    },
+    {
+      "code": "75105",
+      "number": 5,
+      "name": "5e arrondissement",
+      "area_km2": 2.539375,
+      "active_establishments_total": 32586,
+      "restaurants_count": 1378,
+      "bars_cafes_count": 154,
+      "nightlife_extension_count": 173,
+      "restaurants_per_km2": 542.65,
+      "bars_per_km2": 60.64,
+      "cafes_per_km2": 60.64
+    },
+    {
+      "code": "75106",
+      "number": 6,
+      "name": "6e arrondissement",
+      "area_km2": 2.153096,
+      "active_establishments_total": 34158,
+      "restaurants_count": 1027,
+      "bars_cafes_count": 112,
+      "nightlife_extension_count": 138,
+      "restaurants_per_km2": 476.99,
+      "bars_per_km2": 52.02,
+      "cafes_per_km2": 52.02
+    },
+    {
+      "code": "75107",
+      "number": 7,
+      "name": "7e arrondissement",
+      "area_km2": 4.090057,
+      "active_establishments_total": 43978,
+      "restaurants_count": 701,
+      "bars_cafes_count": 68,
+      "nightlife_extension_count": 144,
+      "restaurants_per_km2": 171.39,
+      "bars_per_km2": 16.63,
+      "cafes_per_km2": 16.63
+    },
+    {
+      "code": "75108",
+      "number": 8,
+      "name": "8e arrondissement",
+      "area_km2": 3.880036,
+      "active_establishments_total": 188191,
+      "restaurants_count": 2014,
+      "bars_cafes_count": 159,
+      "nightlife_extension_count": 531,
+      "restaurants_per_km2": 519.07,
+      "bars_per_km2": 40.98,
+      "cafes_per_km2": 40.98
+    },
+    {
+      "code": "75109",
+      "number": 9,
+      "name": "9e arrondissement",
+      "area_km2": 2.178303,
+      "active_establishments_total": 60147,
+      "restaurants_count": 2139,
+      "bars_cafes_count": 207,
+      "nightlife_extension_count": 202,
+      "restaurants_per_km2": 981.96,
+      "bars_per_km2": 95.03,
+      "cafes_per_km2": 95.03
+    },
+    {
+      "code": "75110",
+      "number": 10,
+      "name": "10e arrondissement",
+      "area_km2": 2.891739,
+      "active_establishments_total": 64642,
+      "restaurants_count": 2180,
+      "bars_cafes_count": 234,
+      "nightlife_extension_count": 331,
+      "restaurants_per_km2": 753.87,
+      "bars_per_km2": 80.92,
+      "cafes_per_km2": 80.92
+    },
+    {
+      "code": "75111",
+      "number": 11,
+      "name": "11e arrondissement",
+      "area_km2": 3.665442,
+      "active_establishments_total": 81870,
+      "restaurants_count": 2428,
+      "bars_cafes_count": 404,
+      "nightlife_extension_count": 554,
+      "restaurants_per_km2": 662.4,
+      "bars_per_km2": 110.22,
+      "cafes_per_km2": 110.22
+    },
+    {
+      "code": "75112",
+      "number": 12,
+      "name": "12e arrondissement",
+      "area_km2": 16.314783,
+      "active_establishments_total": 67611,
+      "restaurants_count": 1461,
+      "bars_cafes_count": 155,
+      "nightlife_extension_count": 381,
+      "restaurants_per_km2": 89.55,
+      "bars_per_km2": 9.5,
+      "cafes_per_km2": 9.5
+    },
+    {
+      "code": "75113",
+      "number": 13,
+      "name": "13e arrondissement",
+      "area_km2": 7.149311,
+      "active_establishments_total": 53641,
+      "restaurants_count": 1320,
+      "bars_cafes_count": 113,
+      "nightlife_extension_count": 358,
+      "restaurants_per_km2": 184.63,
+      "bars_per_km2": 15.81,
+      "cafes_per_km2": 15.81
+    },
+    {
+      "code": "75114",
+      "number": 14,
+      "name": "14e arrondissement",
+      "area_km2": 5.614877,
+      "active_establishments_total": 54701,
+      "restaurants_count": 1190,
+      "bars_cafes_count": 109,
+      "nightlife_extension_count": 339,
+      "restaurants_per_km2": 211.94,
+      "bars_per_km2": 19.41,
+      "cafes_per_km2": 19.41
+    },
+    {
+      "code": "75115",
+      "number": 15,
+      "name": "15e arrondissement",
+      "area_km2": 8.494994,
+      "active_establishments_total": 97127,
+      "restaurants_count": 1851,
+      "bars_cafes_count": 162,
+      "nightlife_extension_count": 499,
+      "restaurants_per_km2": 217.89,
+      "bars_per_km2": 19.07,
+      "cafes_per_km2": 19.07
+    },
+    {
+      "code": "75116",
+      "number": 16,
+      "name": "16e arrondissement",
+      "area_km2": 16.372542,
+      "active_establishments_total": 111466,
+      "restaurants_count": 1292,
+      "bars_cafes_count": 86,
+      "nightlife_extension_count": 389,
+      "restaurants_per_km2": 78.91,
+      "bars_per_km2": 5.25,
+      "cafes_per_km2": 5.25
+    },
+    {
+      "code": "75117",
+      "number": 17,
+      "name": "17e arrondissement",
+      "area_km2": 5.668835,
+      "active_establishments_total": 104320,
+      "restaurants_count": 2061,
+      "bars_cafes_count": 190,
+      "nightlife_extension_count": 430,
+      "restaurants_per_km2": 363.57,
+      "bars_per_km2": 33.52,
+      "cafes_per_km2": 33.52
+    },
+    {
+      "code": "75118",
+      "number": 18,
+      "name": "18e arrondissement",
+      "area_km2": 5.996051,
+      "active_establishments_total": 82438,
+      "restaurants_count": 2315,
+      "bars_cafes_count": 305,
+      "nightlife_extension_count": 544,
+      "restaurants_per_km2": 386.09,
+      "bars_per_km2": 50.87,
+      "cafes_per_km2": 50.87
+    },
+    {
+      "code": "75119",
+      "number": 19,
+      "name": "19e arrondissement",
+      "area_km2": 6.792651,
+      "active_establishments_total": 64223,
+      "restaurants_count": 1347,
+      "bars_cafes_count": 152,
+      "nightlife_extension_count": 519,
+      "restaurants_per_km2": 198.3,
+      "bars_per_km2": 22.38,
+      "cafes_per_km2": 22.38
+    },
+    {
+      "code": "75120",
+      "number": 20,
+      "name": "20e arrondissement",
+      "area_km2": 5.983446,
+      "active_establishments_total": 65937,
+      "restaurants_count": 1367,
+      "bars_cafes_count": 191,
+      "nightlife_extension_count": 482,
+      "restaurants_per_km2": 228.46,
+      "bars_per_km2": 31.92,
+      "cafes_per_km2": 31.92
+    }
+  ]
+}
