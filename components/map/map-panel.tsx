@@ -3,11 +3,7 @@
 import { useTranslations, useLocale } from "next-intl";
 import { ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { ShareButton } from "@/components/share-button";
 import { ArrondissementLabel } from "@/components/arrondissement-label";
 import { ScoreBar } from "@/components/detail/score-bar";
@@ -29,7 +25,14 @@ type Props = {
   onClose: () => void;
 };
 
-export function MapPanel({ arrondissement, allArrondissements, composite, rank, open, onClose }: Props) {
+export function MapPanel({
+  arrondissement,
+  allArrondissements,
+  composite,
+  rank,
+  open,
+  onClose,
+}: Props) {
   const num = arrondissement.number;
   const isMobile = useIsMobile();
 
@@ -102,17 +105,25 @@ function PanelContent({
   return (
     <div className="p-5">
       <div className="mb-6 flex items-start justify-between">
-        <div>
-          <h2 className="text-display text-balance text-2xl">
+        <Link
+          href={`/paris/${num}`}
+          className="flex flex-col items-start gap-2"
+        >
+          <h2 className="text-display text-2xl text-balance">
             <ArrondissementLabel number={num} locale={locale} />
           </h2>
           <p className="text-muted-foreground/70 font-mono text-xs tabular-nums">
-            {t("detail.rank")}: {rank} {t("detail.outOf")}
+            {rank} {t("detail.outOf")}
           </p>
-        </div>
+        </Link>
         <div className="flex items-center gap-1">
           <ShareButton number={num} size="icon-xs" />
-          <Button variant="ghost" size="icon-xs" onClick={onClose} aria-label={t("common.close")}>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            onClick={onClose}
+            aria-label={t("common.close")}
+          >
             <X className="size-4" />
           </Button>
         </div>
@@ -144,8 +155,14 @@ function PanelContent({
             return aNull - bNull;
           })
           .map((key) => {
-            const dimRanks = rankByDimension(allArrondissements, key as DimensionKey);
-            const dimMedian = dimensionMedian(allArrondissements, key as DimensionKey);
+            const dimRanks = rankByDimension(
+              allArrondissements,
+              key as DimensionKey,
+            );
+            const dimMedian = dimensionMedian(
+              allArrondissements,
+              key as DimensionKey,
+            );
             const entry = dimRanks.get(arrondissement.number);
             return (
               <DimensionSection
