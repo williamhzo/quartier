@@ -25,14 +25,10 @@ Open [localhost:3000](http://localhost:3000). No env vars required for the app.
 
 ## Commands
 
-| Command                                             | What it does                                                                           |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `bun dev`                                           | Dev server                                                                             |
-| `bun run build`                                     | Production build                                                                       |
-| `bun run lint`                                      | ESLint                                                                                 |
-| `bun run format`                                    | Prettier                                                                               |
-| `bun run data:refresh --dimensions=nightlife --all` | Optional maintainer command: refresh nightlife from a newer local SIRENE stock parquet |
-| `bun run data:build`                                | Rebuild data from source datasets                                                      |
+| Command         | What it does     |
+| --------------- | ---------------- |
+| `bun dev`       | Dev server       |
+| `bun run build` | Production build |
 
 ## Fork it
 
@@ -50,13 +46,9 @@ All source data is French open data, no paid APIs needed. Want to add a dimensio
 - Python + DuckDB are only needed if you want to refresh nightlife against a newer SIRENE stock download.
 - To refresh nightlife locally: install DuckDB for Python with `python3 -m pip install -r scripts/requirements-sirene.txt`, place `StockEtablissement_utf8.parquet` in `data/raw/sirene/`, then run `bun run data:refresh --dimensions=nightlife --all`
 
-## Stack
-
-Next.js 16 · TypeScript · Tailwind CSS 4 · shadcn/ui · MapLibre GL · react-map-gl · Recharts · nuqs · next-intl · Vercel
-
 ## Where the data comes from
 
-Everything is French government's open data:
+Everything is from French government's open data:
 
 - Housing prices: [DVF](https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres/) (actual transaction records, not asking prices). Geo-split CSVs from [files.data.gouv.fr](https://files.data.gouv.fr/geo-dvf/latest/csv/)
 - Income & poverty: [INSEE Filosofi](https://www.insee.fr/fr/statistiques/5359146) (dossier complet)
