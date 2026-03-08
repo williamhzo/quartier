@@ -42,7 +42,7 @@
   },
   "map": {
     "title": "Paris Map",
-    "compositeScore": "All",
+    "compositeScore": "Total",
     "dimensionsLabel": "Dimensions",
     "h1": "Paris Arrondissements Map"
   },

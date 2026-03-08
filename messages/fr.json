@@ -42,7 +42,7 @@
   },
   "map": {
     "title": "Carte de Paris",
-    "compositeScore": "Global",
+    "compositeScore": "Total",
     "dimensionsLabel": "Score",
     "h1": "Carte des arrondissements de Paris"
   },
