@@ -38,14 +38,6 @@ Open [localhost:3000](http://localhost:3000). No env vars required for the app.
 
 All source data is French open data, no paid APIs needed. Want to add a dimension? Look at `scripts/data-config.ts` for the pattern and `scripts/sources/` for existing parsers.
 
-## Current data coverage
-
-- Shipped in the app: housing, income, safety, transport, nightlife, green space, noise, amenities, culture, sports
-- Nightlife source: a tracked arrondissement snapshot derived from the local SIRENE stock parquet in `data/raw/sirene/`
-- Normal app setup does not require Python or DuckDB. The tracked nightlife snapshot is already committed.
-- Python + DuckDB are only needed if you want to refresh nightlife against a newer SIRENE stock download.
-- To refresh nightlife locally: install DuckDB for Python with `python3 -m pip install -r scripts/requirements-sirene.txt`, place `StockEtablissement_utf8.parquet` in `data/raw/sirene/`, then run `bun run data:refresh --dimensions=nightlife --all`
-
 ## Where the data comes from
 
 Everything is from French government's open data:
