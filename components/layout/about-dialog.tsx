@@ -65,12 +65,12 @@ export function AboutDialog({ children }: { children: React.ReactNode }) {
             href={TWITTER_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors"
             aria-label="X (Twitter)"
           >
             <XIcon className="size-4" />
+            <span className="text-muted-foreground text-xs">@williamhzo</span>
           </a>
-          <span className="text-muted-foreground text-xs">@williamhzo</span>
         </div>
       </DialogContent>
     </Dialog>
