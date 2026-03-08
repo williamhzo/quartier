@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "quartier.sh - Comparaison des arrondissements de Paris par les données",
+    "title": "Quartier - Comparaison des arrondissements de Paris par les données",
     "description": "Comparez les 20 arrondissements de Paris sur 10 critères calculés à partir des données ouvertes : logement, sécurité, transports, vie nocturne, espaces verts et plus.",
     "leaderboardTitle": "Classement des 20 arrondissements de Paris",
     "leaderboardDescription": "Quel arrondissement arrive en tête ? Classez et comparez les 20 sur 10 critères : logement, sécurité, transports, espaces verts, culture et plus.",
@@ -12,11 +12,11 @@
     "map": "carte",
     "leaderboard": "classement",
     "about": "à propos",
-    "title": "quartier"
+    "title": "Quartier"
   },
   "about": {
-    "title": "À propos de quartier",
-    "tagline": "Tout le monde a un avis sur le meilleur arrondissement de Paris. quartier remplace ces avis par des données (et après, on se dispute sur les données).",
+    "title": "À propos de Quartier",
+    "tagline": "Tout le monde a un avis sur le meilleur arrondissement de Paris. Quartier remplace ces avis par des données (et après, on se dispute sur les données).",
     "body": "Choisissez un profil et comparez les arrondissements sur 10 dimensions : logement, sécurité, accès métro, vie nocturne, revenus, bruit, espaces verts et le reste. Scores calculés à partir des données ouvertes de data.gouv.fr, l'INSEE et la Ville de Paris.",
     "openSource": "Open source, contributions bienvenues sur"
   },
@@ -65,7 +65,6 @@
     "viewFull": "Voir la fiche complète",
     "share": "Copier le lien",
     "copied": "Copié !",
-    "rank": "Rang",
     "outOf": "sur 20",
     "housing": {
       "medianPrice": "Prix médian au m²",

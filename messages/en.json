@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "quartier.sh - Data-Driven Paris Arrondissement Comparison",
+    "title": "Quartier - Data-Driven Paris Arrondissement Comparison",
     "description": "Compare all 20 Paris arrondissements across 10 dimensions scored from French open data: housing, safety, transport, green space, nightlife, and more.",
     "leaderboardTitle": "Paris Arrondissement Rankings: All 20 Compared",
     "leaderboardDescription": "Which Paris arrondissement ranks best? Sort and compare all 20 across 10 data-driven dimensions: housing, safety, transport, green space, culture, and more.",
@@ -12,11 +12,11 @@
     "map": "map",
     "leaderboard": "leaderboard",
     "about": "about",
-    "title": "quartier"
+    "title": "Quartier"
   },
   "about": {
-    "title": "About quartier",
-    "tagline": "Everyone who's lived in Paris has opinions about which arrondissement is best. quartier replaces those opinions with data (and then you argue about the data instead).",
+    "title": "About Quartier",
+    "tagline": "Everyone who's lived in Paris has opinions about which arrondissement is best. Quartier replaces those opinions with data (so you can argue about the data instead).",
     "body": "Pick a profile and see how each arrondissement scores across 10 dimensions: housing, crime, metro access, nightlife, income, noise, green space, and more. All scores derived from open data by data.gouv.fr, INSEE, and the City of Paris.",
     "openSource": "Open source, contributions welcome on"
   },
@@ -65,7 +65,6 @@
     "viewFull": "View full details",
     "share": "Copy link",
     "copied": "Copied!",
-    "rank": "Rank",
     "outOf": "out of 20",
     "housing": {
       "medianPrice": "Median price per m²",

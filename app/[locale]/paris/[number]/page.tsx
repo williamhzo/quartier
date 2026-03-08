@@ -54,16 +54,16 @@ export async function generateMetadata({ params }: Props) {
       languages,
     },
     openGraph: {
-      title: `${title} - quartier`,
+      title: `${title} - Quartier`,
       description,
       url: canonicalUrl,
       locale: locale === "fr" ? "fr_FR" : "en_US",
-      siteName: "quartier",
+      siteName: "Quartier",
       images: [{ url: ogImage, width: 1200, height: 630, type: "image/png" }],
     },
     twitter: {
       card: "summary_large_image" as const,
-      title: `${title} - quartier`,
+      title: `${title} - Quartier`,
       description,
       images: [ogImage],
     },
@@ -125,7 +125,7 @@ export default async function DetailPage({ params }: Props) {
       {
         "@type": "ListItem",
         position: 1,
-        name: "quartier",
+        name: "Quartier",
         item: localizeUrl("/", locale),
       },
       {

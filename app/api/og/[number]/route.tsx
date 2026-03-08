@@ -83,7 +83,7 @@ export async function GET(
             color: "#0a0a0a",
           }}
         >
-          quartier
+          Quartier
         </span>
         <span
           style={{

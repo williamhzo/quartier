@@ -22,7 +22,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
 
   if (arr != null && arr >= 1 && arr <= 20) {
     const name = arrondissementName(arr, locale);
-    const title = `${name} - quartier`;
+    const title = `${name} - Quartier`;
     return {
       title: { absolute: title },
       alternates: { canonical: canonicalUrl, languages },
@@ -31,7 +31,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
         description: t("description"),
         url: canonicalUrl,
         locale: locale === "fr" ? "fr_FR" : "en_US",
-        siteName: "quartier",
+        siteName: "Quartier",
         images: [{ url: `/api/og/${arr}`, width: 1200, height: 630, type: "image/png" }],
       },
       twitter: {

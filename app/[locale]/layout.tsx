@@ -63,7 +63,7 @@ export async function generateMetadata({
     metadataBase: new URL(SITE_URL),
     title: {
       default: t("title"),
-      template: `%s - quartier`,
+      template: `%s - Quartier`,
     },
     description: t("description"),
     alternates: {
@@ -72,7 +72,7 @@ export async function generateMetadata({
     },
     openGraph: {
       type: "website",
-      siteName: "quartier",
+      siteName: "Quartier",
       locale: locale === "fr" ? "fr_FR" : "en_US",
       title: t("title"),
       description: t("description"),
@@ -113,7 +113,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     applicationCategory: "Reference",
-    name: "quartier",
+    name: "Quartier",
     url: localizeUrl("/", locale),
     inLanguage: locale === "fr" ? "fr-FR" : "en-US",
     description: t("description"),
