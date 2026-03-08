@@ -248,23 +248,9 @@ export function ParisMap({
     [selectedNumber],
   );
 
-  const lineColor = useMemo(
-    () =>
-      "#94a3b8" as maplibregl.ExpressionSpecification,
-    [],
-  );
-
-  const lineWidth = useMemo(
-    () =>
-      0.36 as maplibregl.ExpressionSpecification,
-    [],
-  );
-
-  const lineOpacity = useMemo(
-    () =>
-      0.58 as maplibregl.ExpressionSpecification,
-    [],
-  );
+  const lineColor = "#94a3b8";
+  const lineWidth = 0.36;
+  const lineOpacity = 0.58;
 
   const glowOpacity = useMemo(
     () =>
