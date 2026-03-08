@@ -47,6 +47,7 @@ export const DATA_CONFIG = {
     "income",
     "safety",
     "transport",
+    "nightlife",
     "greenSpace",
     "noise",
     "amenities",

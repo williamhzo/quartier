@@ -91,7 +91,7 @@ Goal: restore nightlife as a real shipped dimension using the downloaded SIRENE 
 
 [x] Step 1. Generate a tracked arrondissement nightlife snapshot from the stock parquet.
 [x] Step 2. Rewire refresh/build to consume the snapshot instead of API page cache.
-[ ] Step 3. Re-enable nightlife in config, scoring, and generated data outputs.
+[x] Step 3. Re-enable nightlife in config, scoring, and generated data outputs.
 [ ] Step 4. Restore nightlife in the UI and validate it end to end.
 
 Acceptance criteria:

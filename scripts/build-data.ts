@@ -229,13 +229,8 @@ async function validateNightlifeSnapshotReadiness(): Promise<void> {
   }
 }
 
-async function validateBuildPreconditions(
-  mode: "network-first" | "cache-only",
-): Promise<void> {
+async function validateBuildPreconditions(): Promise<void> {
   if (!DATA_CONFIG.enabledDimensions.includes("nightlife")) {
-    return;
-  }
-  if (mode !== "cache-only") {
     return;
   }
 
@@ -1271,7 +1266,7 @@ async function main(): Promise<void> {
   for (const dimension of DATA_CONFIG.enabledDimensions) {
     logInfo(`dimension "${dimension}": ${describeDimensionSource(dimension)}`);
   }
-  await validateBuildPreconditions(mode);
+  await validateBuildPreconditions();
   const generatedAt = new Date().toISOString();
   const driftBaseline = await loadDriftBaseline();
 
