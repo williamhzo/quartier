@@ -58,6 +58,7 @@ export async function generateMetadata({
   const languages = localeAlternates("/");
   languages["x-default"] = xDefaultUrl("/");
   const canonicalUrl = localizeUrl("/", locale);
+  const socialTitle = "Quartier: data-driven liveability maps";
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -74,7 +75,7 @@ export async function generateMetadata({
       type: "website",
       siteName: "Quartier",
       locale: locale === "fr" ? "fr_FR" : "en_US",
-      title: t("title"),
+      title: socialTitle,
       description: t("description"),
       url: canonicalUrl,
       images: [{ url: "/api/og", width: 1200, height: 630, type: "image/png" }],
@@ -92,7 +93,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: t("title"),
+      title: socialTitle,
       description: t("description"),
       images: ["/api/og"],
     },
