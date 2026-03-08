@@ -21,7 +21,7 @@ import type { Arrondissement, DimensionKey, PersonaKey } from "@/lib/types";
 import type { FeatureCollection, Geometry } from "geojson";
 import { PERSONA_WEIGHTS } from "@/lib/personas";
 import { rankByComposite } from "@/lib/scoring";
-import { formatArrondissement } from "@/lib/arrondissements";
+import { ordinalLabel } from "@/lib/arrondissements";
 import { PersonaSelector } from "@/components/scoring/persona-selector";
 import { DimensionSelect } from "@/components/scoring/dimension-select";
 import { MapPanel } from "./map-panel";
@@ -114,7 +114,7 @@ export function ParisMap({
             ...f.properties,
             score,
             number: num,
-            label: formatArrondissement(num, locale),
+            label: ordinalLabel(num, locale),
           },
         };
       }),
@@ -149,7 +149,7 @@ export function ParisMap({
         return;
       }
       const a = ranked.find((r) => r.number === num);
-      const name = formatArrondissement(num, locale);
+      const name = ordinalLabel(num, locale);
       const score =
         a != null
           ? dimension === "composite"

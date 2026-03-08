@@ -130,20 +130,9 @@ export async function GET(
                 marginTop: 4,
               }}
             >
-              {suffix}
+              {suffix} arr.
             </span>
           </div>
-          <span
-            style={{
-              fontSize: 30,
-              fontWeight: 400,
-              color: "#8a8a8a",
-              marginTop: 8,
-              letterSpacing: "0.01em",
-            }}
-          >
-            arrondissement
-          </span>
         </div>
 
         {/* Right: composite score */}
