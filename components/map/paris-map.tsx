@@ -250,13 +250,8 @@ export function ParisMap({
 
   const lineColor = useMemo(
     () =>
-      [
-        "case",
-        ["==", ["get", "number"], selectedNumber ?? -1],
-        "#1e293b",
-        "#94a3b8",
-      ] as maplibregl.ExpressionSpecification,
-    [selectedNumber],
+      "#94a3b8" as maplibregl.ExpressionSpecification,
+    [],
   );
 
   const lineWidth = useMemo(
@@ -264,10 +259,23 @@ export function ParisMap({
       [
         "case",
         ["==", ["get", "number"], selectedNumber ?? -1],
-        2.5,
+        2.25,
         ["boolean", ["feature-state", "hover"], false],
-        1.5,
-        0.5,
+        1.2,
+        0.36,
+      ] as maplibregl.ExpressionSpecification,
+    [selectedNumber],
+  );
+
+  const lineOpacity = useMemo(
+    () =>
+      [
+        "case",
+        ["==", ["get", "number"], selectedNumber ?? -1],
+        0.9,
+        ["boolean", ["feature-state", "hover"], false],
+        0.8,
+        0.58,
       ] as maplibregl.ExpressionSpecification,
     [selectedNumber],
   );
@@ -378,6 +386,7 @@ export function ParisMap({
             paint={{
               "line-color": lineColor as unknown as string,
               "line-width": lineWidth as unknown as number,
+              "line-opacity": lineOpacity as unknown as number,
             }}
           />
           <Layer
