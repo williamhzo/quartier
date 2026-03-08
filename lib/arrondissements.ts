@@ -1,8 +1,8 @@
 function ordinalSuffixEn(n: number): string {
-  if (n === 1) return "ST";
-  if (n === 2) return "ND";
-  if (n === 3) return "RD";
-  return "TH";
+  if (n === 1) return "st";
+  if (n === 2) return "nd";
+  if (n === 3) return "rd";
+  return "th";
 }
 
 export function arrondissementSuffix(
@@ -18,7 +18,7 @@ export function formatArrondissement(
   locale: string = "fr",
 ): string {
   if (locale === "fr") return `${n}${n === 1 ? "er" : "e"}`;
-  return `${n}${ordinalSuffixEn(n)} ARR.`;
+  return `${n}${ordinalSuffixEn(n)} arr.`;
 }
 
 export function arrondissementName(n: number, locale: string = "fr"): string {
@@ -28,7 +28,7 @@ export function arrondissementName(n: number, locale: string = "fr"): string {
 
 export function ordinalLabel(n: number, locale: string = "fr"): string {
   if (locale === "fr") return formatArrondissement(n, "fr");
-  return `${n}${ordinalSuffixEn(n).toLowerCase()}`;
+  return `${n}${ordinalSuffixEn(n)}`;
 }
 
 export const ARRONDISSEMENT_CODES: Record<number, string> = {

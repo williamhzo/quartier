@@ -21,7 +21,7 @@ export function ArrondissementLabel({ number: n, locale, className }: Props) {
   return (
     <span className={className}>
       {n}
-      {suffix} ARR.
+      {suffix} arr.
     </span>
   );
 }
