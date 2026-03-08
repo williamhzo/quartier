@@ -29,7 +29,7 @@ Open [localhost:3000](http://localhost:3000). No env vars required for the app.
 | `bun run build`      | Production build                  |
 | `bun run lint`       | ESLint                            |
 | `bun run format`     | Prettier                          |
-| `bun run data:refresh --dimensions=nightlife --all` | Rebuild the tracked nightlife snapshot from the local SIRENE stock parquet |
+| `bun run data:refresh --dimensions=nightlife --all` | Optional maintainer command: refresh nightlife from a newer local SIRENE stock parquet |
 | `bun run data:build` | Rebuild data from source datasets |
 
 ## Fork it
@@ -44,7 +44,9 @@ All source data is French open data, no paid APIs needed. Want to add a dimensio
 
 - Shipped in the app: housing, income, safety, transport, nightlife, green space, noise, amenities, culture, sports
 - Nightlife source: a tracked arrondissement snapshot derived from the local SIRENE stock parquet in `data/raw/sirene/`
-- To regenerate nightlife locally: install DuckDB for Python with `python3 -m pip install -r scripts/requirements-sirene.txt`, place `StockEtablissement_utf8.parquet` in `data/raw/sirene/`, then run `bun run data:refresh --dimensions=nightlife --all`
+- Normal app setup does not require Python or DuckDB. The tracked nightlife snapshot is already committed.
+- Python + DuckDB are only needed if you want to refresh nightlife against a newer SIRENE stock download.
+- To refresh nightlife locally: install DuckDB for Python with `python3 -m pip install -r scripts/requirements-sirene.txt`, place `StockEtablissement_utf8.parquet` in `data/raw/sirene/`, then run `bun run data:refresh --dimensions=nightlife --all`
 
 ## Stack
 
