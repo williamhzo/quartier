@@ -31,10 +31,10 @@
     "amenities": "Amenities",
     "culture": "Culture",
     "sports": "Sports",
-    "composite": "Composite score"
+    "composite": "All"
   },
   "personas": {
-    "label": "Profile",
+    "label": "Persona",
     "youngPro": "Young professional",
     "family": "Family",
     "tourist": "Tourist",
@@ -42,7 +42,8 @@
   },
   "map": {
     "title": "Paris Map",
-    "compositeScore": "Composite score",
+    "compositeScore": "All",
+    "dimensionsLabel": "Dimensions",
     "h1": "Paris Arrondissements Map"
   },
   "leaderboard": {

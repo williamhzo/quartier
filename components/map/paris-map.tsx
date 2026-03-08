@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, {
   Layer,
   Source,
@@ -136,7 +130,7 @@ export function ParisMap({
   const displayArrondissement =
     selectedArrondissement ??
     (lastSelectedNumber != null
-      ? ranked.find((a) => a.number === lastSelectedNumber) ?? null
+      ? (ranked.find((a) => a.number === lastSelectedNumber) ?? null)
       : null) ??
     ranked[0];
 
@@ -291,9 +285,19 @@ export function ParisMap({
 
   return (
     <div className="relative h-[calc(100dvh-3.5rem)]">
-      <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 rounded-lg bg-background/90 p-1.5 shadow-sm ring-1 ring-border/40 backdrop-blur-sm">
-        <PersonaSelector value={persona} onChange={setPersona} />
-        <DimensionSelect value={dimension} onChange={setDimension} />
+      <div className="bg-background/90 ring-border/40 absolute top-3 left-3 z-10 flex flex-col gap-2 rounded-lg p-2 shadow-sm ring-1 backdrop-blur-sm">
+        <div className="space-y-1">
+          <p className="text-muted-foreground px-1 text-xs">
+            {t("personas.label")}
+          </p>
+          <PersonaSelector value={persona} onChange={setPersona} />
+        </div>
+        <div className="space-y-1">
+          <p className="text-muted-foreground px-1 text-xs">
+            {t("map.dimensionsLabel")}
+          </p>
+          <DimensionSelect value={dimension} onChange={setDimension} />
+        </div>
       </div>
 
       <Map

@@ -31,7 +31,7 @@
     "amenities": "Équipements",
     "culture": "Culture",
     "sports": "Sport",
-    "composite": "Score global"
+    "composite": "Global"
   },
   "personas": {
     "label": "Profil",
@@ -42,7 +42,8 @@
   },
   "map": {
     "title": "Carte de Paris",
-    "compositeScore": "Score global",
+    "compositeScore": "Global",
+    "dimensionsLabel": "Score",
     "h1": "Carte des arrondissements de Paris"
   },
   "leaderboard": {
